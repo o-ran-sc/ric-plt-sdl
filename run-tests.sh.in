@@ -1,0 +1,26 @@
+#!/bin/sh
+
+export TOP_SRCDIR="@top_srcdir@"
+
+TESTRUNNER="./testrunner"
+if test "$USE_VALGRIND" != "false" ; then
+    VALGRIND="$(which valgrind 2> /dev/null)"
+    if test $? != 0 ; then
+        unset VALGRIND
+        echo "valgrind not found, valgrind disabled"
+    else
+        export VALGRIND
+        echo "valgrind enabled"
+        export GTEST_DEATH_TEST_USE_FORK=1
+        if test -z "$VALGRIND_SUPPRESSIONS" ; then
+            export VALGRIND_SUPPRESSIONS="${TOP_SRCDIR}/tst/valgrind-suppressions.conf"
+        fi
+    fi
+else
+    unset VALGRIND
+    echo "valgrind disabled"
+fi
+if test -z "$GTEST_DEATH_TEST_STYLE" ; then
+    export GTEST_DEATH_TEST_STYLE="threadsafe"
+fi
+exec "$TESTRUNNER"
