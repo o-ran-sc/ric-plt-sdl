@@ -1,0 +1,12 @@
+{
+    "database":
+    {
+        "type": "redis-standalone",
+        "servers":
+        [
+            {
+                "address": "dbaas"
+            }
+        ]
+    }
+}

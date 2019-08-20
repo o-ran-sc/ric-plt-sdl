@@ -1,0 +1,26 @@
+#!/bin/sh
+
+if test "${#}" != 1 ; then
+    echo "Usage: collectsdlinfo OUTPUTDIR" 1>&2
+    exit 1
+fi
+if test "${1}" = "-h" || test "${1}" = "--help" ; then
+    cat << EOF
+Usage: collectsdlinfo OUTPUTDIR
+
+collectsdlinfo finds SDL configuration files and collects debug info. 
+The results are saved into the given OUTPUTDIR directory.
+EOF
+    exit 0
+fi
+
+OUTPUTDIR="${1}"
+mkdir -p "${OUTPUTDIR}" || exit 1
+outputfile="${OUTPUTDIR}/shareddatalayer_configuration.txt"
+sdltool dump-configuration > "${outputfile}" 2>&1
+
+outputfile="${OUTPUTDIR}/shareddatalayer_write_read_latency.txt"
+sdltool test-get-set -- timeout 10 > "${outputfile}" 2>&1
+
+outputfile="${OUTPUTDIR}/shareddatalayer_backend_connectivity.txt"
+sdltool test-connectivity -- timeout 10 > "${outputfile}" 2>&1
