@@ -1,0 +1,13 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+confdir=@confdir@
+collectsdlinfopath=@pkglibexecdir@/collectsdlinfo
+
+Name: libsdl
+Description: Shared Data Layer
+URL: @PACKAGE_URL@
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lsdl
+CFlags: -I${includedir}
