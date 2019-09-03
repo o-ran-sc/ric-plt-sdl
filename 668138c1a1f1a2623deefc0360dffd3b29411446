@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "477a53e0_299538d6",
+        "filename": "src/configurationreader.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2019-09-03T12:15:29Z",
+      "side": 1,
+      "message": "Above mentioned environment variables are not used in RIC currently. Instead there is `conf/ric_dbaas.json` configuration file, which has hard coded \"dbaas\" Kubernetes service name configured as database address (actual address comes from DNS in connection setup phase).\n\nThis is just a temporary solution for current (simple/initial) dbaas deployment. There is plan to replace static JSON configuration with configmap later, when dbaas provides database address in configmap.\n\nSentinel support will be added later as a separate merge.\n\nIs it OK to go with current temporary solution in the mean time ?",
+      "parentUuid": "bf424145_eb352fbc",
+      "revId": "668138c1a1f1a2623deefc0360dffd3b29411446",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "575f4e42_46063195",
         "filename": "src/databaseconfigurationimpl.cpp",
         "patchSetId": 2
