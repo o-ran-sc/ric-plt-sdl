@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9f06785a_79d4a071",
+        "filename": "src/configurationreader.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2019-09-03T12:55:55Z",
+      "side": 1,
+      "message": "As discussed offline, I have been testing against outdated dbaas Helm chart (the one which is found from \u0027ric-plt/dbaas\u0027 repo, correct one is inside \u0027it/dep\u0027 repo).\n\nIn current dbaas deployment above mentioned service name is updated, and not something that is easy to be hard coded inside SDL. Also environment variables has been changed so that they use service name internally.\n\nIt is better to switch to use environment variables, as you proposed.\n\nGood finding, thanks!",
+      "parentUuid": "477a53e0_299538d6",
+      "revId": "668138c1a1f1a2623deefc0360dffd3b29411446",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "575f4e42_46063195",
         "filename": "src/databaseconfigurationimpl.cpp",
         "patchSetId": 2
