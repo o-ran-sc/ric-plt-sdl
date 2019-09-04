@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "5602f267_f3187e74",
+        "filename": "src/configurationreader.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2019-09-04T13:19:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f06785a_79d4a071",
+      "revId": "668138c1a1f1a2623deefc0360dffd3b29411446",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "575f4e42_46063195",
         "filename": "src/databaseconfigurationimpl.cpp",
         "patchSetId": 2
@@ -69,6 +87,24 @@
       "revId": "668138c1a1f1a2623deefc0360dffd3b29411446",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac92d110_5b89a55e",
+        "filename": "src/databaseconfigurationimpl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2019-09-04T13:19:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "575f4e42_46063195",
+      "revId": "668138c1a1f1a2623deefc0360dffd3b29411446",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
