@@ -22,6 +22,9 @@
 #if HAVE_HIREDIS
 #include "private/redis/asynchiredisdatabasediscovery.hpp"
 #endif
+#if HAVE_SENTINEL
+#include "private/redis/asyncsentineldatabasediscovery.hpp"
+#endif
 #include "private/abort.hpp"
 
 using namespace shareddatalayer::redis;
@@ -49,15 +52,22 @@ std::shared_ptr<AsyncDatabaseDiscovery> AsyncDatabaseDiscovery::create(std::shar
         SHAREDDATALAYER_ABORT("No Hiredis vip for Redis cluster configuration");
 #endif
     else
+    {
 #if HAVE_HIREDIS
+#if HAVE_SENTINEL
+        static_cast<void>(ns);
+        return std::make_shared<AsyncSentinelDatabaseDiscovery>(engine,
+                                                                logger);
+#else
         return std::make_shared<AsyncHiredisDatabaseDiscovery>(engine,
                                                                ns,
                                                                DatabaseInfo::Type::SINGLE,
                                                                staticAddresses,
                                                                logger);
+#endif
 #else
         static_cast<void>(logger);
         SHAREDDATALAYER_ABORT("No Hiredis");
 #endif
+    }
 }
-

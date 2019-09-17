@@ -53,7 +53,8 @@ namespace
                                               databaseInfo,
                                               contentsBuilder,
                                               false,
-                                              logger);
+                                              logger,
+                                              false);
     }
 
     class AsyncRedisStorageErrorCategory: public std::error_category

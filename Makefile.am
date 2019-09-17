@@ -117,6 +117,11 @@ libsdl_la_SOURCES += \
     src/redis/hiredisclusterepolladapter.cpp \
     src/redis/hiredisclustersystem.cpp
 endif
+if SENTINEL
+libsdl_la_SOURCES += \
+    include/private/redis/asyncsentineldatabasediscovery.hpp \
+    src/redis/asyncsentineldatabasediscovery.cpp
+endif
 libsdl_la_CPPFLAGS = \
     $(BASE_CPPFLAGS) \
     $(HIREDIS_CFLAGS) \
@@ -369,6 +374,10 @@ testrunner_SOURCES += \
     tst/asynchiredisclustercommanddispatcher_test.cpp \
     tst/hiredisclusterepolladapter_test.cpp \
     tst/hiredisclustersystem_test.cpp
+endif
+if SENTINEL
+testrunner_SOURCES += \
+    tst/asyncsentineldatabasediscovery_test.cpp
 endif
 testrunner_CPPFLAGS = \
     $(BASE_CPPFLAGS) \

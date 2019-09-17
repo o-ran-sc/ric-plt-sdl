@@ -131,6 +131,10 @@ namespace
                 out << "Discovery type:: HIREDIS" << std::endl;
                 PrintStaticConfiguration(out);
                 break;
+            case DatabaseInfo::Discovery::SENTINEL:
+                out << "Discovery type:: SENTINEL" << std::endl;
+                PrintStaticConfiguration(out);
+                break;
         }
     }
 

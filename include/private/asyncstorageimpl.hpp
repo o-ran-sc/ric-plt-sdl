@@ -17,12 +17,14 @@
 #ifndef SHAREDDATALAYER_REDIS_ASYNCSTORAGEIMPL_HPP_
 #define SHAREDDATALAYER_REDIS_ASYNCSTORAGEIMPL_HPP_
 
+#include <functional>
 #include <sdl/asyncstorage.hpp>
 #include <sdl/publisherid.hpp>
 #include "private/configurationreader.hpp"
 #include "private/databaseconfigurationimpl.hpp"
 #include "private/logger.hpp"
 #include "private/namespaceconfigurationsimpl.hpp"
+#include "private/redis/asyncdatabasediscovery.hpp"
 
 namespace shareddatalayer
 {
@@ -31,6 +33,10 @@ namespace shareddatalayer
     class AsyncStorageImpl: public AsyncStorage
     {
     public:
+        using AsyncDatabaseDiscoveryCreator = std::function<std::shared_ptr<redis::AsyncDatabaseDiscovery>(std::shared_ptr<Engine> engine,
+                                                                                                           const DatabaseConfiguration& databaseConfiguration,
+                                                                                                           std::shared_ptr<Logger> logger)>;
+
         AsyncStorageImpl(const AsyncStorageImpl&) = delete;
 
         AsyncStorageImpl& operator = (const AsyncStorageImpl&) = delete;
@@ -48,7 +54,8 @@ namespace shareddatalayer
                          const boost::optional<PublisherId>& pId,
                          std::shared_ptr<DatabaseConfiguration> databaseConfiguration,
                          std::shared_ptr<NamespaceConfigurations> namespaceConfigurations,
-                         std::shared_ptr<Logger> logger);
+                         std::shared_ptr<Logger> logger,
+                         const AsyncDatabaseDiscoveryCreator& asyncDatabaseDiscoveryCreator);
 
         int fd() const override;
 
@@ -80,6 +87,7 @@ namespace shareddatalayer
         std::shared_ptr<NamespaceConfigurations> namespaceConfigurations;
         const boost::optional<PublisherId> publisherId;
         std::shared_ptr<Logger> logger;
+        AsyncDatabaseDiscoveryCreator asyncDatabaseDiscoveryCreator;
 
         AsyncStorage& getRedisHandler();
         AsyncStorage& getDummyHandler();

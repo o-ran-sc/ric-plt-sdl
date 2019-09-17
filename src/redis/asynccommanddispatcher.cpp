@@ -33,9 +33,11 @@ std::shared_ptr<AsyncCommandDispatcher> AsyncCommandDispatcher::create(Engine& e
                                                                        const DatabaseInfo& databaseInfo,
                                                                        std::shared_ptr<ContentsBuilder> contentsBuilder,
                                                                        bool usePermanentCommandCallbacks,
-                                                                       std::shared_ptr<Logger> logger)
+                                                                       std::shared_ptr<Logger> logger,
+                                                                       bool usedForSentinel)
 {
 #if HAVE_HIREDIS_VIP
+    static_cast<void>(usedForSentinel);
     if (databaseInfo.type == DatabaseInfo::Type::CLUSTER)
     {
         return std::make_shared<AsyncHiredisClusterCommandDispatcher>(engine,
@@ -60,7 +62,8 @@ std::shared_ptr<AsyncCommandDispatcher> AsyncCommandDispatcher::create(Engine& e
                                                            databaseInfo.hosts.at(0).getPort(),
                                                            contentsBuilder,
                                                            usePermanentCommandCallbacks,
-                                                           logger);
+                                                           logger,
+                                                           usedForSentinel);
 #else
     SHAREDDATALAYER_ABORT("Not implemented.");
 #endif

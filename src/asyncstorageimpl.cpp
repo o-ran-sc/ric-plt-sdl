@@ -23,11 +23,24 @@
 #include "private/engine.hpp"
 #include "private/logger.hpp"
 #if HAVE_REDIS
-#include "private/redis/asyncdatabasediscovery.hpp"
 #include "private/redis/asyncredisstorage.hpp"
 #endif
 
 using namespace shareddatalayer;
+using namespace shareddatalayer::redis;
+
+namespace
+{
+        std::shared_ptr<AsyncDatabaseDiscovery> asyncDatabaseDiscoveryCreator(std::shared_ptr<Engine> engine,
+                                                                              const DatabaseConfiguration& databaseConfiguration,
+                                                                              std::shared_ptr<Logger> logger)
+        {
+            return AsyncDatabaseDiscovery::create(engine,
+                                                  boost::none,
+                                                  databaseConfiguration,
+                                                  logger);
+        }
+}
 
 AsyncStorageImpl::AsyncStorageImpl(std::shared_ptr<Engine> engine,
                                    const boost::optional<PublisherId>& pId,
@@ -36,7 +49,8 @@ AsyncStorageImpl::AsyncStorageImpl(std::shared_ptr<Engine> engine,
     databaseConfiguration(std::make_shared<DatabaseConfigurationImpl>()),
     namespaceConfigurations(std::make_shared<NamespaceConfigurationsImpl>()),
     publisherId(pId),
-    logger(logger)
+    logger(logger),
+    asyncDatabaseDiscoveryCreator(::asyncDatabaseDiscoveryCreator)
 {
     ConfigurationReader configurationReader(logger);
     configurationReader.readDatabaseConfiguration(std::ref(*databaseConfiguration));
@@ -48,12 +62,14 @@ AsyncStorageImpl::AsyncStorageImpl(std::shared_ptr<Engine> engine,
                                    const boost::optional<PublisherId>& pId,
                                    std::shared_ptr<DatabaseConfiguration> databaseConfiguration,
                                    std::shared_ptr<NamespaceConfigurations> namespaceConfigurations,
-                                   std::shared_ptr<Logger> logger):
+                                   std::shared_ptr<Logger> logger,
+                                   const AsyncDatabaseDiscoveryCreator& asyncDatabaseDiscoveryCreator):
     engine(engine),
     databaseConfiguration(databaseConfiguration),
     namespaceConfigurations(namespaceConfigurations),
     publisherId(pId),
-    logger(logger)
+    logger(logger),
+    asyncDatabaseDiscoveryCreator(asyncDatabaseDiscoveryCreator)
 {
 }
 
@@ -61,9 +77,8 @@ AsyncStorage& AsyncStorageImpl::getRedisHandler()
 {
 #if HAVE_REDIS
     static AsyncRedisStorage redisHandler{engine,
-                                          redis::AsyncDatabaseDiscovery::create(
+                                          asyncDatabaseDiscoveryCreator(
                                               engine,
-                                              boost::none,
                                               std::ref(*databaseConfiguration),
                                               logger),
                                           publisherId,

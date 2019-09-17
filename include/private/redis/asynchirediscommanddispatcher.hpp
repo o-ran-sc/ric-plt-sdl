@@ -55,7 +55,8 @@ namespace shareddatalayer
                                           uint16_t port,
                                           std::shared_ptr<ContentsBuilder> contentsBuilder,
                                           bool usePermanentCommandCallbacks,
-                                          std::shared_ptr<Logger> logger);
+                                          std::shared_ptr<Logger> logger,
+                                          bool usedForSentinel);
 
             AsyncHiredisCommandDispatcher(Engine& engine,
                                           const std::string& address,
@@ -64,7 +65,8 @@ namespace shareddatalayer
                                           bool usePermanentCommandCallbacks,
                                           HiredisSystem& hiredisSystem,
                                           std::shared_ptr<HiredisEpollAdapter> adapter,
-                                          std::shared_ptr<Logger> logger);
+                                          std::shared_ptr<Logger> logger,
+                                          bool usedForSentinel);
 
             ~AsyncHiredisCommandDispatcher() override;
 
@@ -120,6 +122,7 @@ namespace shareddatalayer
             Timer::Duration connectionRetryTimerDuration;
             Timer::Duration connectionVerificationRetryTimerDuration;
             std::shared_ptr<Logger> logger;
+            bool usedForSentinel;
 
             void connect();
 

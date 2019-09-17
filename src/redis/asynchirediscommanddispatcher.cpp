@@ -80,7 +80,8 @@ AsyncHiredisCommandDispatcher::AsyncHiredisCommandDispatcher(Engine& engine,
                                                              uint16_t port,
                                                              std::shared_ptr<ContentsBuilder> contentsBuilder,
                                                              bool usePermanentCommandCallbacks,
-                                                             std::shared_ptr<Logger> logger):
+                                                             std::shared_ptr<Logger> logger,
+                                                             bool usedForSentinel):
     AsyncHiredisCommandDispatcher(engine,
                                   address,
                                   port,
@@ -88,7 +89,8 @@ AsyncHiredisCommandDispatcher::AsyncHiredisCommandDispatcher(Engine& engine,
                                   usePermanentCommandCallbacks,
                                   HiredisSystem::getHiredisSystem(),
                                   std::make_shared<HiredisEpollAdapter>(engine),
-                                  logger)
+                                  logger,
+                                  usedForSentinel)
 {
 }
 
@@ -99,7 +101,8 @@ AsyncHiredisCommandDispatcher::AsyncHiredisCommandDispatcher(Engine& engine,
                                                              bool usePermanentCommandCallbacks,
                                                              HiredisSystem& hiredisSystem,
                                                              std::shared_ptr<HiredisEpollAdapter> adapter,
-                                                             std::shared_ptr<Logger> logger):
+                                                             std::shared_ptr<Logger> logger,
+                                                             bool usedForSentinel):
     engine(engine),
     address(address),
     port(ntohs(port)),
@@ -113,7 +116,8 @@ AsyncHiredisCommandDispatcher::AsyncHiredisCommandDispatcher(Engine& engine,
     connectionRetryTimer(engine),
     connectionRetryTimerDuration(std::chrono::seconds(1)),
     connectionVerificationRetryTimerDuration(std::chrono::seconds(10)),
-    logger(logger)
+    logger(logger),
+    usedForSentinel(usedForSentinel)
 
 {
     connect();
@@ -140,28 +144,33 @@ void AsyncHiredisCommandDispatcher::connect()
 
 void AsyncHiredisCommandDispatcher::verifyConnection()
 {
-   /* When Redis has max amount of users, it will still accept new connections but will
-    * close them immediately. Therefore, we need to verify that just established connection
-    * really works. This prevents calling client readyAck callback for a connection that
-    * will be terminated immediately.
-    */
-    /* Connection verification is now done by doing redis command list query. Because we anyway
-     * need to verify that Redis has required commands, we can now combine these two operations
-     * (command list query and connection verification). If either one of the functionalities
-     * is not needed in the future and it is removed, remember to still leave the other one.
-     */
-    serviceState = ServiceState::CONNECTION_VERIFICATION;
-    /* Disarm retry timer as now we are connected to hiredis. This ensures timer disarm if
-     * we are spontaneously connected to redis while timer is running. If connection verification
-     * fails, timer is armed again (normal handling in connection verification).
-     */
-    connectionRetryTimer.disarm();
-    dispatchAsync(std::bind(&AsyncHiredisCommandDispatcher::verifyConnectionReply,
-                            this,
-                            std::placeholders::_1,
-                            std::placeholders::_2),
-                  contentsBuilder->build("COMMAND"),
-                  false);
+    if (usedForSentinel)
+        setConnected();
+    else
+    {
+       /* When Redis has max amount of users, it will still accept new connections but will
+        * close them immediately. Therefore, we need to verify that just established connection
+        * really works. This prevents calling client readyAck callback for a connection that
+        * will be terminated immediately.
+        */
+        /* Connection verification is now done by doing redis command list query. Because we anyway
+         * need to verify that Redis has required commands, we can now combine these two operations
+         * (command list query and connection verification). If either one of the functionalities
+         * is not needed in the future and it is removed, remember to still leave the other one.
+         */
+        serviceState = ServiceState::CONNECTION_VERIFICATION;
+        /* Disarm retry timer as now we are connected to hiredis. This ensures timer disarm if
+         * we are spontaneously connected to redis while timer is running. If connection verification
+         * fails, timer is armed again (normal handling in connection verification).
+         */
+        connectionRetryTimer.disarm();
+        dispatchAsync(std::bind(&AsyncHiredisCommandDispatcher::verifyConnectionReply,
+                                this,
+                                std::placeholders::_1,
+                                std::placeholders::_2),
+                      contentsBuilder->build("COMMAND"),
+                      false);
+    }
 }
 
 void AsyncHiredisCommandDispatcher::verifyConnectionReply(const std::error_code& error,

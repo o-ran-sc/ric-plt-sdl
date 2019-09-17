@@ -38,6 +38,7 @@ namespace shareddatalayer
             enum class Discovery
             {
                 HIREDIS,
+                SENTINEL
             };
 
             DatabaseConfiguration::Addresses hosts;

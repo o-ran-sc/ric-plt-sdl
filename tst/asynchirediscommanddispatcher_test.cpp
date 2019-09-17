@@ -280,7 +280,8 @@ namespace
                                                                    false,
                                                                    hiredisSystemMock,
                                                                    adapterMock,
-                                                                   logger));
+                                                                   logger,
+                                                                   false));
         }
 
         ~AsyncHiredisCommandDispatcherDisconnectedTest()
@@ -305,7 +306,8 @@ namespace
                                                                    true,
                                                                    hiredisSystemMock,
                                                                    adapterMock,
-                                                                   logger));
+                                                                   logger,
+                                                                   false));
         }
 
         ~AsyncHiredisCommandDispatcherWithPermanentCommandCallbacksTest()
@@ -397,6 +399,33 @@ namespace
     };
 
     using AsyncHiredisCommandDispatcherDeathTest = AsyncHiredisCommandDispatcherConnectedTest;
+
+    class AsyncHiredisCommandDispatcherForSentinelTest: public AsyncHiredisCommandDispatcherBaseTest
+    {
+    public:
+        AsyncHiredisCommandDispatcherForSentinelTest()
+        {
+                InSequence dummy;
+                expectationsUntilConnect();
+                expectAdapterAttach();
+                expectRedisAsyncSetConnectCallback();
+                expectRedisAsyncSetDisconnectCallback();
+                dispatcher.reset(new AsyncHiredisCommandDispatcher(engineMock,
+                                                                   "host",
+                                                                   htons(6379U),
+                                                                   contentsBuilderMock,
+                                                                   true,
+                                                                   hiredisSystemMock,
+                                                                   adapterMock,
+                                                                   logger,
+                                                                   true));
+        }
+
+        ~AsyncHiredisCommandDispatcherForSentinelTest()
+        {
+            expectRedisAsyncFree();
+        }
+    };
 }
 
 TEST_F(AsyncHiredisCommandDispatcherDisconnectedTest, IsNotCopyable)
@@ -439,7 +468,8 @@ TEST_F(AsyncHiredisCommandDispatcherDisconnectedTest, ContextErrorInConnectArmsR
                                                        false,
                                                        hiredisSystemMock,
                                                        adapterMock,
-                                                       logger));
+                                                       logger,
+                                                       false));
     expectDisarmConnectionRetryTimer();
 }
 
@@ -457,7 +487,8 @@ TEST_F(AsyncHiredisCommandDispatcherBaseTest, NullRedisContextInConnectArmsRetry
                                                        false,
                                                        hiredisSystemMock,
                                                        adapterMock,
-                                                       logger));
+                                                       logger,
+                                                       false));
 }
 
 TEST_F(AsyncHiredisCommandDispatcherDisconnectedTest, FailedCommandListQueryArmsRetryTimer)
@@ -946,4 +977,11 @@ TEST_F(AsyncHiredisCommandDispatcherDeathTest, TooManyRepliesAborts)
                                         contents);
     savedCb(&ac, &redisReplyBuilder.buildNilReply(), savedPd);
     EXPECT_EXIT(savedCb(&ac, &redisReplyBuilder.buildNilReply(), savedPd), KilledBySignal(SIGABRT), "");
+}
+
+TEST_F(AsyncHiredisCommandDispatcherForSentinelTest, CommandListInquiryIsNotSent)
+{
+    EXPECT_CALL(hiredisSystemMock, redisAsyncCommandArgv(_, _, _, _, _, _))
+        .Times(0);
+    connected(&ac, 0);
 }

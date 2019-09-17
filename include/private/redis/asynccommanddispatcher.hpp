@@ -66,7 +66,8 @@ namespace shareddatalayer
                                                                   const DatabaseInfo& databaseInfo,
                                                                   std::shared_ptr<ContentsBuilder> contentsBuilder,
                                                                   bool usePermanentCommandCallbacks,
-                                                                  std::shared_ptr<Logger> logger);
+                                                                  std::shared_ptr<Logger> logger,
+                                                                  bool usedForSentinel);
 
         protected:
             AsyncCommandDispatcher() = default;
