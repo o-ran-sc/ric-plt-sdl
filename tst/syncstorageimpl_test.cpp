@@ -343,7 +343,7 @@ TEST_F(SyncStorageImplTest, SetIfNotExistsSuccessfully)
     expectSetIfNotExistsAsync("key1", { 0x0a, 0x0b, 0x0c });
     expectPollWait();
     expectModifyIfAck(std::error_code(), true);
-    EXPECT_EQ(true, syncStorage->setIfNotExists(ns, "key1", { 0x0a, 0x0b, 0x0c }));
+    EXPECT_TRUE(syncStorage->setIfNotExists(ns, "key1", { 0x0a, 0x0b, 0x0c }));
 }
 
 TEST_F(SyncStorageImplTest, SetIfNotExistsReturnsFalseIfKeyAlreadyExists)
@@ -353,7 +353,7 @@ TEST_F(SyncStorageImplTest, SetIfNotExistsReturnsFalseIfKeyAlreadyExists)
     expectSetIfNotExistsAsync("key1", { 0x0a, 0x0b, 0x0c });
     expectPollWait();
     expectModifyIfAck(std::error_code(), false);
-    EXPECT_EQ(false, syncStorage->setIfNotExists(ns, "key1", { 0x0a, 0x0b, 0x0c }));
+    EXPECT_FALSE(syncStorage->setIfNotExists(ns, "key1", { 0x0a, 0x0b, 0x0c }));
 }
 
 TEST_F(SyncStorageImplTest, SetIfNotExistsCanThrowBackendError)
@@ -414,7 +414,7 @@ TEST_F(SyncStorageImplTest, RemoveIfSuccessfully)
     expectRemoveIfAsync("key1", { 0x0a, 0x0b, 0x0c });
     expectPollWait();
     expectModifyIfAck(std::error_code(), true);
-    EXPECT_EQ(true, syncStorage->removeIf(ns, "key1", { 0x0a, 0x0b, 0x0c }));
+    EXPECT_TRUE(syncStorage->removeIf(ns, "key1", { 0x0a, 0x0b, 0x0c }));
 }
 
 TEST_F(SyncStorageImplTest, RemoveIfReturnsFalseIfKeyDoesnotMatch)
@@ -424,7 +424,7 @@ TEST_F(SyncStorageImplTest, RemoveIfReturnsFalseIfKeyDoesnotMatch)
     expectRemoveIfAsync("key1", { 0x0a, 0x0b, 0x0c });
     expectPollWait();
     expectModifyIfAck(std::error_code(), false);
-    EXPECT_EQ(false, syncStorage->removeIf(ns, "key1", { 0x0a, 0x0b, 0x0c }));
+    EXPECT_FALSE(syncStorage->removeIf(ns, "key1", { 0x0a, 0x0b, 0x0c }));
 }
 
 TEST_F(SyncStorageImplTest, RemoveIfCanThrowBackendError)
