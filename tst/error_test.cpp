@@ -87,6 +87,10 @@ TEST_F(ErrorCodesTest, AllAsyncRedisCommandDispatcherErrorCodesHaveCorrectDescri
                 ec = aec;
                 EXPECT_EQ("redis I/O error", getErrorCodeMessage(ec));
                 break;
+            case AsyncRedisCommandDispatcherErrorCode::WRITING_TO_SLAVE:
+                ec = aec;
+                EXPECT_EQ("writing to slave", getErrorCodeMessage(ec));
+                break;
             case AsyncRedisCommandDispatcherErrorCode::END_MARKER:
                 ec = aec;
                 EXPECT_EQ("unsupported error code for message()", getErrorCodeMessage(ec));
@@ -138,6 +142,10 @@ TEST_F(ErrorCodesTest, AllAsyncRedisCommandDispatcherErrorCodesAreMappedToCorrec
                 EXPECT_TRUE(ec == InternalError::SDL_NOT_CONNECTED_TO_BACKEND);
                 break;
             case AsyncRedisCommandDispatcherErrorCode::IO_ERROR:
+                ec = aec;
+                EXPECT_TRUE(ec == InternalError::BACKEND_ERROR);
+                break;
+            case AsyncRedisCommandDispatcherErrorCode::WRITING_TO_SLAVE:
                 ec = aec;
                 EXPECT_TRUE(ec == InternalError::BACKEND_ERROR);
                 break;

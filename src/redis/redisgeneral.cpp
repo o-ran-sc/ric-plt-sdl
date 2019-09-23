@@ -70,6 +70,9 @@ namespace
         if (startsWith("ERR Protocol error", rr->str, static_cast<size_t>(rr->len)))
             return AsyncRedisCommandDispatcherErrorCode::PROTOCOL_ERROR;
 
+        if (startsWith("READONLY", rr->str, static_cast<size_t>(rr->len)))
+            return AsyncRedisCommandDispatcherErrorCode::WRITING_TO_SLAVE;
+
         std::ostringstream oss;
         oss << "redis reply error: " << std::string(rr->str, static_cast<size_t>(rr->len));
         logErrorOnce(oss.str());

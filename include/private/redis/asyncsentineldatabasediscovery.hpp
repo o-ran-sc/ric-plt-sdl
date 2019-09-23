@@ -44,7 +44,8 @@ namespace shareddatalayer
             using AsyncCommandDispatcherCreator = std::function<std::shared_ptr<redis::AsyncCommandDispatcher>(Engine& engine,
                                                                                                                const redis::DatabaseInfo& databaseInfo,
                                                                                                                std::shared_ptr<redis::ContentsBuilder> contentsBuilder,
-                                                                                                               std::shared_ptr<Logger> logger)>;
+                                                                                                               std::shared_ptr<Logger> logger,
+                                                                                                               bool usePermanentCommandCallbacks)>;
 
             AsyncSentinelDatabaseDiscovery(const AsyncSentinelDatabaseDiscovery&) = delete;
 
@@ -58,7 +59,7 @@ namespace shareddatalayer
                                            const AsyncCommandDispatcherCreator& asyncCommandDispatcherCreator,
                                            std::shared_ptr<redis::ContentsBuilder> contentsBuilder);
 
-            ~AsyncSentinelDatabaseDiscovery() override = default;
+            ~AsyncSentinelDatabaseDiscovery() override;
 
             void setStateChangedCb(const StateChangedCb& stateChangedCb) override;
 
@@ -70,10 +71,17 @@ namespace shareddatalayer
             std::shared_ptr<Logger> logger;
             StateChangedCb stateChangedCb;
             DatabaseInfo databaseInfo;
+            std::shared_ptr<redis::AsyncCommandDispatcher> subscriber;
             std::shared_ptr<redis::AsyncCommandDispatcher> dispatcher;
             std::shared_ptr<redis::ContentsBuilder> contentsBuilder;
+            Timer subscribeRetryTimer;
+            Timer::Duration subscribeRetryTimerDuration;
             Timer masterInquiryRetryTimer;
             Timer::Duration masterInquiryRetryTimerDuration;
+
+            void subscribeNotifications();
+
+            void subscribeAck(const std::error_code& error, const Reply& reply);
 
             void sendMasterInquiry();
 

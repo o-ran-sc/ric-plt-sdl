@@ -67,6 +67,7 @@ namespace shareddatalayer
             DATASET_LOADING,
             NOT_CONNECTED,
             IO_ERROR,
+            WRITING_TO_SLAVE,
             //Keep this always as last item. Used in unit tests to loop all enum values.
             END_MARKER
         };

@@ -62,9 +62,9 @@ namespace shareddatalayer
      * <code>shareddatalayer::Error::BACKEND_FAILURE</code>:<br>
      * shareddatalayer delivered the request to the backend data storage but the backend data storage failed to process the request.
      * In case of a write type request, data in the backend data storage may or may not have been altered.<br>
-     * Client is advised to try the operation again later. Optionally client can also re-create the used shareddatalayer instance.
+     * Client is advised to try the operation again later. If also re-tries are failing client should re-create the used shareddatalayer instance.
      * It is possible that the system does not automatically recover from this type of error situations. Therefore client is advised
-     * to escalate the problem to O&M if operation does not succeed after several retries.<br>
+     * to escalate the problem to O&M if operation does not succeed after above mentioned recovery actions.<br>
      * When shareddatalayer operations work again, client can choose how to best address the possible loss of consistency
      * (see <code>shareddatalayer::Error::OPERATION_INTERRUPTED</code> for possible options).
      *

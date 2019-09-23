@@ -557,6 +557,10 @@ TEST_F(SyncStorageImplTest, AllDispatcherErrorCodesThrowCorrectException)
                 expectModifyIfAck(aec, false);
                 EXPECT_THROW(syncStorage->setIfNotExists(ns, "key1", { 0x0a, 0x0b, 0x0c }), BackendError);
                 break;
+            case AsyncRedisCommandDispatcherErrorCode::WRITING_TO_SLAVE:
+                expectModifyIfAck(aec, false);
+                EXPECT_THROW(syncStorage->setIfNotExists(ns, "key1", { 0x0a, 0x0b, 0x0c }), BackendError);
+                break;
             default:
                 FAIL() << "No mapping for AsyncRedisCommandDispatcherErrorCode value: " << aec;
                 break;

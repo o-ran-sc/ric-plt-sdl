@@ -109,6 +109,8 @@ namespace
                 return "redis error";
             case AsyncRedisCommandDispatcherErrorCode::IO_ERROR:
                 return "redis I/O error";
+            case AsyncRedisCommandDispatcherErrorCode::WRITING_TO_SLAVE:
+                return "writing to slave";
             case AsyncRedisCommandDispatcherErrorCode::END_MARKER:
                 logErrorOnce("AsyncRedisCommandDispatcherErrorCode::END_MARKER is not meant to be queried (it is only for enum loop control)");
                 return "unsupported error code for message()";
@@ -136,6 +138,8 @@ namespace
             case AsyncRedisCommandDispatcherErrorCode::UNKNOWN_ERROR:
                 return InternalError::BACKEND_ERROR;
             case AsyncRedisCommandDispatcherErrorCode::IO_ERROR:
+                return InternalError::BACKEND_ERROR;
+            case AsyncRedisCommandDispatcherErrorCode::WRITING_TO_SLAVE:
                 return InternalError::BACKEND_ERROR;
             case AsyncRedisCommandDispatcherErrorCode::END_MARKER:
                 logErrorOnce("AsyncRedisCommandDispatcherErrorCode::END_MARKER is not meant to be mapped to InternalError (it is only for enum loop control)");
