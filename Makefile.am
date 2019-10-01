@@ -85,6 +85,7 @@ libsdl_la_SOURCES += \
     include/private/redis/asyncdatabasediscovery.hpp \
     include/private/redis/asyncredisreply.hpp \
     include/private/redis/asyncredisstorage.hpp \
+    include/private/redis/asyncsentineldatabasediscovery.hpp \
     include/private/redis/contents.hpp \
     include/private/redis/contentsbuilder.hpp \
     include/private/redis/databaseinfo.hpp \
@@ -93,6 +94,7 @@ libsdl_la_SOURCES += \
     src/redis/asyncdatabasediscovery.cpp \
     src/redis/asyncredisreply.cpp \
     src/redis/asyncredisstorage.cpp \
+    src/redis/asyncsentineldatabasediscovery.cpp \
     src/redis/contentsbuilder.cpp
 endif
 if HIREDIS
@@ -116,11 +118,6 @@ libsdl_la_SOURCES += \
     src/redis/asynchiredisclustercommanddispatcher.cpp \
     src/redis/hiredisclusterepolladapter.cpp \
     src/redis/hiredisclustersystem.cpp
-endif
-if SENTINEL
-libsdl_la_SOURCES += \
-    include/private/redis/asyncsentineldatabasediscovery.hpp \
-    src/redis/asyncsentineldatabasediscovery.cpp
 endif
 libsdl_la_CPPFLAGS = \
     $(BASE_CPPFLAGS) \
@@ -350,6 +347,7 @@ testrunner_SOURCES += \
     tst/asynccommanddispatcher_test.cpp \
     tst/asyncdatabasediscovery_test.cpp \
     tst/asyncredisstorage_test.cpp \
+    tst/asyncsentineldatabasediscovery_test.cpp \
     tst/asyncstorageimpl_test.cpp \
     tst/contents_test.cpp \
     tst/contentsbuilder_test.cpp \
@@ -374,10 +372,6 @@ testrunner_SOURCES += \
     tst/asynchiredisclustercommanddispatcher_test.cpp \
     tst/hiredisclusterepolladapter_test.cpp \
     tst/hiredisclustersystem_test.cpp
-endif
-if SENTINEL
-testrunner_SOURCES += \
-    tst/asyncsentineldatabasediscovery_test.cpp
 endif
 testrunner_CPPFLAGS = \
     $(BASE_CPPFLAGS) \

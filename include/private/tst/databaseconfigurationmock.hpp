@@ -28,10 +28,14 @@ namespace shareddatalayer
         public:
             MOCK_METHOD1(checkAndApplyDbType, void(const std::string& type));
             MOCK_METHOD1(checkAndApplyServerAddress, void(const std::string& address));
+            MOCK_METHOD1(checkAndApplySentinelAddress, void(const std::string& address));
+            MOCK_METHOD1(checkAndApplySentinelMasterName, void(const std::string& name));
             MOCK_CONST_METHOD0(getDbType, DatabaseConfiguration::DbType());
             MOCK_CONST_METHOD0(getServerAddresses, DatabaseConfiguration::Addresses());
             MOCK_CONST_METHOD0(getDefaultServerAddresses, DatabaseConfiguration::Addresses());
             MOCK_CONST_METHOD0(isEmpty, bool());
+            MOCK_CONST_METHOD0(getSentinelAddress, boost::optional<HostAndPort>());
+            MOCK_CONST_METHOD0(getSentinelMasterName, std::string());
         };
     }
 }

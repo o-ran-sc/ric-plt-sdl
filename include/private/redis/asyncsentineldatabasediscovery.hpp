@@ -52,10 +52,14 @@ namespace shareddatalayer
             AsyncSentinelDatabaseDiscovery& operator = (const AsyncSentinelDatabaseDiscovery&) = delete;
 
             AsyncSentinelDatabaseDiscovery(std::shared_ptr<Engine> engine,
-                                           std::shared_ptr<Logger> logger);
+                                           std::shared_ptr<Logger> logger,
+                                           const HostAndPort& sentinelAddress,
+                                           const std::string& sentinelMasterName);
 
             AsyncSentinelDatabaseDiscovery(std::shared_ptr<Engine> engine,
                                            std::shared_ptr<Logger> logger,
+                                           const HostAndPort& sentinelAddress,
+                                           const std::string& sentinelMasterName,
                                            const AsyncCommandDispatcherCreator& asyncCommandDispatcherCreator,
                                            std::shared_ptr<redis::ContentsBuilder> contentsBuilder);
 
@@ -71,6 +75,7 @@ namespace shareddatalayer
             std::shared_ptr<Logger> logger;
             StateChangedCb stateChangedCb;
             DatabaseInfo databaseInfo;
+            std::string sentinelMasterName;
             std::shared_ptr<redis::AsyncCommandDispatcher> subscriber;
             std::shared_ptr<redis::AsyncCommandDispatcher> dispatcher;
             std::shared_ptr<redis::ContentsBuilder> contentsBuilder;

@@ -20,6 +20,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <boost/lexical_cast.hpp>
+#include <ostream>
 
 using namespace shareddatalayer;
 
@@ -155,4 +156,10 @@ bool HostAndPort::operator<(const HostAndPort& hp) const
         return this->getPort() < hp.getPort();
     else
         return this->getHost() < hp.getHost();
+}
+
+std::ostream& shareddatalayer::operator << (std::ostream& os, const HostAndPort& hostAndPort)
+{
+    os << hostAndPort.getHost() << ":" << hostAndPort.getPort();
+    return os;
 }

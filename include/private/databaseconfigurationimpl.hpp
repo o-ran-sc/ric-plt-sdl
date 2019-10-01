@@ -32,17 +32,27 @@ namespace shareddatalayer
 
         void checkAndApplyServerAddress(const std::string& address) override;
 
+        void checkAndApplySentinelAddress(const std::string& address) override;
+
+        void checkAndApplySentinelMasterName(const std::string& name) override;
+
         DatabaseConfiguration::DbType getDbType() const override;
 
         DatabaseConfigurationImpl::Addresses getServerAddresses() const override;
 
         DatabaseConfiguration::Addresses getDefaultServerAddresses() const override;
 
+        boost::optional<HostAndPort> getSentinelAddress() const override;
+
+        std::string getSentinelMasterName() const override;
+
         bool isEmpty() const override;
 
     private:
         DbType dbType;
         Addresses serverAddresses;
+        boost::optional<HostAndPort> sentinelAddress;
+        std::string sentinelMasterName;
     };
 }
 

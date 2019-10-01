@@ -71,6 +71,13 @@ TEST_F(DatabaseConfigurationImplTest, CanApplyRedisClusterDbTypeStringAndReturnT
     EXPECT_EQ(DatabaseConfiguration::DbType::REDIS_CLUSTER, retDbType);
 }
 
+TEST_F(DatabaseConfigurationImplTest, CanApplyRedisSentinelDbTypeStringAndReturnType)
+{
+    databaseConfigurationImpl->checkAndApplyDbType("redis-sentinel");
+    const auto retDbType(databaseConfigurationImpl->getDbType());
+    EXPECT_EQ(DatabaseConfiguration::DbType::REDIS_SENTINEL, retDbType);
+}
+
 TEST_F(DatabaseConfigurationImplTest, CanApplyNewAddressesOneByOneAndReturnAllAddresses)
 {
     databaseConfigurationImpl->checkAndApplyServerAddress("dummydatabaseaddress.local");
@@ -102,4 +109,29 @@ TEST_F(DatabaseConfigurationImplTest, IsEmptyReturnsCorrectInformation)
     EXPECT_TRUE(databaseConfigurationImpl->isEmpty());
     databaseConfigurationImpl->checkAndApplyServerAddress("[2001::123]:12345");
     EXPECT_FALSE(databaseConfigurationImpl->isEmpty());
+}
+
+TEST_F(DatabaseConfigurationImplTest, DefaultSentinelAddressIsNone)
+{
+    EXPECT_EQ(boost::none, databaseConfigurationImpl->getSentinelAddress());
+}
+
+TEST_F(DatabaseConfigurationImplTest, CanApplyAndReturnSentinelAddress)
+{
+    databaseConfigurationImpl->checkAndApplySentinelAddress("dummydatabaseaddress.local:1234");
+    auto address = databaseConfigurationImpl->getSentinelAddress();
+    EXPECT_NE(boost::none, databaseConfigurationImpl->getSentinelAddress());
+    EXPECT_EQ("dummydatabaseaddress.local", address->getHost());
+    EXPECT_EQ(1234, ntohs(address->getPort()));
+}
+
+TEST_F(DatabaseConfigurationImplTest, DefaultSentinelMasterNameIsEmpty)
+{
+    EXPECT_EQ("", databaseConfigurationImpl->getSentinelMasterName());
+}
+
+TEST_F(DatabaseConfigurationImplTest, CanApplyAndReturnSentinelMasterName)
+{
+    databaseConfigurationImpl->checkAndApplySentinelMasterName("mymaster");
+    EXPECT_EQ("mymaster", databaseConfigurationImpl->getSentinelMasterName());
 }

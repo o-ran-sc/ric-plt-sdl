@@ -20,6 +20,7 @@
 #include <string>
 #include <stdint.h>
 #include <sdl/exception.hpp>
+#include <iosfwd>
 
 namespace shareddatalayer
 {
@@ -77,6 +78,8 @@ namespace shareddatalayer
     public:
         EmptyHost();
     };
+
+    std::ostream& operator << (std::ostream& os, const HostAndPort& hostAndPort);
 }
 
 #endif

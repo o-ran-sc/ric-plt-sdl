@@ -75,6 +75,14 @@ namespace
         return ports;
     }
 
+    void PrintEnvironmentVariable(std::ostream& out, std::string name)
+    {
+        const auto var(name.c_str());
+        const auto conf(getenv(var));
+        if (conf != nullptr)
+            out << var  << ": " << conf << std::endl;
+    }
+
     void PrintStaticConfiguration(std::ostream& out)
     {
         auto engine(std::make_shared<EngineImpl>());
@@ -93,6 +101,8 @@ namespace
                 out << "Static DB type: redis-cluster" << std::endl;
             else if (staticDbType == DatabaseConfiguration::DbType::REDIS_STANDALONE)
                 out << "Static DB type: redis-standalone" << std::endl;
+            else if (staticDbType == DatabaseConfiguration::DbType::REDIS_SENTINEL)
+                out << "Static DB type: redis-sentinel" << std::endl;
             else
                 out << "Static DB type not defined" << std::endl;
         }
@@ -102,10 +112,10 @@ namespace
             out << "Default Host: " << getHosts(defaultAddresses) << std::endl;
             out << "Default Port: " << getPorts(defaultAddresses) << std::endl;
         }
-        const auto var(DB_HOST_ENV_VAR_NAME);
-        const auto conf(getenv(var));
-        if (conf != nullptr)
-            out << var  << ": " << conf << std::endl;
+        PrintEnvironmentVariable(out, DB_HOST_ENV_VAR_NAME);
+        PrintEnvironmentVariable(out, DB_PORT_ENV_VAR_NAME);
+        PrintEnvironmentVariable(out, SENTINEL_PORT_ENV_VAR_NAME);
+        PrintEnvironmentVariable(out, SENTINEL_MASTER_NAME_ENV_VAR_NAME);
     }
 
     void PrintDatabaseInfo(const DatabaseInfo& databaseInfo, std::ostream& out)

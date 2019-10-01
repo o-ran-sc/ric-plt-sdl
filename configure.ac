@@ -62,10 +62,6 @@ AC_SUBST(SDL_CONF_DIR)
 AC_DEFINE(HAVE_REDIS, [1], [Have redis])
 AM_CONDITIONAL([REDIS], [test xtrue])
 
-# @TODO Change to true when Redis HA support is activated.
-AC_DEFINE(HAVE_SENTINEL, [0], [Have sentinel])
-AM_CONDITIONAL([SENTINEL], [test "xyes" = "xno"])
-
 PKG_CHECK_MODULES([HIREDIS], [hiredis])
 AC_DEFINE(HAVE_HIREDIS, [1], [Have hiredis])
 AM_CONDITIONAL([HIREDIS], [test xtrue])

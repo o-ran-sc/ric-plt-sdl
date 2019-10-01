@@ -19,6 +19,7 @@
 
 #include <string>
 #include <vector>
+#include <boost/optional.hpp>
 #include "private/hostandport.hpp"
 
 namespace shareddatalayer
@@ -32,15 +33,20 @@ namespace shareddatalayer
         {
             UNKNOWN = 0,
             REDIS_STANDALONE,
-            REDIS_CLUSTER
+            REDIS_CLUSTER,
+            REDIS_SENTINEL
         };
 
         virtual ~DatabaseConfiguration() = default;
         virtual void checkAndApplyDbType(const std::string& type) = 0;
         virtual void checkAndApplyServerAddress(const std::string& address) = 0;
+        virtual void checkAndApplySentinelAddress(const std::string& address) = 0;
+        virtual void checkAndApplySentinelMasterName(const std::string& name) = 0;
         virtual DatabaseConfiguration::DbType getDbType() const = 0;
         virtual DatabaseConfiguration::Addresses getServerAddresses() const = 0;
         virtual DatabaseConfiguration::Addresses getDefaultServerAddresses() const = 0;
+        virtual boost::optional<HostAndPort> getSentinelAddress() const = 0; // Optional return value, because empty HostAndPort can't be created.
+        virtual std::string getSentinelMasterName() const = 0;
         virtual bool isEmpty() const = 0;
 
         DatabaseConfiguration(DatabaseConfiguration&&) = delete;

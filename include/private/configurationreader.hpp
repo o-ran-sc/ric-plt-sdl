@@ -19,6 +19,8 @@
 
 #define DB_HOST_ENV_VAR_NAME "DBAAS_SERVICE_HOST"
 #define DB_PORT_ENV_VAR_NAME "DBAAS_SERVICE_PORT"
+#define SENTINEL_PORT_ENV_VAR_NAME "DBAAS_SERVICE_SENTINEL_PORT"
+#define SENTINEL_MASTER_NAME_ENV_VAR_NAME "DBAAS_MASTER_NAME"
 
 #include <iosfwd>
 #include <string>
@@ -61,6 +63,10 @@ namespace shareddatalayer
         std::string dbHostEnvVariableValue;
         const std::string dbPortEnvVariableName;
         std::string dbPortEnvVariableValue;
+        const std::string sentinelPortEnvVariableName;
+        std::string sentinelPortEnvVariableValue;
+        const std::string sentinelMasterNameEnvVariableName;
+        std::string sentinelMasterNameEnvVariableValue;
         boost::optional<boost::property_tree::ptree> jsonDatabaseConfiguration;
         std::string sourceForDatabaseConfiguration;
         std::unordered_map<std::string, std::pair<boost::property_tree::ptree, std::string>> jsonNamespaceConfigurations;

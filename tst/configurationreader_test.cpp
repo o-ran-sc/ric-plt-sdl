@@ -62,6 +62,16 @@ namespace
             EXPECT_CALL(databaseConfigurationMock, checkAndApplyServerAddress(address));
         }
 
+        void expectSentinelAddressConfigurationCheckAndApply(const std::string& address)
+        {
+            EXPECT_CALL(databaseConfigurationMock, checkAndApplySentinelAddress(address));
+        }
+
+        void expectSentinelMasterNameConfigurationCheckAndApply(const std::string& address)
+        {
+            EXPECT_CALL(databaseConfigurationMock, checkAndApplySentinelMasterName(address));
+        }
+
         void expectDatabaseConfigurationIsEmpty_returnFalse()
         {
             EXPECT_CALL(databaseConfigurationMock, isEmpty()).
@@ -723,6 +733,8 @@ class ConfigurationReaderEnvironmentVariableTest: public ConfigurationReaderBase
 public:
     std::string dbHostEnvVariableValue;
     std::string dbPortEnvVariableValue;
+    std::string sentinelPortEnvVariableValue;
+    std::string sentinelMasterNameEnvVariableValue;
     std::istringstream is{R"JSON(
         {
             "database":
@@ -757,7 +769,7 @@ public:
             try
             {
                 EXPECT_CALL(systemMock, getenv(_))
-				    .Times(2)
+                    .Times(4)
                     .WillOnce(Return(dbHostEnvVariableValue.c_str()))
                     .WillOnce(Return(nullptr));
                 initializeReaderWithoutDirectories();
@@ -779,6 +791,8 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationCanOv
     expectGetEnvironmentString(dbHostEnvVariableValue.c_str());
     dbPortEnvVariableValue = "12345";
     expectGetEnvironmentString(dbPortEnvVariableValue.c_str());
+    expectGetEnvironmentString(nullptr); //SENTINEL_PORT_ENV_VAR_NAME
+    expectGetEnvironmentString(nullptr); //SENTINEL_MASTER_NAME_ENV_VAR_NAME
 
     expectDbTypeConfigurationCheckAndApply("redis-standalone");
     expectDBServerAddressConfigurationCheckAndApply("unknownAddress.local:12345");
@@ -792,7 +806,9 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWitho
     InSequence dummy;
     dbHostEnvVariableValue = "server.local";
     expectGetEnvironmentString(dbHostEnvVariableValue.c_str());
-    expectGetEnvironmentString(nullptr);
+    expectGetEnvironmentString(nullptr); //DB_PORT_ENV_VAR_NAME
+    expectGetEnvironmentString(nullptr); //SENTINEL_PORT_ENV_VAR_NAME
+    expectGetEnvironmentString(nullptr); //SENTINEL_MASTER_NAME_ENV_VAR_NAME
 
     expectDbTypeConfigurationCheckAndApply("redis-standalone");
     expectDBServerAddressConfigurationCheckAndApply("server.local");
@@ -817,10 +833,31 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationAccep
     InSequence dummy;
     dbHostEnvVariableValue = "[2001::123]:12345";
     expectGetEnvironmentString(dbHostEnvVariableValue.c_str());
-    expectGetEnvironmentString(nullptr);
+    expectGetEnvironmentString(nullptr); //DB_PORT_ENV_VAR_NAME
+    expectGetEnvironmentString(nullptr); //SENTINEL_PORT_ENV_VAR_NAME
+    expectGetEnvironmentString(nullptr); //SENTINEL_MASTER_NAME_ENV_VAR_NAME
 
     expectDbTypeConfigurationCheckAndApply("redis-standalone");
     expectDBServerAddressConfigurationCheckAndApply("[2001::123]:12345");
+    initializeReaderWithoutDirectories();
+    configurationReader->readDatabaseConfiguration(databaseConfigurationMock);
+}
+
+TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWithSentinel)
+{
+    InSequence dummy;
+    dbHostEnvVariableValue = "sentinelAddress.local";
+    expectGetEnvironmentString(dbHostEnvVariableValue.c_str());
+    dbPortEnvVariableValue = "1111";
+    expectGetEnvironmentString(dbPortEnvVariableValue.c_str());
+    sentinelPortEnvVariableValue = "2222";
+    expectGetEnvironmentString(sentinelPortEnvVariableValue.c_str());
+    sentinelMasterNameEnvVariableValue = "mymaster";
+    expectGetEnvironmentString(sentinelMasterNameEnvVariableValue.c_str());
+
+    expectDbTypeConfigurationCheckAndApply("redis-sentinel");
+    expectSentinelAddressConfigurationCheckAndApply("sentinelAddress.local:2222");
+    expectSentinelMasterNameConfigurationCheckAndApply(sentinelMasterNameEnvVariableValue);
     initializeReaderWithoutDirectories();
     configurationReader->readDatabaseConfiguration(databaseConfigurationMock);
 }
