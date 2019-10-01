@@ -28,6 +28,7 @@ namespace
     }
 
     const uint16_t DEFAULT_PORT(6379U);
+    const uint16_t DEFAULT_SENTINEL_PORT(26379U);
 }
 
 DatabaseConfigurationImpl::DatabaseConfigurationImpl():
@@ -45,6 +46,8 @@ void DatabaseConfigurationImpl::checkAndApplyDbType(const std::string& type)
         dbType = DatabaseConfiguration::DbType::REDIS_STANDALONE;
     else if (type == "redis-cluster")
         dbType = DatabaseConfiguration::DbType::REDIS_CLUSTER;
+    else if (type == "redis-sentinel")
+        dbType = DatabaseConfiguration::DbType::REDIS_SENTINEL;
     else
         throw DatabaseConfiguration::InvalidDbType(type);
 }
@@ -72,4 +75,24 @@ DatabaseConfiguration::Addresses DatabaseConfigurationImpl::getServerAddresses()
 DatabaseConfiguration::Addresses DatabaseConfigurationImpl::getDefaultServerAddresses() const
 {
     return { HostAndPort(getDefaultHost(), htons(DEFAULT_PORT)) };
+}
+
+void DatabaseConfigurationImpl::checkAndApplySentinelAddress(const std::string& address)
+{
+    sentinelAddress = HostAndPort(address, htons(DEFAULT_SENTINEL_PORT));
+}
+
+boost::optional<HostAndPort> DatabaseConfigurationImpl::getSentinelAddress() const
+{
+    return sentinelAddress;
+}
+
+void DatabaseConfigurationImpl::checkAndApplySentinelMasterName(const std::string& name)
+{
+    sentinelMasterName = name;
+}
+
+std::string DatabaseConfigurationImpl::getSentinelMasterName() const
+{
+    return sentinelMasterName;
 }

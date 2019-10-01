@@ -200,10 +200,14 @@ ConfigurationReader::ConfigurationReader(std::shared_ptr<Logger> logger):
 ConfigurationReader::ConfigurationReader(const Directories& directories,
                                          System& system,
                                          std::shared_ptr<Logger> logger):
-	dbHostEnvVariableName(DB_HOST_ENV_VAR_NAME),
-	dbHostEnvVariableValue({}),
-	dbPortEnvVariableName(DB_PORT_ENV_VAR_NAME),
-	dbPortEnvVariableValue({}),
+    dbHostEnvVariableName(DB_HOST_ENV_VAR_NAME),
+    dbHostEnvVariableValue({}),
+    dbPortEnvVariableName(DB_PORT_ENV_VAR_NAME),
+    dbPortEnvVariableValue({}),
+    sentinelPortEnvVariableName(SENTINEL_PORT_ENV_VAR_NAME),
+    sentinelPortEnvVariableValue({}),
+    sentinelMasterNameEnvVariableName(SENTINEL_MASTER_NAME_ENV_VAR_NAME),
+    sentinelMasterNameEnvVariableValue({}),
     jsonDatabaseConfiguration(boost::none),
     logger(logger)
 {
@@ -215,6 +219,12 @@ ConfigurationReader::ConfigurationReader(const Directories& directories,
         auto envStr = system.getenv(dbPortEnvVariableName.c_str());
         if (envStr)
             dbPortEnvVariableValue = envStr;
+        envStr = system.getenv(sentinelPortEnvVariableName.c_str());
+        if (envStr)
+            sentinelPortEnvVariableValue = envStr;
+        envStr = system.getenv(sentinelMasterNameEnvVariableName.c_str());
+        if (envStr)
+            sentinelMasterNameEnvVariableValue = envStr;
     }
 
     readConfigurationFromDirectories(directories);
@@ -285,12 +295,21 @@ void ConfigurationReader::readDatabaseConfiguration(DatabaseConfiguration& datab
     {
         if (sourceForDatabaseConfiguration == dbHostEnvVariableName)
         {
-            // Currently hard coded to redis-standalone, because RIC dbaas does not support Redis cluster configuration.
-        	validateAndSetDbType("redis-standalone", databaseConfiguration, sourceForDatabaseConfiguration);
-        	if (dbPortEnvVariableValue.empty())
-        		parseDatabaseServersConfigurationFromString(databaseConfiguration, dbHostEnvVariableValue, sourceForDatabaseConfiguration);
-        	else
-        		parseDatabaseServersConfigurationFromString(databaseConfiguration, dbHostEnvVariableValue + ":" + dbPortEnvVariableValue, sourceForDatabaseConfiguration);
+            // NOTE: Redis cluster is not currently configurable via environment variables.
+            if (sentinelPortEnvVariableValue.empty())
+            {
+                validateAndSetDbType("redis-standalone", databaseConfiguration, sourceForDatabaseConfiguration);
+                if (dbPortEnvVariableValue.empty())
+                    parseDatabaseServersConfigurationFromString(databaseConfiguration, dbHostEnvVariableValue, sourceForDatabaseConfiguration);
+                else
+                    parseDatabaseServersConfigurationFromString(databaseConfiguration, dbHostEnvVariableValue + ":" + dbPortEnvVariableValue, sourceForDatabaseConfiguration);
+            }
+            else
+            {
+                validateAndSetDbType("redis-sentinel", databaseConfiguration, sourceForDatabaseConfiguration);
+                databaseConfiguration.checkAndApplySentinelAddress(dbHostEnvVariableValue + ":" + sentinelPortEnvVariableValue);
+                databaseConfiguration.checkAndApplySentinelMasterName(sentinelMasterNameEnvVariableValue);
+            }
         }
         else
             parseDatabaseConfigurationTree(databaseConfiguration, jsonDatabaseConfiguration, sourceForDatabaseConfiguration);

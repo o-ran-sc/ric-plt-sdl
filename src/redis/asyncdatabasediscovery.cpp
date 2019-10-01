@@ -14,18 +14,16 @@
    limitations under the License.
 */
 
-#include "private/redis/asyncdatabasediscovery.hpp"
-#include "private/databaseconfiguration.hpp"
-#include "private/logger.hpp"
 #include <cstdlib>
 #include "config.h"
+#include "private/abort.hpp"
+#include "private/databaseconfiguration.hpp"
+#include "private/logger.hpp"
+#include "private/redis/asyncdatabasediscovery.hpp"
 #if HAVE_HIREDIS
 #include "private/redis/asynchiredisdatabasediscovery.hpp"
 #endif
-#if HAVE_SENTINEL
 #include "private/redis/asyncsentineldatabasediscovery.hpp"
-#endif
-#include "private/abort.hpp"
 
 using namespace shareddatalayer::redis;
 
@@ -54,17 +52,26 @@ std::shared_ptr<AsyncDatabaseDiscovery> AsyncDatabaseDiscovery::create(std::shar
     else
     {
 #if HAVE_HIREDIS
-#if HAVE_SENTINEL
-        static_cast<void>(ns);
-        return std::make_shared<AsyncSentinelDatabaseDiscovery>(engine,
-                                                                logger);
-#else
-        return std::make_shared<AsyncHiredisDatabaseDiscovery>(engine,
-                                                               ns,
-                                                               DatabaseInfo::Type::SINGLE,
-                                                               staticAddresses,
-                                                               logger);
-#endif
+        if (staticDbType == DatabaseConfiguration::DbType::REDIS_SENTINEL)
+        {
+            static_cast<void>(ns);
+            auto sentinelAddress(staticDatabaseConfiguration.getSentinelAddress());
+            if (sentinelAddress)
+                return std::make_shared<AsyncSentinelDatabaseDiscovery>(engine,
+                                                                        logger,
+                                                                        *sentinelAddress,
+                                                                        staticDatabaseConfiguration.getSentinelMasterName());
+            else
+                SHAREDDATALAYER_ABORT("Sentinel address not configured.");
+        }
+        else
+        {
+            return std::make_shared<AsyncHiredisDatabaseDiscovery>(engine,
+                                                                   ns,
+                                                                   DatabaseInfo::Type::SINGLE,
+                                                                   staticAddresses,
+                                                                   logger);
+        }
 #else
         static_cast<void>(logger);
         SHAREDDATALAYER_ABORT("No Hiredis");

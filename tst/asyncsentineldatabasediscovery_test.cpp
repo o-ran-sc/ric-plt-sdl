@@ -364,6 +364,8 @@ namespace
                     new AsyncSentinelDatabaseDiscovery(
                             engineMock,
                             logger,
+                            HostAndPort(someHost, somePort),
+                            "mymaster",
                             std::bind(&AsyncSentinelDatabaseDiscoveryBaseTest::asyncCommandDispatcherCreator,
                                       this),
                             contentsBuilderMock));

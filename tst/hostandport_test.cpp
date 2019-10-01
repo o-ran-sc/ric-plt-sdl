@@ -17,6 +17,7 @@
 #include <arpa/inet.h>
 #include <gtest/gtest.h>
 #include "private/hostandport.hpp"
+#include <sstream>
 
 using namespace shareddatalayer;
 using namespace testing;
@@ -134,4 +135,13 @@ TEST(HostAndPortTest, CanThrowAndCatchEmptyHost)
 TEST(HostAndPortTest, EmptyHostThrows)
 {
     EXPECT_THROW(HostAndPort(":1234", htons(100)), HostAndPort::EmptyHost);
+}
+
+TEST(HostAndPortTest, CanOutput)
+{
+    std::string expectedOutput("somehost.somesubdomain.somedomain:1234");
+    std::stringstream ss;
+    HostAndPort hostAndPort("somehost.somesubdomain.somedomain", 1234);
+    ss << hostAndPort;
+    EXPECT_EQ(expectedOutput, ss.str());
 }

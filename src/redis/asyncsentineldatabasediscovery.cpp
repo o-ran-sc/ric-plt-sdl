@@ -56,9 +56,13 @@ namespace
 }
 
 AsyncSentinelDatabaseDiscovery::AsyncSentinelDatabaseDiscovery(std::shared_ptr<Engine> engine,
-                                                               std::shared_ptr<Logger> logger):
+                                                               std::shared_ptr<Logger> logger,
+                                                               const HostAndPort& sentinelAddress,
+                                                               const std::string& sentinelMasterName):
         AsyncSentinelDatabaseDiscovery(engine,
                                        logger,
+                                       sentinelAddress,
+                                       sentinelMasterName,
                                        ::asyncCommandDispatcherCreator,
                                        std::make_shared<redis::ContentsBuilder>(AsyncStorage::SEPARATOR))
 {
@@ -66,15 +70,17 @@ AsyncSentinelDatabaseDiscovery::AsyncSentinelDatabaseDiscovery(std::shared_ptr<E
 
 AsyncSentinelDatabaseDiscovery::AsyncSentinelDatabaseDiscovery(std::shared_ptr<Engine> engine,
                                                                std::shared_ptr<Logger> logger,
+                                                               const HostAndPort& sentinelAddress,
+                                                               const std::string& sentinelMasterName,
                                                                const AsyncCommandDispatcherCreator& asyncCommandDispatcherCreator,
                                                                std::shared_ptr<redis::ContentsBuilder> contentsBuilder):
         engine(engine),
         logger(logger),
-        // @TODO Make configurable.
-        databaseInfo(DatabaseInfo({DatabaseConfiguration::Addresses({HostAndPort("dbaas-ha", htons(26379U))}),
+        databaseInfo(DatabaseInfo({DatabaseConfiguration::Addresses({sentinelAddress}),
                      DatabaseInfo::Type::SINGLE,
                      boost::none,
                      DatabaseInfo::Discovery::SENTINEL})),
+        sentinelMasterName(sentinelMasterName),
         contentsBuilder(contentsBuilder),
         subscribeRetryTimer(*engine),
         subscribeRetryTimerDuration(std::chrono::seconds(1)),
@@ -181,7 +187,7 @@ void AsyncSentinelDatabaseDiscovery::sendMasterInquiry()
                                         std::placeholders::_1,
                                         std::placeholders::_2),
                               "dummyNamespace", // Not meaningful for Sentinel
-                              contentsBuilder->build("SENTINEL", "get-master-addr-by-name", "mymaster")); //@TODO Make master name configurable
+                              contentsBuilder->build("SENTINEL", "get-master-addr-by-name", sentinelMasterName));
 }
 
 void AsyncSentinelDatabaseDiscovery::masterInquiryAck(const std::error_code& error,
