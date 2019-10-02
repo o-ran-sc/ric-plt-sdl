@@ -11,7 +11,7 @@
 
 m4_define([SDL_MAJOR], [1])
 m4_define([SDL_MINOR], [0])
-m4_define([SDL_MICRO], [1])
+m4_define([SDL_MICRO], [2])
 
 # SDL ABI version with libtool
 #
@@ -26,7 +26,7 @@ m4_define([SDL_MICRO], [1])
 # Change the numbers just before release.
 
 m4_define([SDL_CURRENT], [1])
-m4_define([SDL_REVISION], [1])
+m4_define([SDL_REVISION], [2])
 m4_define([SDL_AGE], [0])
 
 AC_INIT([shareddatalayer], [SDL_MAJOR.SDL_MINOR.SDL_MICRO], [], [], [https://gerrit.o-ran-sc.org/r/admin/repos/ric-plt/sdl])
@@ -53,8 +53,8 @@ AX_BOOST_SYSTEM
 AX_BOOST_FILESYSTEM
 PKG_PROG_PKG_CONFIG
 
-AC_DEFINE([HAVE_SYSTEMLOGGER], [1], [Have systemlogger])
-AM_CONDITIONAL([SYSTEMLOGGER], [test xtrue])
+AC_DEFINE([HAVE_SYSTEMLOGGER], [0], [Have systemlogger])
+AM_CONDITIONAL([SYSTEMLOGGER], [test "xyes" = "xno"])
 
 SDL_CONF_DIR=$sysconfdir/$PACKAGE_NAME.d
 AC_SUBST(SDL_CONF_DIR)

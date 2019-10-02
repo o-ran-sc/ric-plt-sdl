@@ -16,8 +16,10 @@
 
 #include "config.h"
 #include <memory>
+#include <ostream>
 #include <string>
 #include "private/createlogger.hpp"
+#include "private/stdstreamlogger.hpp"
 #if HAVE_SYSTEMLOGGER
 #include "private/systemlogger.hpp"
 #endif
@@ -29,24 +31,24 @@ std::shared_ptr<Logger> shareddatalayer::createLogger(const std::string& prefix)
 #if HAVE_SYSTEMLOGGER
     return std::shared_ptr<Logger>(new SystemLogger(prefix));
 #else
-#error "Need to compile with at least one logging backend"
+    return std::shared_ptr<Logger>(new StdStreamLogger(prefix));
 #endif
 }
 
 void shareddatalayer::logDebugOnce(const std::string& msg) noexcept
 {
     auto logger(createLogger(SDL_LOG_PREFIX));
-    logger->debug() << msg;
+    logger->debug() << msg << std::endl;
 }
 
 void shareddatalayer::logErrorOnce(const std::string& msg) noexcept
 {
     auto logger(createLogger(SDL_LOG_PREFIX));
-    logger->error() << msg;
+    logger->error() << msg << std::endl;
 }
 
 void shareddatalayer::logInfoOnce(const std::string& msg) noexcept
 {
     auto logger(createLogger(SDL_LOG_PREFIX));
-    logger->info() << msg;
+    logger->info() << msg << std::endl;
 }

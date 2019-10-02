@@ -35,6 +35,7 @@ libsdl_la_SOURCES = \
     include/private/namespaceconfigurations.hpp \
     include/private/namespaceconfigurationsimpl.hpp \
     include/private/namespacevalidator.hpp \
+    include/private/stdstreamlogger.hpp \
     include/private/syncstorageimpl.hpp \
     include/private/system.hpp \
     include/private/timer.hpp \
@@ -67,6 +68,7 @@ libsdl_la_SOURCES = \
     src/publisherid.cpp \
     src/rejectedbybackend.cpp \
     src/rejectedbysdl.cpp \
+    src/stdstreamlogger.cpp \
     src/syncstorage.cpp \
     src/syncstorageimpl.cpp \
     src/system.cpp \
