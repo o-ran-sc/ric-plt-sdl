@@ -61,7 +61,11 @@ By default the shared library is installed to `/usr/local/lib` and
 headers into to `/usr/local/include`. If this is not desired, then
 provide different path when running `configure`, for example:
 
-    ./configure --prefix=$HOME
+    ./configure --prefix=$HOME/usr/local
+
+In above example SDL pkg-config .pc file is installed to `$HOME/usr/local/lib/pkgconfig`
+directory. This directory should be included to `PKG_CONFIG_PATH` while building
+the application which is using the SDL API library.
 
 Note that `configure` command allows plethora of additional options.
 For more info:
@@ -71,6 +75,11 @@ For more info:
 After configuration has been done, run:
 
     make install
+
+In some cases dynamic linker cache needs to be manually refreshed after SDL API
+has been re-installed:
+
+    ldconfig
 
 ### Redis modules
 
