@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "abc118b3_86b25183",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-11-02T10:28:23Z",
+      "side": 1,
+      "message": "already in base",
+      "range": {
+        "startLine": 21,
+        "startChar": 23,
+        "endLine": 21,
+        "endChar": 38
+      },
+      "revId": "a4d28ffd0e1ed061562c6db929d4e61f6359b05e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d69cce3d_26ef3540",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-11-02T10:28:23Z",
+      "side": 1,
+      "message": "already in base",
+      "range": {
+        "startLine": 22,
+        "startChar": 23,
+        "endLine": 22,
+        "endChar": 31
+      },
+      "revId": "a4d28ffd0e1ed061562c6db929d4e61f6359b05e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68911a42_df5244ac",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-11-02T10:28:23Z",
+      "side": 1,
+      "message": "already in base",
+      "range": {
+        "startLine": 23,
+        "startChar": 23,
+        "endLine": 23,
+        "endChar": 30
+      },
+      "revId": "a4d28ffd0e1ed061562c6db929d4e61f6359b05e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fadc3633_e01e4778",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-11-02T10:28:23Z",
+      "side": 1,
+      "message": "already in base",
+      "range": {
+        "startLine": 24,
+        "startChar": 23,
+        "endLine": 24,
+        "endChar": 33
+      },
+      "revId": "a4d28ffd0e1ed061562c6db929d4e61f6359b05e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "685c25d7_c36cc445",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-11-02T10:28:23Z",
+      "side": 1,
+      "message": "NOT in base, do you think many projects will need this?",
+      "range": {
+        "startLine": 25,
+        "startChar": 23,
+        "endLine": 25,
+        "endChar": 35
+      },
+      "revId": "a4d28ffd0e1ed061562c6db929d4e61f6359b05e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2985746b_725aeb10",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-11-02T10:28:23Z",
+      "side": 1,
+      "message": "Do you generate documentation other than man pages with this? Do you think other projects will need this also?",
+      "range": {
+        "startLine": 26,
+        "startChar": 23,
+        "endLine": 26,
+        "endChar": 30
+      },
+      "revId": "a4d28ffd0e1ed061562c6db929d4e61f6359b05e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1516f0fb_96aabe7a",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-11-02T10:28:23Z",
+      "side": 1,
+      "message": "base has a version built from source",
+      "range": {
+        "startLine": 27,
+        "startChar": 23,
+        "endLine": 27,
+        "endChar": 39
+      },
+      "revId": "a4d28ffd0e1ed061562c6db929d4e61f6359b05e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
