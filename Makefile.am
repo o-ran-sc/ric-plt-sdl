@@ -148,19 +148,15 @@ libshareddatalayercli_la_SOURCES = \
 
 libshareddatalayercli_la_CPPFLAGS = \
     $(BASE_CPPFLAGS) \
-    $(PTHREAD_CFLAGS) \
     $(BOOST_CPPFLAGS)
 libshareddatalayercli_la_LDFLAGS = \
     $(BOOST_LDFLAGS) \
-    $(PTHREAD_CFLAGS) \
     -release $(PACKAGE_VERSION)
 libshareddatalayercli_la_LIBADD = \
     $(BOOST_FILESYSTEM_LIB) \
     $(BOOST_PROGRAM_OPTIONS_LIB) \
     $(BOOST_SYSTEM_LIB) \
-    $(PTHREAD_LIBS) \
     -lboost_system \
-    -lpthread \
     libsdl.la
 
 pkgincludedir = \
@@ -203,15 +199,12 @@ sdltool_SOURCES = \
     src/cli/main.cpp
 sdltool_CPPFLAGS = \
     $(BASE_CPPFLAGS) \
-    $(PTHREAD_CFLAGS) \
     $(BOOST_CPPFLAGS)
 sdltool_LDFLAGS = \
-    $(PTHREAD_CFLAGS) \
     $(BOOST_LDFLAGS)
 sdltool_LDADD = \
     $(BOOST_PROGRAM_OPTIONS_LIB) \
     libsdl.la \
-    $(PTHREAD_LIBS) \
     -lboost_system \
     libshareddatalayercli.la
 
@@ -245,14 +238,11 @@ libgmock_la_SOURCES = \
     3rdparty/googletest/googlemock/include/gmock/internal/custom/gmock-port.h
 
 libgmock_la_CPPFLAGS = \
-    $(PTHREAD_CFLAGS) \
     -I$(top_srcdir)/3rdparty/googletest/googlemock/include/ \
     -I$(top_srcdir)/3rdparty/googletest/googlemock/ \
     -I$(top_srcdir)/3rdparty/googletest/googletest/include/
-libgmock_la_LDFLAGS = \
-    $(PTHREAD_CFLAGS)
 libgmock_la_LIBADD = \
-    $(PTHREAD_LIBS)
+    -lpthread
 
 libgtest_la_SOURCES = \
     3rdparty/googletest/googletest/src/gtest-all.cc \
@@ -292,13 +282,10 @@ libgtest_la_SOURCES = \
     3rdparty/googletest/googletest/include/gtest/internal/custom/gtest-printers.h
 
 libgtest_la_CPPFLAGS = \
-    $(PTHREAD_CFLAGS) \
     -I$(top_srcdir)/3rdparty/googletest/googletest/include/ \
     -I$(top_srcdir)/3rdparty/googletest/googletest/
-libgtest_la_LDFLAGS = \
-    $(PTHREAD_CFLAGS)
 libgtest_la_LIBADD = \
-    $(PTHREAD_LIBS)
+    -lpthread
 
 check_PROGRAMS = \
     testrunner
