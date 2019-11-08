@@ -11,7 +11,7 @@
 
 m4_define([SDL_MAJOR], [1])
 m4_define([SDL_MINOR], [0])
-m4_define([SDL_MICRO], [2])
+m4_define([SDL_MICRO], [3])
 
 # SDL ABI version with libtool
 #
@@ -21,12 +21,14 @@ m4_define([SDL_MICRO], [2])
 # 3. Increase the age value only if the changes made to the ABI are backward
 #    compatible.
 #
+# Never zero or decrease any of the ABI version number values.
+#
 # See https://autotools.io/libtool/version.html
 #
 # Change the numbers just before release.
 
 m4_define([SDL_CURRENT], [1])
-m4_define([SDL_REVISION], [2])
+m4_define([SDL_REVISION], [3])
 m4_define([SDL_AGE], [0])
 
 AC_INIT([shareddatalayer], [SDL_MAJOR.SDL_MINOR.SDL_MICRO], [], [], [https://gerrit.o-ran-sc.org/r/admin/repos/ric-plt/sdl])
@@ -46,7 +48,6 @@ AC_PROG_MKDIR_P
 AM_PROG_LIBTOOL
 AC_CONFIG_MACRO_DIR([m4])
 AX_CXX_COMPILE_STDCXX([11], [noext], [mandatory])
-AX_PTHREAD
 AX_BOOST_BASE([1.53], [], [AC_MSG_ERROR(Unable to detect suitable boost library)])
 AX_BOOST_PROGRAM_OPTIONS
 AX_BOOST_SYSTEM
