@@ -1,0 +1,5 @@
+sdl (@PACKAGE_VERSION@-1) unstable; urgency=medium
+
+  * Initial release
+
+ -- Rolf Badorek <rolf.badorek@nokia.com>  Tue, 12 Nov 2019 15:35:00 +0300

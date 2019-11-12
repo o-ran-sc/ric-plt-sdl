@@ -1,0 +1,54 @@
+Name:     sdl
+Version:  @PACKAGE_VERSION@
+Release:  1%{?dist}
+Summary:  C++ API library for Shared Data Layer clients
+
+License:  Apache-2
+URL:      https://gerrit.o-ran-sc.org/r/admin/repos/ric-plt/sdl
+
+BuildRequires: pkgconfig
+BuildRequires: gcc
+BuildRequires: autoconf
+BuildRequires: autoconf-archive
+BuildRequires: automake
+BuildRequires: make
+BuildRequires: gawk
+BuildRequires: libtool
+BuildRequires: boost-devel
+BuildRequires: pkgconfig(hiredis)
+
+%description
+%{name} provices a C++ API library for Shared Data Layer clients
+
+%package devel
+Summary:   Development files for %{name}
+Requires:  %{name}%{?isa} = %{version}-%{release}
+
+%description devel
+The %{name}-devel package contains libraries and header files for
+developing applications that use %{name}.
+
+%build
+./autogen.sh
+%configure
+%make_build
+
+%install
+%make_install
+rm -f %{buildroot}%{_libdir}/lib*.*a
+
+%post -p /sbin/ldconfig
+
+%files
+%{_libdir}/*.so.*
+%{_bindir}/sdltool
+
+%files devel
+%{_libdir}/pkgconfig/libsdl.pc
+%{_libdir}/*.so
+%{_libdir}/pkgconfig/*.pc
+%{_includedir}/sdl
+
+%changelog
+* Tue Nov 12 2019 Rolf Badorek <rolf.badorek@nokia.com> - @PACKAGE_VERSION@-1
+- first version

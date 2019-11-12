@@ -1,0 +1,20 @@
+Source: sdl
+Priority: optional
+Maintainer: Rolf Badorek <rolf.badorek@nokia.com> 
+Build-Depends: debhelper (>= 10), pkg-config, libtool, automake, gawk, autoconf, automake, autoconf-archive, make, gcc, libboost-all-dev, libhiredis-dev
+Standards-Version: 4.1.2
+Section: libs
+
+Package: sdl-dev
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends: sdl (= ${binary:Version}), ${misc:Depends}
+Description: Development files for sdl
+ The sdl-dev package contains public headers, library and pkg-config file for developing applications that use sdl
+
+Package: sdl
+Architecture: any
+Multi-Arch: same
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: C++ API library for Shared Data Layer clients

@@ -16,18 +16,35 @@
 
 FROM nexus3.o-ran-sc.org:10004/bldr-ubuntu18-c-go:2-u18.04-nng
 
-# Install build tools and SDL dependencies:
+# Install SDL dependencies:
 RUN apt-get update && \
+    apt-get install -y libboost-all-dev && \
     apt-get install -y libhiredis-dev && \
+    apt-get clean
+
+# Install package building tools:
+RUN apt-get update && \
+    apt-get install -y rpm && \
+    apt-get install -y devscripts && \
+    apt-get install -y gawk && \
+    apt-get install -y debhelper && \
     apt-get clean
 
 # Copy sourcefiles:
 RUN mkdir -p /tmp/build
 COPY . /tmp/build
+WORKDIR /tmp/build
 
 # Compile and run unit tests:
-WORKDIR /tmp/build
 RUN ./autogen.sh && \
     ./configure && \
     make all && \
     make test
+
+# Build packages:
+RUN make clean && \
+    make distclean && \
+    ./package.sh --skip-test debian rpm
+
+RUN cp /tmp/build/ci/publish.sh /bin
+ENTRYPOINT ["/bin/publish.sh"]
