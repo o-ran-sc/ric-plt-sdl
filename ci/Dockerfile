@@ -14,20 +14,40 @@
 #   limitations under the License.
 #
 
-FROM nexus3.o-ran-sc.org:10004/bldr-ubuntu18-c-go:2-u18.04-nng
+FROM ubuntu:18.04
 
-# Install build tools and SDL dependencies:
+# Install building tools and SDL dependencies:
 RUN apt-get update && \
-    apt-get install -y libhiredis-dev && \
+    apt-get install -y \
+        build-essential \
+        automake \
+        libtool \
+        pkg-config \
+        libgtest-dev \
+        rpm \
+        devscripts \
+        gawk \
+        debhelper \
+        autoconf-archive \
+        libboost-all-dev \
+        libhiredis-dev && \
     apt-get clean
 
 # Copy sourcefiles:
 RUN mkdir -p /tmp/build
 COPY . /tmp/build
+WORKDIR /tmp/build
 
 # Compile and run unit tests:
-WORKDIR /tmp/build
 RUN ./autogen.sh && \
     ./configure && \
     make all && \
     make test
+
+# Build packages:
+RUN make clean && \
+    make distclean && \
+    ./package.sh --skip-test debian rpm
+
+RUN cp /tmp/build/ci/publish.sh /bin
+ENTRYPOINT ["/bin/publish.sh"]

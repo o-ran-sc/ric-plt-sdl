@@ -11,7 +11,7 @@
 
 m4_define([SDL_MAJOR], [1])
 m4_define([SDL_MINOR], [0])
-m4_define([SDL_MICRO], [3])
+m4_define([SDL_MICRO], [4])
 
 # SDL ABI version with libtool
 #
@@ -28,7 +28,7 @@ m4_define([SDL_MICRO], [3])
 # Change the numbers just before release.
 
 m4_define([SDL_CURRENT], [1])
-m4_define([SDL_REVISION], [3])
+m4_define([SDL_REVISION], [4])
 m4_define([SDL_AGE], [0])
 
 AC_INIT([shareddatalayer], [SDL_MAJOR.SDL_MINOR.SDL_MICRO], [], [], [https://gerrit.o-ran-sc.org/r/admin/repos/ric-plt/sdl])
@@ -36,6 +36,8 @@ AC_CONFIG_HEADERS([include/config.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([Doxyfile])
+AC_CONFIG_FILES([rpm/sdl.spec])
+AC_CONFIG_FILES([debian/changelog])
 AC_CONFIG_FILES([run-tests.sh], [chmod +x run-tests.sh])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([subdir-objects foreign 1.13 tar-pax -Wall -Werror])

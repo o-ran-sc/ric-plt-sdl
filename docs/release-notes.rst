@@ -31,6 +31,10 @@ ric-plt/sdl.
 Version history
 ---------------
 
+[1.0.4] - 2019-11-13
+
+* Add PackageCloud.io publishing to CI scripts.
+
 [1.0.3] - 2019-11-08
 
 * Add CI Dockerfile to compile SDL library and run unit tests.
