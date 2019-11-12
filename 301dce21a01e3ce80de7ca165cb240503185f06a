@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "2a163364_77f0d76c",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-11-12T20:53:38Z",
+      "side": 1,
+      "message": "the Ubuntu 18 base builder image has a very recent Boost library.  Adding this one may conflict, and will probably get an older version.  Please check that this is REALLY what you want. From that Dockerfile:\n\n    RUN wget -nv https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.zip \\",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 1
+      },
+      "revId": "301dce21a01e3ce80de7ca165cb240503185f06a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d71e1ea_4b540c45",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-11-12T20:53:38Z",
+      "side": 1,
+      "message": "please combine with the steps above, there\u0027s no value in in running apt-get update twice.  I would combine them all on a single line",
+      "range": {
+        "startLine": 26,
+        "startChar": 2,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "301dce21a01e3ce80de7ca165cb240503185f06a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1a1a2f3f_f2fc1d68",
         "filename": "debian/control",
         "patchSetId": 1
