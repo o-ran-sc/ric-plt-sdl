@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2f3f_f2fc1d68",
+        "filename": "debian/control",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-11-12T19:50:00Z",
+      "side": 1,
+      "message": "One extra space bar at the end of the line.",
+      "revId": "301dce21a01e3ce80de7ca165cb240503185f06a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
