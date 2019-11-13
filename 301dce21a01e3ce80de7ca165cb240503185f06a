@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "636fca47_0b9ec74a",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2019-11-13T11:35:14Z",
+      "side": 1,
+      "message": "Yes, I have already local environment where I can test this.\n\nIf no better ideas, I\u0027ll switch base image to something which does not have Boost built from source files (e.g. to plain Ubuntu base image). We can then come back to this issue later after Amber release if needed.",
+      "parentUuid": "611ccd0c_024d019e",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 1
+      },
+      "revId": "301dce21a01e3ce80de7ca165cb240503185f06a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d71e1ea_4b540c45",
         "filename": "ci/Dockerfile",
         "patchSetId": 1
