@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "611ccd0c_024d019e",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-11-13T11:13:52Z",
+      "side": 1,
+      "message": "I don\u0027t know how to fix the dependency in Debian package building phase.  Please download the base builder image, run it in a local VirtualBox on your laptop, and experiment.  Happily this is easy to do, easy to look around, unlike trying to solve similar problems in Jenkins build minion images!\n\nI\u0027ll paste below how boost is installed.  All the header and shared-object files SHOULD be in the expected places, but I s the bootstrap invocation uses prefix /usr.  \n\nRUN wget -nv https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.zip \\\n    \u0026\u0026 unzip -q boost_1_69_0.zip \\\n    \u0026\u0026 cd boost_1_69_0 \\\n    \u0026\u0026 ./bootstrap.sh --prefix\u003d/usr/ \\\n    \u0026\u0026 ./b2 \\\n    \u0026\u0026 ./b2 install \\\n    \u0026\u0026 cd ../ \\\n    \u0026\u0026 rm -rf boost_1_69_0.zip boost_1_69_0",
+      "parentUuid": "c7110321_0ff9cc28",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 1
+      },
+      "revId": "301dce21a01e3ce80de7ca165cb240503185f06a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d71e1ea_4b540c45",
         "filename": "ci/Dockerfile",
         "patchSetId": 1
