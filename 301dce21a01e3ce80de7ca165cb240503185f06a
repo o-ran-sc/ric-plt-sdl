@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "56bca4f6_adb29ea6",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2019-11-13T12:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "636fca47_0b9ec74a",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 1
+      },
+      "revId": "301dce21a01e3ce80de7ca165cb240503185f06a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d71e1ea_4b540c45",
         "filename": "ci/Dockerfile",
         "patchSetId": 1
@@ -144,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "88bb6c6a_0a7ac42a",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2019-11-13T12:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36a13625_00d1a77a",
+      "range": {
+        "startLine": 26,
+        "startChar": 2,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "301dce21a01e3ce80de7ca165cb240503185f06a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a1a2f3f_f2fc1d68",
         "filename": "debian/control",
         "patchSetId": 1
@@ -176,6 +224,24 @@
       "revId": "301dce21a01e3ce80de7ca165cb240503185f06a",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97e7e856_7025dc9e",
+        "filename": "debian/control",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2019-11-13T12:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f978760f_c4f0c7ad",
+      "revId": "301dce21a01e3ce80de7ca165cb240503185f06a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
