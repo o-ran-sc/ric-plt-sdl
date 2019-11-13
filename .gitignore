@@ -37,6 +37,8 @@
 /doxygen-doc/
 /run-tests.sh
 /testrunner
+.tox
+docs/_build/
 *.log
 *.trs
 *.sw*
