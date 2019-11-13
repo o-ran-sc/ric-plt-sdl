@@ -1,0 +1,7 @@
+Code-Review+2: Timo Tietavainen <timo.tietavainen@nokia.com>
+Verified+1: ORAN Jobbuilder <releng+oran-jobbuilder@linuxfoundation.org>
+Submitted-by: Rolf Badorek <rolf.badorek@nokia.com>
+Submitted-at: Wed, 13 Nov 2019 12:50:40 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/ric-plt/sdl/+/1513
+Project: ric-plt/sdl
+Branch: refs/heads/master
