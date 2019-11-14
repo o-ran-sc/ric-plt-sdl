@@ -1,5 +1,4 @@
 ..
-..  Copyright (c) 2019 AT&T Intellectual Property.
 ..  Copyright (c) 2019 Nokia.
 ..
 ..  Licensed under the Creative Commons Attribution 4.0 International

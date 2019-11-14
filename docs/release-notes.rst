@@ -1,5 +1,4 @@
 ..
-..  Copyright (c) 2019 AT&T Intellectual Property.
 ..  Copyright (c) 2019 Nokia.
 ..
 ..  Licensed under the Creative Commons Attribution 4.0 International
@@ -50,7 +49,7 @@ Version history
   activated via environment variables.
 * Add Sentinel change notification handling logic.
 * Unit test fix for a false positive warning, when'EXPECT_EQ' macro is used
-  to validate boolean value. 
+  to validate boolean value.
 
 [1.0.0] - 2019-08-20
 
