@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bea64ff3_0a3097e7",
+        "filename": "releases/packagecloud-release-sdl.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-11-28T13:03:37Z",
+      "side": 1,
+      "message": "Should the directory name be \u0027.releases\u0027, starting with a dot character? I\u0027m not sure about this ,just asking..",
+      "revId": "98872ed9d8e933d976148cb90e81a75cad64abcc",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
