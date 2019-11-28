@@ -10,7 +10,9 @@
 
 ## Documentation
 
-Documentation is generated with `doxygen` tool.
+Documentation is generated with `doxygen` tool. Dependency to `doxygen`
+tool is optional. If not installed, then `doxygen-doc` target will not
+be created to Makefile.
 
 By default `make doxygen-doc` creates HTML, PDF and PS documents (if
 the needed tools are available). The documents are created to:
@@ -33,10 +35,23 @@ directory named `shareddatalayer`.
 
 ### Dependencies
 
-Currently, the following libraries are required while building:
+Build-time dependencies:
 
-    boost-devel
-    hiredis-devel
+    boost
+    hiredis
+    doxygen (optional)
+
+Commands to install dependent packages in Fedora:
+
+    sudo dnf install boost-devel
+    sudo dnf install hiredis-devel
+    sudo dnf install doxygen
+
+Commands to install dependent packages in Debian/Ubuntu:
+
+    sudo apt install libboost-all-dev
+    sudo apt install libhiredis-dev
+    sudo apt install doxygen
 
 ### Compilation in the source directory
 
