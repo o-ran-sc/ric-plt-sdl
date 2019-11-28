@@ -14,6 +14,11 @@
    limitations under the License.
 */
 
+/*
+ * This source code is part of the near-RT RIC (RAN Intelligent Controller)
+ * platform project (RICP).
+*/
+
 #include <type_traits>
 #include <gtest/gtest.h>
 #include <sdl/asyncstorage.hpp>

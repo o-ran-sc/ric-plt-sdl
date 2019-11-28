@@ -14,6 +14,11 @@
    limitations under the License.
 */
 
+/*
+ * This source code is part of the near-RT RIC (RAN Intelligent Controller)
+ * platform project (RICP).
+*/
+
 #ifndef SHAREDDATALAYER_TST_ENGINEMOCK_HPP_
 #define SHAREDDATALAYER_TST_ENGINEMOCK_HPP_
 

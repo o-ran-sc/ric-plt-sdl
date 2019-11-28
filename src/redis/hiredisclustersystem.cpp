@@ -14,6 +14,11 @@
    limitations under the License.
 */
 
+/*
+ * This source code is part of the near-RT RIC (RAN Intelligent Controller)
+ * platform project (RICP).
+*/
+
 #include "private/redis/hiredisclustersystem.hpp"
 
 using namespace shareddatalayer::redis;

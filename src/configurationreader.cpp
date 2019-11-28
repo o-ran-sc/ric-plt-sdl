@@ -14,6 +14,11 @@
    limitations under the License.
 */
 
+/*
+ * This source code is part of the near-RT RIC (RAN Intelligent Controller)
+ * platform project (RICP).
+*/
+
 #include "private/abort.hpp"
 #include "private/configurationreader.hpp"
 #include <boost/property_tree/json_parser.hpp>

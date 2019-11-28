@@ -14,6 +14,11 @@
    limitations under the License.
 */
 
+/*
+ * This source code is part of the near-RT RIC (RAN Intelligent Controller)
+ * platform project (RICP).
+*/
+
 #include "private/namespacevalidator.hpp"
 #include <sdl/emptynamespace.hpp>
 #include <sdl/invalidnamespace.hpp>
