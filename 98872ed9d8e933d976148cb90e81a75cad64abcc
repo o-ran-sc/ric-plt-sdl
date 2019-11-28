@@ -16,6 +16,24 @@
       "revId": "98872ed9d8e933d976148cb90e81a75cad64abcc",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b27182c_34785a02",
+        "filename": "releases/packagecloud-release-sdl.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2019-11-28T13:12:29Z",
+      "side": 1,
+      "message": "From instructions (link in commit log):\n\n\"The release file regex is: (releases/.*.yaml|.releases/.*.yaml). In words, the directory name can be “.releases” or “releases”\"\n\nI used the same naming convention as was used in chapter \u0027PackageCloud Release Files\u0027 example. With modification that I didn\u0027t mention version number in file name, to avoid need for file renaming for each release. For file name requirement is (in case of PackageCloud.io) that it starts with “packagecloud” prefix and has .yaml extension.",
+      "parentUuid": "bea64ff3_0a3097e7",
+      "revId": "98872ed9d8e933d976148cb90e81a75cad64abcc",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
