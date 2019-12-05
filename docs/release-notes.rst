@@ -26,7 +26,6 @@ ric-plt/sdl.
    :local:
 
 
-
 Version history
 ---------------
 
