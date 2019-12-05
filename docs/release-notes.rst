@@ -30,6 +30,11 @@ ric-plt/sdl.
 Version history
 ---------------
 
+[1.0.5] - 2019-12-05
+
+* Documentation improvements
+* Added PackageCloud.io release scripts
+
 [1.0.4] - 2019-11-13
 
 * Add PackageCloud.io publishing to CI scripts.

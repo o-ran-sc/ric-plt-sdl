@@ -1,4 +1,11 @@
-sdl (@PACKAGE_VERSION@-1) unstable; urgency=medium
+sdl (1.0.5-1) unstable; urgency=medium
+
+  * Documentation improvements
+  * Added PackageCloud.io release scripts
+
+ -- Rolf Badorek <rolf.badorek@nokia.com>  Thu, 05 Dec 2019 10:35:00 +0300
+
+sdl (1.0.4-1) unstable; urgency=medium
 
   * Initial release
 
