@@ -23,6 +23,8 @@ Welcome to O-RAN Shared Data Layer (SDL) in C++ Documentation
    :caption: Contents:
 
    overview.rst
+   user-guide.rst
+   developer-guide.rst
    release-notes.rst
 
 * :ref:`genindex`
