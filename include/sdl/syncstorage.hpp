@@ -211,7 +211,7 @@ namespace shareddatalayer
                               const Data& data) = 0;
 
         /**
-         * Find all keys matching search pattern under the namespace. No prior knowledge about the keys in the given
+         * Find all keys matching search key prefix under the namespace. No prior knowledge about the keys in the given
          * namespace exists, thus operation is not guaranteed to be atomic or isolated.
          *
          * Exceptions thrown (excluding standard exceptions such as std::bad_alloc) are all derived from
