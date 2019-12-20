@@ -292,7 +292,7 @@ namespace shareddatalayer
         using FindKeysAck = std::function<void(const std::error_code& error, const Keys& keys)>;
 
         /**
-         * Find all keys matching search pattern under the namespace. No prior knowledge about the keys in the given
+         * Find all keys matching search key prefix under the namespace. No prior knowledge about the keys in the given
          * namespace exists, thus operation is not guaranteed to be atomic or isolated.
          *
          * @param ns Namespace under which this operation is targeted.

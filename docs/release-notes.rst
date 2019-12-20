@@ -15,7 +15,7 @@
 ..  limitations under the License.
 ..
 
-Release-Notes
+Release Notes
 =============
 
 This document provides the release notes for O-RAN SC Amber release of
