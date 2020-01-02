@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8918dc3c_a1bd11f4",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-02T14:26:59Z",
+      "side": 1,
+      "message": "it would be REALLY great if there was a \"standalone\" backend, that uses a dictionary (python) as this would make testing with SDL much more nice rather than the developer having to install redis in their local pod.",
+      "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af4da58d_8ecbcb29",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-02T14:26:59Z",
+      "side": 1,
+      "message": "Might want to clarify this section to separate local testing using a standalone Redis vs. running in the RIC. I think the verbiage here refers to the latter right?\n\na short section here on using SDL with a local redis would be nice (with and without the needed extensions).",
+      "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9676cbe_05618edd",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-02T14:26:59Z",
+      "side": 1,
+      "message": "where does sdltool come from? How do I install it? Please put install instructions for that.",
+      "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
