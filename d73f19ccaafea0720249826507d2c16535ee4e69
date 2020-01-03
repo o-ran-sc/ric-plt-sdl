@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9b4ad208_1c0ece14",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-03T15:30:08Z",
+      "side": 1,
+      "message": "Instead of \u0027dummy\u0027 dictionary backend, would it be ok if we add a new task to our backlog to implemented a new Helm Chart file under dbaas repo to deploy simple standalone Redis-server with needed Redis module extension installed? This Helm Chart would be used only in development envs to deploy quickly simple database backend for sdl. That backlog task would contain also SDL documentation update to add instruction how to deploy this development Redis server Pod.",
+      "parentUuid": "8918dc3c_a1bd11f4",
+      "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "af4da58d_8ecbcb29",
         "filename": "docs/user-guide.rst",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "38044369_4c7a550d",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-03T15:30:08Z",
+      "side": 1,
+      "message": "Yes this section was about RIC deployment, I updated text to clarify it, is it better now?",
+      "parentUuid": "af4da58d_8ecbcb29",
+      "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b9676cbe_05618edd",
         "filename": "docs/user-guide.rst",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2020-01-02T14:26:59Z",
       "side": 1,
       "message": "where does sdltool come from? How do I install it? Please put install instructions for that.",
+      "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fb73802_58c6d4a6",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-03T15:30:08Z",
+      "side": 1,
+      "message": "It comes from PackageCloud.io repository. I updated text to clarify it, OK now?",
+      "parentUuid": "b9676cbe_05618edd",
       "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
