@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "19a40a1f_f38fbb9a",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-03T18:24:05Z",
+      "side": 1,
+      "message": "OK, link added.",
+      "parentUuid": "5fc6d65d_bb943073",
+      "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b9676cbe_05618edd",
         "filename": "docs/user-guide.rst",
         "patchSetId": 1
