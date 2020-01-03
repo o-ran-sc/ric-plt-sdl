@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "5fc6d65d_bb943073",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-03T15:36:04Z",
+      "side": 1,
+      "message": "yes, last suggestion is to link to the README you sent yesterday, right to this: https://gerrit.o-ran-sc.org/r/gitweb?p\u003dric-plt/dbaas.git;a\u003dblob;f\u003dREADME.md;h\u003d6391fc45ea762a5b606dcf9f867fac8087b1222f;hb\u003dHEAD",
+      "parentUuid": "38044369_4c7a550d",
+      "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b9676cbe_05618edd",
         "filename": "docs/user-guide.rst",
         "patchSetId": 1
@@ -122,6 +140,24 @@
       "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc835f7b_41c0be90",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-03T15:36:04Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "5fb73802_58c6d4a6",
+      "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
