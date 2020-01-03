@@ -16,6 +16,24 @@
       "revId": "8651b864a78b1d2676c906ccdee05d1adb6d3e16",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dfc5bcd_4d5f7184",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-03T18:24:05Z",
+      "side": 1,
+      "message": "A note added to that IP addresses are allowed to use also.",
+      "parentUuid": "7ee92841_151fdbee",
+      "revId": "8651b864a78b1d2676c906ccdee05d1adb6d3e16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
