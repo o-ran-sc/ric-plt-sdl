@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "a25e5b48_199e9652",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-03T15:33:04Z",
+      "side": 1,
+      "message": "Well, no.\n\nBoth are needed. The standalone redis pod proposal helps those who do integration tests, like A1 does. I essentially did this by copying the dbaas helm chart and deploying it as part of the integration tests.\n\nHowever, for **unit testing**, there should not be kubernetes or pods or networking or any of that. This is where a dict backend implementation is useful. please see patchset 3 here: https://gerrit.o-ran-sc.org/r/c/ric-plt/a1/+/2143\n\nSo I think both are needed; one is for unit testing in a pure python environment, and one is for the next level of testing.\n\nIf you agree, you may be able to borrow a portion of what I linked above for the idea.",
+      "parentUuid": "9b4ad208_1c0ece14",
+      "revId": "d73f19ccaafea0720249826507d2c16535ee4e69",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "af4da58d_8ecbcb29",
         "filename": "docs/user-guide.rst",
         "patchSetId": 1
