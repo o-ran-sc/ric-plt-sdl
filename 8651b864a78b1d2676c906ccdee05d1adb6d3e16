@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ee92841_151fdbee",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-03T15:36:04Z",
+      "side": 1,
+      "message": "I think you might want to keep both mentions; that a service name or an IP will work.",
+      "revId": "8651b864a78b1d2676c906ccdee05d1adb6d3e16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
