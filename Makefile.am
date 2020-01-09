@@ -176,6 +176,12 @@ pkginclude_HEADERS = \
     include/sdl/rejectedbysdl.hpp \
     include/sdl/syncstorage.hpp
 
+pkgtstincludedir = \
+    $(includedir)/sdl/tst
+pkgtstinclude_HEADERS = \
+    include/sdl/tst/mockableasyncstorage.hpp \
+    include/sdl/tst/mockablesyncstorage.hpp
+
 pkgconfigdir = \
     ${libdir}/pkgconfig
 nodist_pkgconfig_DATA = \
@@ -316,6 +322,8 @@ testrunner_SOURCES = \
     tst/hostandport_test.cpp \
     tst/invalidnamespace_test.cpp \
     tst/main.cpp \
+    tst/mockableasyncstorage_test.cpp \
+    tst/mockablesyncstorage_test.cpp \
     tst/namespaceconfigurations_test.cpp \
     tst/namespaceconfigurationsimpl_test.cpp \
     tst/namespacevalidator_test.cpp \
