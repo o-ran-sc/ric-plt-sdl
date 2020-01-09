@@ -79,4 +79,12 @@
  * Functionally it is similar to AsyncStorage, with an exception that functions are blocking while
  * waiting response(s) from database.
  *
+ * @subsection unit_testing_sec Unit Testing
+ *
+ * SDL provides helper classes for clients to mock SDL APIs.
+ *
+ * shareddatalayer::tst::MockableAsyncStorage to mock shareddatalayer::AsyncStorage API.
+ *
+ * shareddatalayer::tst::MockableSyncStorage to mock shareddatalayer::SyncStorage API.
+ *
  */
