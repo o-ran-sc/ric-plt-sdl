@@ -1,4 +1,10 @@
-sdl (@PACKAGE_VERSION@-1) unstable; urgency=medium
+sdl (1.1.0-1) unstable; urgency=medium
+
+  * Add public helper classes for UT mocking.
+
+ -- Timo Tietavainen <timo.tietavainen@nokia.com>  Thu, 09 Jan 2020 11:28:07 +0200
+
+sdl (1.0.4-1) unstable; urgency=medium
 
   * Initial release
 
