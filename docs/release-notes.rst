@@ -30,6 +30,10 @@ ric-plt/sdl.
 Version history
 ---------------
 
+[1.1.0] - 2020-01-09
+
+* Add public helper classes for UT mocking.
+
 [1.0.4] - 2019-11-13
 
 * Add PackageCloud.io publishing to CI scripts.

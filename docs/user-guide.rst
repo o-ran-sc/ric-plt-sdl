@@ -469,6 +469,14 @@ Building Clients Using SDL
 * Use *pkg-config* tool to acquire needed compilation and linking flags,
   instead of hardcoding them. This ensures that flags are always up-to-date.
   See more information from `here <#building-clients-using-sdl>`_.
+* If you want to mock SDL APIs in unit testing, SDL provides helper classes
+  for that. By using these helper classes you need to implement mock
+  implementation only for those SDL API functions which you use in the unit
+  tests. See more information from `doxygen documentation <#doxygen-generated-sdl-api-documentation>`_
+  of the helper classes:
+
+  * *include/sdl/tst/mockableasyncstorage.hpp: MockableAsyncStorage*
+  * *include/sdl/tst/mockablesyncstorage.hpp: MockableSyncStorage*
 
 Using SDL APIs
 ==============
