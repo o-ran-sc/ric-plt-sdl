@@ -16,6 +16,24 @@
       "revId": "2f89569737254b9b893ecba2609bcca1ba0d6713",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3018fb36_2971a8ef",
+        "filename": "include/sdl/tst/mockableasyncstorage.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-09T16:39:35Z",
+      "side": 1,
+      "message": "No, I forgot to add them. Thanks Rolf.",
+      "parentUuid": "c6161ffc_cb89db07",
+      "revId": "2f89569737254b9b893ecba2609bcca1ba0d6713",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
