@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6161ffc_cb89db07",
+        "filename": "include/sdl/tst/mockableasyncstorage.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-01-09T15:19:12Z",
+      "side": 1,
+      "message": "Was copyright section left out on purpose?",
+      "revId": "2f89569737254b9b893ecba2609bcca1ba0d6713",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
