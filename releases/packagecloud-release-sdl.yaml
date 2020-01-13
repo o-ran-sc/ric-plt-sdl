@@ -1,8 +1,11 @@
 ---
 distribution_type: packagecloud
-package_name:
-   - name: sdl_1.0.4-1_amd64.deb
-   - name: sdl-dev_1.0.4-1_amd64.deb
-   - name: sdl-1.0.4-1.x86_64.rpm
-   - name: sdl-devel-1.0.4-1.x86_64.rpm
-
+package_name: sdl-1.1.0
+packages:
+   - name: sdl_1.1.0-1_amd64.deb
+   - name: sdl-dev_1.1.0-1_amd64.deb
+   - name: sdl-1.1.0-1.x86_64.rpm
+   - name: sdl-devel-1.1.0-1.x86_64.rpm
+ref: 91a224f190867869d2d0b14a5f96e44a0593e682
+log_dir: ric-plt-sdl-docker-ci-pc-merge-master/14
+version: 1.1.0
