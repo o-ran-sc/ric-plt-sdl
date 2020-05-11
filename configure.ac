@@ -72,6 +72,11 @@ AM_CONDITIONAL([HIREDIS], [test xtrue])
 AC_DEFINE(HAVE_HIREDIS_VIP, [0], [Have hiredis-vip])
 AM_CONDITIONAL([HIREDIS_VIP], [test "xyes" = "xno"])
 
+AC_ARG_ENABLE(gcov,[AS_HELP_STRING([--enable-gcov], [enable coverage test])])
+AC_MSG_CHECKING([whether to enable gcov])
+AS_IF([test "x${enable_gcov}" = "xyes" ], AC_MSG_RESULT([yes]), AC_MSG_RESULT([no]))
+AM_CONDITIONAL([ENABLEGCOV],[test "x${enable_gcov}" = "xyes"])
+
 DX_DOT_FEATURE(ON)
 DX_INIT_DOXYGEN([shareddatalayer], [Doxyfile], [doxygen-doc])
 SDL_LT_VERSION=m4_format("%d:%d:%d", SDL_CURRENT, SDL_REVISION, SDL_AGE)

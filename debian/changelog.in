@@ -1,3 +1,9 @@
+sdl (1.1.1-1) UNRELEASED; urgency=low
+
+  * Add unit test code coverage (gcov) make target.
+
+ -- Timo Tietavainen <timo.tietavainen@nokia.com>  Mon, 11 May 2020 11:35:53 +0300
+
 sdl (1.1.0-1) unstable; urgency=medium
 
   * Add public helper classes for UT mocking.
