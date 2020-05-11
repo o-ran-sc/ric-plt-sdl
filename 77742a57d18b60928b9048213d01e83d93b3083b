@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df5ac5d2_b64671a6",
+        "filename": "Makefile.am",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2020-05-11T10:23:11Z",
+      "side": 1,
+      "message": "I can\u0027t find a dependency line for testrunner - it needs to have the libraries built first, is that right?",
+      "range": {
+        "startLine": 387,
+        "startChar": 6,
+        "endLine": 387,
+        "endChar": 16
+      },
+      "revId": "77742a57d18b60928b9048213d01e83d93b3083b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e61cf4a_25220ce6",
+        "filename": "Makefile.am",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2020-05-11T10:23:11Z",
+      "side": 1,
+      "message": "you don\u0027t need to compile in the symbol table for supporting the debugger when you build for coverage, you could remove -g here, but it\u0027s probably not harmful",
+      "range": {
+        "startLine": 391,
+        "startChar": 13,
+        "endLine": 391,
+        "endChar": 15
+      },
+      "revId": "77742a57d18b60928b9048213d01e83d93b3083b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74a48627_5ad603c6",
+        "filename": "Makefile.am",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2020-05-11T10:23:11Z",
+      "side": 1,
+      "message": "tab character snuck in here.\n\nwhy do you use # in the command? is this a special pattern for make? new to me",
+      "revId": "77742a57d18b60928b9048213d01e83d93b3083b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa2be2c3_bcf4fb1e",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2020-05-11T10:23:11Z",
+      "side": 1,
+      "message": "does this require the all target also - e.g., \"make all test_gcov\" ?",
+      "range": {
+        "startLine": 185,
+        "startChar": 9,
+        "endLine": 185,
+        "endChar": 18
+      },
+      "revId": "77742a57d18b60928b9048213d01e83d93b3083b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
