@@ -131,6 +131,24 @@
     },
     {
       "key": {
+        "uuid": "365b76ae_c4d6a291",
+        "filename": "Makefile.am",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-11T12:00:00Z",
+      "side": 1,
+      "message": "The reason why I move specifically all gcov files with src# and include# prefix to gcov_report directory is that I do not want to move system level gcov files like #usr#include#c++#8#bits#ios_base.h.gcov and hence build any coverage reports from these files.\nMaybe system level coverage file filtering out is something what needs to be done in every module, could this be then done in Jenkins JJB templates instead of doing it at module level?",
+      "parentUuid": "5dfc7534_6abbd2e4",
+      "revId": "77742a57d18b60928b9048213d01e83d93b3083b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa2be2c3_bcf4fb1e",
         "filename": "README.md",
         "patchSetId": 1
