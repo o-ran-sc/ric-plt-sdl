@@ -209,6 +209,21 @@ supports, for example::
     ./testrunner
     ./testrunner --gtest_filter=AsyncStorageTest*
 
+To get unit test code coverage analyse enable unit test gcov code coverage
+analyse by configuring gcov reporting directory:
+
+    configure --with-gcov-report-dir=DIR
+
+Directory can be an absolute path or a relative path to an SDL source root.
+Unit test build creates directory if it does not exist.
+
+Build and run unit tests with code coverage analyse:
+
+    make test_gcov
+
+After successful unit test run code coverage (.gcov) result files are in
+a directory, what was defined by '--with-gcov-report-dir' configure option.
+
 Functional Tests
 ================
 

@@ -72,6 +72,23 @@ AM_CONDITIONAL([HIREDIS], [test xtrue])
 AC_DEFINE(HAVE_HIREDIS_VIP, [0], [Have hiredis-vip])
 AM_CONDITIONAL([HIREDIS_VIP], [test "xyes" = "xno"])
 
+AC_ARG_WITH([gcov-report-dir],
+    AS_HELP_STRING([--with-gcov-report-dir=DIR],
+        [Directory for GCOV report files]),
+    [],
+    [with_gcov_report_dir=no])
+AC_MSG_CHECKING([gcov])
+if test "x$with_gcov_report_dir" = "xno"; then
+    AC_MSG_RESULT([no])
+    GCOV_REPORT_DIR="gcov_report"
+else
+    AC_MSG_RESULT([yes])
+    AC_MSG_NOTICE([gcov report directory: $with_gcov_report_dir])
+    GCOV_REPORT_DIR="$with_gcov_report_dir"
+fi
+AC_SUBST(GCOV_REPORT_DIR)
+AM_CONDITIONAL([ENABLE_GCOV],[test "x$with_gcov_report_dir" != "xno"])
+
 DX_DOT_FEATURE(ON)
 DX_INIT_DOXYGEN([shareddatalayer], [Doxyfile], [doxygen-doc])
 SDL_LT_VERSION=m4_format("%d:%d:%d", SDL_CURRENT, SDL_REVISION, SDL_AGE)

@@ -172,6 +172,23 @@ line options gtest supports, for example:
     make testrunner
     ./testrunner --help
 
+## Running unit tests with gcov
+
+Enable unit test gcov code coverage analyse by configuring gcov reporting
+directory:
+
+    configure --with-gcov-report-dir=DIR
+
+Directory can be an absolute path or a relative path to an SDL source root.
+Unit test build creates directory if it does not exist.
+
+Build and run unit tests with code coverage analyse:
+
+    make test_gcov
+
+After successful unit test run code coverage (.gcov) result files are in
+a directory, what was defined by '--with-gcov-report-dir' configure option.
+
 ## Using SDL in application pod
 
 SDL is not yet available in O-RAN-SC PackageCloud.io repository.
