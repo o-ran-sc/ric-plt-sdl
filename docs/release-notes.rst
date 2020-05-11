@@ -30,6 +30,10 @@ ric-plt/sdl.
 Version history
 ---------------
 
+[1.1.1] - 2020-05-11
+
+* Add unit test code coverage (gcov) make target.
+
 [1.1.0] - 2020-01-09
 
 * Add public helper classes for UT mocking.
