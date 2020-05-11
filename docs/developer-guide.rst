@@ -209,6 +209,16 @@ supports, for example::
     ./testrunner
     ./testrunner --gtest_filter=AsyncStorageTest*
 
+Enable compiling and linking options to collect SDL gcov code coverage statistics:
+
+    configure --enable-gcov
+
+Build and run unit tests with code coverage analyse. Code coverage (.gcov) result
+files are put to gcov_report directory, which is created at build time under SDL
+source root:
+
+    make test_gcov
+
 Functional Tests
 ================
 

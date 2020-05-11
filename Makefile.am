@@ -387,8 +387,26 @@ TESTS = \
 test: testrunner
 	./run-tests.sh
 
+if ENABLEGCOV
+AM_CXXFLAGS= -O0 --coverage
+AM_LDFLAGS= --coverage
+
+test_gcov: test
+	mkdir -p gcov_report
+	@for p in src/.libs/*.o src/redis/.libs/*.o; do \
+		gcov -abcfu $$p; \
+	done; \
+	pwd; \
+	ls -la; \
+	mv *.gcov gcov_report/;
+endif
+
 clean-local:
 	rm -f libsdl.pc
+if ENABLEGCOV
+	rm -rf gcov_report
+	@find . -name '*.gcno' -o -name '*.gcda' -o -name '*.gcov'| xargs -r rm
+endif
 
 @DX_RULES@
 
