@@ -37,6 +37,9 @@
 /doxygen-doc/
 /run-tests.sh
 /testrunner
+*.gcov
+*.gcda
+*.gcno
 .tox
 docs/_build/
 *.log
