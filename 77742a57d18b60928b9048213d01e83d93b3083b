@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf03b4c4_5445d4e8",
+        "filename": "Makefile.am",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-11T11:28:26Z",
+      "side": 1,
+      "message": "Yes. Build dependencies are handled by automake\u0027s libtool magic.",
+      "parentUuid": "df5ac5d2_b64671a6",
+      "range": {
+        "startLine": 387,
+        "startChar": 6,
+        "endLine": 387,
+        "endChar": 16
+      },
+      "revId": "77742a57d18b60928b9048213d01e83d93b3083b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3e61cf4a_25220ce6",
         "filename": "Makefile.am",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9a1fab62_632a229d",
+        "filename": "Makefile.am",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-11T11:28:26Z",
+      "side": 1,
+      "message": "OK, thanks. -g removed.",
+      "parentUuid": "3e61cf4a_25220ce6",
+      "range": {
+        "startLine": 391,
+        "startChar": 13,
+        "endLine": 391,
+        "endChar": 15
+      },
+      "revId": "77742a57d18b60928b9048213d01e83d93b3083b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74a48627_5ad603c6",
         "filename": "Makefile.am",
         "patchSetId": 1
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "5dfc7534_6abbd2e4",
+        "filename": "Makefile.am",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-11T11:28:26Z",
+      "side": 1,
+      "message": "Tab fixed.\nActually # is part of the actual string to move \"src#\". Example file name what is moved:\nsrc#eventfd.cpp.gcov\nI use gcov -p flag, that\u0027s why hashtags are visible in gcov file path names\nGcov help:\n\"\"\"\n-p\n--preserve-paths\n    Preserve complete path information in the names of generated .gcov files. Without this option, just the filename component is used. With this option, all directories are used, with ‘/’ characters translated to ‘#’ characters, . directory components removed and unremoveable .. components renamed to ‘^’. This is useful if sourcefiles are in several different directories. \n\"\"\"",
+      "parentUuid": "74a48627_5ad603c6",
+      "revId": "77742a57d18b60928b9048213d01e83d93b3083b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa2be2c3_bcf4fb1e",
         "filename": "README.md",
         "patchSetId": 1
@@ -76,6 +142,30 @@
       "writtenOn": "2020-05-11T10:23:11Z",
       "side": 1,
       "message": "does this require the all target also - e.g., \"make all test_gcov\" ?",
+      "range": {
+        "startLine": 185,
+        "startChar": 9,
+        "endLine": 185,
+        "endChar": 18
+      },
+      "revId": "77742a57d18b60928b9048213d01e83d93b3083b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "776dd9fe_fa7295af",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-11T11:28:26Z",
+      "side": 1,
+      "message": "\u0027make test_gcov\u0027 is enough, no need to add \u0027all\u0027 target.\n\u0027make test_gcov\u0027 will build also the libsdl library itself, not only test binaries.",
+      "parentUuid": "aa2be2c3_bcf4fb1e",
       "range": {
         "startLine": 185,
         "startChar": 9,
