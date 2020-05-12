@@ -22,6 +22,30 @@
       "revId": "135a6154de5b648e2eeb7d6f8919f1ad5e323b29",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff977d51_957e2d04",
+        "filename": "Makefile.am",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-12T09:42:25Z",
+      "side": 1,
+      "message": "No, it\u0027s not allowed to have a backslash here, It would cause makefile syntax error for the lines after 403.\nActually only where it is mandatory to have a backslash is a for loop. I\u0027ll update the code so that backslash will be used only at the end of for loop lines.",
+      "parentUuid": "fbf65bb1_c6f35681",
+      "range": {
+        "startLine": 403,
+        "startChar": 0,
+        "endLine": 403,
+        "endChar": 2
+      },
+      "revId": "135a6154de5b648e2eeb7d6f8919f1ad5e323b29",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
