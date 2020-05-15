@@ -72,6 +72,68 @@ AM_CONDITIONAL([HIREDIS], [test xtrue])
 AC_DEFINE(HAVE_HIREDIS_VIP, [0], [Have hiredis-vip])
 AM_CONDITIONAL([HIREDIS_VIP], [test "xyes" = "xno"])
 
+#
+# Configuration option --with-rpm-dir=DIR
+#   If this option is given, rpm packages building is enabled and ready rpms are
+#   copied to the directory.
+#
+AC_ARG_WITH([rpm-dir],
+    AS_HELP_STRING([--with-rpm-dir=DIR],
+        [Directory for build rpm packages]),
+    [AC_CHECK_PROG(RPMBUILD, rpmbuild, "yes", "no")
+     AC_CHECK_PROG(RPM, rpm, "yes", "no")
+     AS_IF([test "x$RPMBUILD" != xyes],
+         [AC_MSG_ERROR([rpmbuild needs to be installed])],
+     [test "x$RPM" != xyes],
+         [AC_MSG_ERROR([rpm is needs to be installed])])],
+    [with_rpm_dir=no])
+
+AC_MSG_CHECKING([rpm package])
+if test "x$with_rpm_dir" = "xno"; then
+    AC_MSG_RESULT([no])
+    RPM_DIR="/tmp"
+else
+    AC_MSG_RESULT([yes])
+    AC_MSG_NOTICE([rpm directory: $with_rpm_dir])
+    RPM_DIR="$with_rpm_dir"
+fi
+AC_SUBST(RPM_DIR)
+AM_CONDITIONAL([ENABLE_RPM_BUILD],[test "x$with_rpm_dir" != "xno"])
+
+
+#
+# Configuration option --with-deb-dir=DIR
+#   If this option is given, Debian packages packages building is enabled and ready
+#   packages are copied to the directory.
+#
+AC_ARG_WITH([deb-dir],
+    AS_HELP_STRING([--with-deb-dir=DIR],
+        [Directory for build Debian packages]),
+    [AC_CHECK_PROG(DEBUILD, dpkg-buildpackage, "yes", "no")
+     AS_IF([test "x$DEBUILD" != xyes],
+         [AC_MSG_ERROR([dpkg-buildpackage needs to be installed])],
+             [test "x$with_rpm_dir" != "xno"],
+			     [AC_MSG_ERROR([--with-deb-dir and --with-rpm-dir are mutually exclusive])])],
+    [with_deb_dir=no])
+
+AC_MSG_CHECKING([deb package])
+if test "x$with_deb_dir" = "xno"; then
+    AC_MSG_RESULT([no])
+    DEB_DIR="/tmp"
+else
+    AC_MSG_RESULT([yes])
+    AC_MSG_NOTICE([deb directory: $with_deb_dir])
+    DEB_DIR="$with_deb_dir"
+fi
+AC_SUBST(DEB_DIR)
+AM_CONDITIONAL([ENABLE_DEB_BUILD],[test "x$with_deb_dir" != "xno"])
+
+
+#
+# Configuration option --with-gcov-report-dir=DIR
+#   If this option is given, gcov unit test coverage analysis is enabled and
+#   results are copied to the directory.
+#
 AC_ARG_WITH([gcov-report-dir],
     AS_HELP_STRING([--with-gcov-report-dir=DIR],
         [Directory for GCOV report files]),
