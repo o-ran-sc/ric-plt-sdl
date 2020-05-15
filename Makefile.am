@@ -400,6 +400,21 @@ test_gcov: test
 	ls -la @GCOV_REPORT_DIR@
 endif
 
+if ENABLE_RPM_BUILD
+build_rpm:
+	rpmbuild --nodeps --nocheck -bb rpm/sdl.spec --define="_sourcedir $(top_srcdir)" --define="_builddir $(top_srcdir)" --define="_rpmdir .."
+	mkdir -p @RPM_DIR@
+	cp ../x86_64/*.rpm @RPM_DIR@
+endif
+
+
+if ENABLE_DEB_BUILD
+build_deb:
+	DEB_BUILD_OPTIONS='nocheck noddebs' debuild -b -us -uc
+	mkdir -p @DEB_DIR@
+	cp ../*.deb @DEB_DIR@
+endif
+
 clean-local:
 	rm -f libsdl.pc
 if ENABLE_GCOV

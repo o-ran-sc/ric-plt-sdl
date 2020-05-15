@@ -1,7 +1,7 @@
 Source: sdl
 Priority: optional
 Maintainer: Rolf Badorek <rolf.badorek@nokia.com>
-Build-Depends: debhelper (>= 10), pkg-config, libtool, automake, gawk, autoconf, automake, autoconf-archive, make, gcc, libboost-all-dev, libhiredis-dev
+Build-Depends: debhelper (>= 10), pkg-config, libtool, automake, gawk, autoconf, automake, autoconf-archive, make, gcc, libboost-filesystem-dev, libboost-program-options-dev, libboost-system-dev, libhiredis-dev
 Standards-Version: 4.1.2
 Section: libs
 

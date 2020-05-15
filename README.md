@@ -39,18 +39,29 @@ Build-time dependencies:
 
     boost
     hiredis
+    rpm
+    valgrind
+    autoconf-archive
     doxygen (optional)
 
 Commands to install dependent packages in Fedora:
 
     sudo dnf install boost-devel
     sudo dnf install hiredis-devel
+    sudo dnf install rpm
+    sudo dnf install valgrind
+    sudo dnf install autoconf-archive
     sudo dnf install doxygen
 
 Commands to install dependent packages in Debian/Ubuntu:
 
-    sudo apt install libboost-all-dev
+    sudo apt install libboost-filesystem-dev
+    sudo apt install libboost-program-options-dev
+    sudo apt install libboost-system-dev
     sudo apt install libhiredis-dev
+    sudo apt install rpm
+    sudo apt install valgrind
+    sudo apt install autoconf-archive
     sudo apt install doxygen
 
 ### Compilation in the source directory
