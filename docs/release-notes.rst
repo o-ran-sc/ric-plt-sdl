@@ -30,6 +30,10 @@ ric-plt/sdl.
 Version history
 ---------------
 
+[1.1.2] - 2020-05-15
+
+* Add makefile targets to build rpm and Debian packages.
+
 [1.1.1] - 2020-05-11
 
 * Add unit test code coverage (gcov) make target.

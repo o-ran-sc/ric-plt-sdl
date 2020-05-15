@@ -1,5 +1,5 @@
 Name:     sdl
-Version:  1.1.1
+Version:  1.1.2
 Release:  1%{?dist}
 Summary:  C++ API library for Shared Data Layer clients
 
@@ -50,6 +50,9 @@ rm -f %{buildroot}%{_libdir}/lib*.*a
 %{_includedir}/sdl
 
 %changelog
+* Fri May 15 2020 Timo Tietavainen <timo.tietavainen@nokia.com> - 1.1.2-1
+- Add makefile targets to build rpm and Debian packages.
+
 * Mon May 11 2020 Timo Tietavainen <timo.tietavainen@nokia.com> - 1.1.1-1
 - Add unit test code coverage (gcov) make target.
 
