@@ -45,6 +45,30 @@
       "revId": "71a4464b362a76b784aaa7cb19775aa54ae07ddd",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab827eaf_ba0b5d5c",
+        "filename": "README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-15T14:59:37Z",
+      "side": 1,
+      "message": "I didn\u0027t find filesystem, program-options or system boost devel packages for fedora what could be dnf installed. There seems to be Linux OS variations what boost packages there are available?",
+      "parentUuid": "1a1337df_2d2eb68e",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 32
+      },
+      "revId": "71a4464b362a76b784aaa7cb19775aa54ae07ddd",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
