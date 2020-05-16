@@ -30,6 +30,11 @@ ric-plt/sdl.
 Version history
 ---------------
 
+[1.1.3] - 2020-05-16
+
+* Rename rpm and Debian makefile targets to rpm-pkg and deb-pkg.
+* Update CI Dockerfile to utilize rpm-pkg and deb-pkg makefile targets.
+
 [1.1.2] - 2020-05-15
 
 * Add makefile targets to build rpm and Debian packages.

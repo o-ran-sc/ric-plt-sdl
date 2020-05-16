@@ -401,7 +401,7 @@ test_gcov: test
 endif
 
 if ENABLE_RPM_BUILD
-build_rpm:
+rpm-pkg:
 	rpmbuild --nodeps --nocheck -bb rpm/sdl.spec --define="_sourcedir $(top_srcdir)" --define="_builddir $(top_srcdir)" --define="_rpmdir .."
 	mkdir -p @RPM_DIR@
 	cp ../x86_64/*.rpm @RPM_DIR@
@@ -409,7 +409,7 @@ endif
 
 
 if ENABLE_DEB_BUILD
-build_deb:
+deb-pkg:
 	DEB_BUILD_OPTIONS='nocheck noddebs' debuild -b -us -uc
 	mkdir -p @DEB_DIR@
 	cp ../*.deb @DEB_DIR@

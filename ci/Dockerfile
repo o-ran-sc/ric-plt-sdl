@@ -34,8 +34,11 @@ RUN apt-get update && \
         gawk \
         debhelper \
         autoconf-archive \
-        libboost-all-dev \
-        libhiredis-dev && \
+        libboost-filesystem-dev \
+        libboost-program-options-dev \
+        libboost-system-dev \
+        libhiredis-dev \
+        valgrind && \
     apt-get clean
 
 # Copy sourcefiles:
@@ -52,7 +55,12 @@ RUN ./autogen.sh && \
 # Build packages:
 RUN make clean && \
     make distclean && \
-    ./package.sh --skip-test debian rpm
+    ./configure --with-rpm-dir=/tmp/pkgs && \
+    make rpm-pkg && \
+    make clean && \
+    make distclean && \
+    ./configure --with-deb-dir=/tmp/pkgs && \
+    make deb-pkg
 
 RUN cp /tmp/build/ci/publish.sh /bin
 ENTRYPOINT ["/bin/publish.sh"]

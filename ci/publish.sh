@@ -13,4 +13,4 @@ then
     exit 1
 fi
 
-cp -v /tmp/*.rpm /tmp/*.deb "$TARGET"
+cp -v /tmp/pkgs/*.rpm /tmp/pkgs/*.deb "$TARGET"
