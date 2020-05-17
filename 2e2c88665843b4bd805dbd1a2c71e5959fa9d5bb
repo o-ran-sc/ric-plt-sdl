@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66199f75_6e42ec30",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2020-05-17T10:24:39Z",
+      "side": 1,
+      "message": "This can be dropped as soon as LF merges my global-jjb change.",
+      "revId": "2e2c88665843b4bd805dbd1a2c71e5959fa9d5bb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "976a4228_fc296d63",
+        "filename": "ci/publish.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2020-05-17T10:24:39Z",
+      "side": 1,
+      "message": "This can be dropped as soon as LF merges my global-jjb change.",
+      "revId": "2e2c88665843b4bd805dbd1a2c71e5959fa9d5bb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3208ada5_d38971b3",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2020-05-17T10:24:39Z",
+      "side": 1,
+      "message": "I would not bump the version.  You have only changed invisible parts of build process. The built artifacts are byte-for-byte identical with the previous.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 3
+      },
+      "revId": "2e2c88665843b4bd805dbd1a2c71e5959fa9d5bb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
