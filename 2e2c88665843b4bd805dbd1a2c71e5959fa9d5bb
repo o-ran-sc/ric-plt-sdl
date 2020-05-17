@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "29e22bb8_eb3b7c0d",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-17T15:02:19Z",
+      "side": 1,
+      "message": "I would like to keep Dockerfile \u0026 publish.sh file to ease sdl building/unit testing in your own local development environment. Since these files wont be anymore ci related, I can move these files away from ci directory to sdl root directory.",
+      "parentUuid": "66199f75_6e42ec30",
+      "revId": "2e2c88665843b4bd805dbd1a2c71e5959fa9d5bb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "976a4228_fc296d63",
         "filename": "ci/publish.sh",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "2c8132a6_9c7e0357",
+        "filename": "ci/publish.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-17T15:02:19Z",
+      "side": 1,
+      "message": "I would like to keep Dockerfile \u0026 publish.sh file to ease sdl building/unit testing in your own local development environment. Since these files wont be anymore ci related, I can move these files away from ci directory to sdl root directory.",
+      "parentUuid": "976a4228_fc296d63",
+      "revId": "2e2c88665843b4bd805dbd1a2c71e5959fa9d5bb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3208ada5_d38971b3",
         "filename": "configure.ac",
         "patchSetId": 1
@@ -47,6 +83,30 @@
       "writtenOn": "2020-05-17T10:24:39Z",
       "side": 1,
       "message": "I would not bump the version.  You have only changed invisible parts of build process. The built artifacts are byte-for-byte identical with the previous.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 3
+      },
+      "revId": "2e2c88665843b4bd805dbd1a2c71e5959fa9d5bb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2a0f415_fbc8d050",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-17T15:02:19Z",
+      "side": 1,
+      "message": "I would like to keep sdl library version and rmr/Debian packakge versions to be the same. If I wont update version, Jenkins job \"Merge Master\" will fail to publish new packages to o-ran-sc/staging area because version already exists. But yeah I can do also so that I won\u0027t update sdl library nor package versions and just let the Jenkins job \"Merge Master\" to fail.",
+      "parentUuid": "3208ada5_d38971b3",
       "range": {
         "startLine": 14,
         "startChar": 0,
