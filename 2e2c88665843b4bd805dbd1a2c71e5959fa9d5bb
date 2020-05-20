@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "2590230a_981706ae",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2020-05-20T18:47:03Z",
+      "side": 1,
+      "message": "Totally reasonable to use a Dockerfile for testing.  After we stop using this Dockerfile to build and publish your packages, I suggest you rename it to Dockerfile-Unit-Test.",
+      "revId": "2e2c88665843b4bd805dbd1a2c71e5959fa9d5bb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "976a4228_fc296d63",
         "filename": "ci/publish.sh",
         "patchSetId": 1
