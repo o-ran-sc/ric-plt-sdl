@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "14ee0489_d05bcc55",
+        "filename": "ci/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-20T19:00:59Z",
+      "side": 1,
+      "message": "Yes true, I will 1) move Dockerfile and publish.sh away from ci directory, 2) remove the ci directory and 3) Rename Dockerfile to Dockerfile-Unit-Test or Dockerfile-Test. I will create a new merge request for these changes tomorrow.",
+      "parentUuid": "2590230a_981706ae",
+      "revId": "2e2c88665843b4bd805dbd1a2c71e5959fa9d5bb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "976a4228_fc296d63",
         "filename": "ci/publish.sh",
         "patchSetId": 1
