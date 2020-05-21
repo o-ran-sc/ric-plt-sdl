@@ -62,5 +62,5 @@ RUN make clean && \
     ./configure --with-deb-dir=/tmp/pkgs && \
     make deb-pkg
 
-RUN cp /tmp/build/ci/publish.sh /bin
+RUN cp /tmp/build/docker_test/publish.sh /bin
 ENTRYPOINT ["/bin/publish.sh"]
