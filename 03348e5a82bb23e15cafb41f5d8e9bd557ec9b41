@@ -22,6 +22,30 @@
       "revId": "03348e5a82bb23e15cafb41f5d8e9bd557ec9b41",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a32b3063_4723f353",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-05-21T13:11:32Z",
+      "side": 1,
+      "message": "True, better to use \u0027Rename\u0027 instead of \u0027Remove\u0027",
+      "parentUuid": "876bb215_f3818838",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "03348e5a82bb23e15cafb41f5d8e9bd557ec9b41",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
