@@ -208,6 +208,18 @@ analysis:
 
 Open the out/index.html using any web browser.
 
+## Docker Tests
+
+It's also possible to test SDL compilation, run unit tests and test building of
+rpm and Debian packages in a Docker:
+
+    docker build  --no-cache -f docker_test/Dockerfile-Test -t sdltest:latest .
+
+If needed, ready rpm and Debian packages can be copied from Docker to host. In
+below example packages are copied to host's /tmp/sdltest-packages directory:
+
+    docker run -v /tmp/sdltest-packages:/export sdltest:latest /export
+
 ## Using SDL in application pod
 
 SDL is not yet available in O-RAN-SC PackageCloud.io repository.
