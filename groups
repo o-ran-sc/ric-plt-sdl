@@ -2,4 +2,3 @@
 #
 67325ca0ac8790098a5d0faebf5331dbc811468d                                    	saml/oran-gerrit-ric-plt-sdl-committers
 add1d629e64dce7097223c93ca6e710c1460b5ba                                    	GitHub Replication
-ldap:cn=oran-gerrit-ric-plt-sdl-committers,ou=Groups,dc=freestandards,dc=org	ldap/oran-gerrit-ric-plt-sdl-committers
