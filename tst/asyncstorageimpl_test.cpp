@@ -71,12 +71,16 @@ namespace
                                                                   this,
                                                                   std::placeholders::_1,
                                                                   std::placeholders::_2,
-                                                                  std::placeholders::_3)));
+                                                                  std::placeholders::_3,
+                                                                  std::placeholders::_4,
+                                                                  std::placeholders::_5)));
         }
 
         std::shared_ptr<redis::AsyncDatabaseDiscovery> asyncDatabaseDiscoveryCreator(std::shared_ptr<Engine>,
-                                                                              const DatabaseConfiguration&,
-                                                                              std::shared_ptr<Logger>)
+                                                                                     const std::string&,
+                                                                                     const DatabaseConfiguration&,
+                                                                                     const boost::optional<std::size_t>&,
+                                                                                     std::shared_ptr<Logger>)
         {
             return discoveryMock;
         }
@@ -139,4 +143,12 @@ TEST_F(AsyncStorageImplTest, CorrectHandlerIsUsedBasedOnConfiguration)
     expectNamespaceConfigurationIsDbBackendUseEnabled_returnFalse();
     AsyncStorage& returnedHandler2 = asyncStorageImpl->getOperationHandler(ns);
     EXPECT_EQ(typeid(AsyncDummyStorage&), typeid(returnedHandler2));
+}
+
+TEST_F(AsyncStorageImplTest, CorrectSdlClusterHandlerIsUsedBasedOnConfiguration)
+{
+    expectNamespaceConfigurationIsDbBackendUseEnabled_returnTrue();
+    dummyDatabaseConfiguration->checkAndApplyDbType("sdl-cluster");
+    AsyncStorage& returnedHandler = asyncStorageImpl->getOperationHandler(ns);
+    EXPECT_EQ(typeid(AsyncRedisStorage&), typeid(returnedHandler));
 }

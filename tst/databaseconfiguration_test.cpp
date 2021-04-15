@@ -52,7 +52,7 @@ TEST(DatabaseConfigurationTest, CanThrowAndCatchInvalidDbType)
     }
     catch (const std::exception& e)
     {
-        EXPECT_STREQ("invalid database type: 'someBadDbType'. Allowed types are: 'redis-standalone' or 'redis-cluster'", e.what());
+        EXPECT_STREQ("invalid database type: 'someBadDbType'. Allowed types are: 'redis-standalone', 'redis-cluster', 'redis-sentinel' or 'sdl-cluster'", e.what());
     }
 }
 

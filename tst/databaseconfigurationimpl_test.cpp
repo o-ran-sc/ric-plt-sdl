@@ -83,6 +83,13 @@ TEST_F(DatabaseConfigurationImplTest, CanApplyRedisSentinelDbTypeStringAndReturn
     EXPECT_EQ(DatabaseConfiguration::DbType::REDIS_SENTINEL, retDbType);
 }
 
+TEST_F(DatabaseConfigurationImplTest, CanApplySdlClusterDbTypeStringAndReturnType)
+{
+    databaseConfigurationImpl->checkAndApplyDbType("sdl-cluster");
+    const auto retDbType(databaseConfigurationImpl->getDbType());
+    EXPECT_EQ(DatabaseConfiguration::DbType::SDL_CLUSTER, retDbType);
+}
+
 TEST_F(DatabaseConfigurationImplTest, CanApplyNewAddressesOneByOneAndReturnAllAddresses)
 {
     databaseConfigurationImpl->checkAndApplyServerAddress("dummydatabaseaddress.local");
@@ -118,14 +125,14 @@ TEST_F(DatabaseConfigurationImplTest, IsEmptyReturnsCorrectInformation)
 
 TEST_F(DatabaseConfigurationImplTest, DefaultSentinelAddressIsNone)
 {
-    EXPECT_EQ(boost::none, databaseConfigurationImpl->getSentinelAddress());
+    EXPECT_EQ(boost::none, databaseConfigurationImpl->getSentinelAddress(boost::none));
 }
 
 TEST_F(DatabaseConfigurationImplTest, CanApplyAndReturnSentinelAddress)
 {
     databaseConfigurationImpl->checkAndApplySentinelAddress("dummydatabaseaddress.local:1234");
-    auto address = databaseConfigurationImpl->getSentinelAddress();
-    EXPECT_NE(boost::none, databaseConfigurationImpl->getSentinelAddress());
+    auto address = databaseConfigurationImpl->getSentinelAddress(boost::none);
+    EXPECT_NE(boost::none, databaseConfigurationImpl->getSentinelAddress(boost::none));
     EXPECT_EQ("dummydatabaseaddress.local", address->getHost());
     EXPECT_EQ(1234, ntohs(address->getPort()));
 }
@@ -139,4 +146,33 @@ TEST_F(DatabaseConfigurationImplTest, CanApplyAndReturnSentinelMasterName)
 {
     databaseConfigurationImpl->checkAndApplySentinelMasterName("mymaster");
     EXPECT_EQ("mymaster", databaseConfigurationImpl->getSentinelMasterName());
+}
+
+TEST_F(DatabaseConfigurationImplTest, CanReturnSDLClusterAddress)
+{
+    databaseConfigurationImpl->checkAndApplyDbType("sdl-cluster");
+    databaseConfigurationImpl->checkAndApplyServerAddress("cluster-0.local");
+    databaseConfigurationImpl->checkAndApplyServerAddress("cluster-1.local");
+    databaseConfigurationImpl->checkAndApplyServerAddress("cluster-2.local");
+    databaseConfigurationImpl->checkAndApplySentinelAddress("cluster-0.local:54321");
+    auto address0 = databaseConfigurationImpl->getSentinelAddress(0);
+    auto address1 = databaseConfigurationImpl->getSentinelAddress(1);
+    auto address2 = databaseConfigurationImpl->getSentinelAddress(2);
+    EXPECT_NE(boost::none, databaseConfigurationImpl->getSentinelAddress(0));
+    EXPECT_NE(boost::none, databaseConfigurationImpl->getSentinelAddress(1));
+    EXPECT_NE(boost::none, databaseConfigurationImpl->getSentinelAddress(2));
+    EXPECT_EQ("cluster-0.local", address0->getHost());
+    EXPECT_EQ("cluster-1.local", address1->getHost());
+    EXPECT_EQ("cluster-2.local", address2->getHost());
+    EXPECT_EQ(54321, ntohs(address0->getPort()));
+}
+
+TEST_F(DatabaseConfigurationImplTest, CanReturnDefaultPortForSDLClusterAddress)
+{
+    databaseConfigurationImpl->checkAndApplyServerAddress("cluster-0.local");
+    databaseConfigurationImpl->checkAndApplySentinelAddress("cluster-0.local");
+    auto address0 = databaseConfigurationImpl->getSentinelAddress(0);
+    EXPECT_NE(boost::none, databaseConfigurationImpl->getSentinelAddress(0));
+    EXPECT_EQ("cluster-0.local", address0->getHost());
+    EXPECT_EQ(26379, ntohs(address0->getPort()));
 }

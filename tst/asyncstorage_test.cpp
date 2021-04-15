@@ -53,3 +53,9 @@ TEST(AsyncStorageTest, CanThrowWhenDisallowedSeparatorCharacterIsUsedInNamespace
     const std::string notValidNamespace(std::string("someNamespace") + AsyncStorage::SEPARATOR);
     EXPECT_THROW(validateNamespace(notValidNamespace), InvalidNamespace);
 }
+
+TEST(AsyncStorageTest, AsyncStorageCreateInstanceHasCorrectType)
+{
+    auto asyncStorageInstance(shareddatalayer::AsyncStorage::create());
+    EXPECT_EQ(typeid(std::unique_ptr<AsyncStorage>), typeid(asyncStorageInstance));
+}
