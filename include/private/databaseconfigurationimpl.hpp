@@ -49,6 +49,8 @@ namespace shareddatalayer
 
         boost::optional<HostAndPort> getSentinelAddress() const override;
 
+        boost::optional<HostAndPort> getSentinelAddress(const boost::optional<std::size_t>& addressIndex) const override;
+
         std::string getSentinelMasterName() const override;
 
         bool isEmpty() const override;

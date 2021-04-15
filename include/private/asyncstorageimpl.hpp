@@ -30,6 +30,7 @@
 #include "private/logger.hpp"
 #include "private/namespaceconfigurationsimpl.hpp"
 #include "private/redis/asyncdatabasediscovery.hpp"
+#include "private/redis/asyncredisstorage.hpp"
 
 namespace shareddatalayer
 {
@@ -39,7 +40,9 @@ namespace shareddatalayer
     {
     public:
         using AsyncDatabaseDiscoveryCreator = std::function<std::shared_ptr<redis::AsyncDatabaseDiscovery>(std::shared_ptr<Engine> engine,
+                                                                                                           const std::string& ns,
                                                                                                            const DatabaseConfiguration& databaseConfiguration,
+                                                                                                           const boost::optional<std::size_t>& addressIndex,
                                                                                                            std::shared_ptr<Logger> logger)>;
 
         AsyncStorageImpl(const AsyncStorageImpl&) = delete;
@@ -94,8 +97,13 @@ namespace shareddatalayer
         std::shared_ptr<Logger> logger;
         AsyncDatabaseDiscoveryCreator asyncDatabaseDiscoveryCreator;
 
-        AsyncStorage& getRedisHandler();
+        std::vector<std::shared_ptr<AsyncRedisStorage>> asyncStorages;
+
+        AsyncStorage& getRedisHandler(const std::string& ns);
         AsyncStorage& getDummyHandler();
+
+        void setAsyncRedisStorageHandlers(const std::string& ns);
+        AsyncStorage& getAsyncRedisStorageHandler(const std::string& ns);
     };
 }
 

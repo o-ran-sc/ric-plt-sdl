@@ -35,6 +35,7 @@ using namespace shareddatalayer::redis;
 std::shared_ptr<AsyncDatabaseDiscovery> AsyncDatabaseDiscovery::create(std::shared_ptr<Engine> engine,
                                                                        const boost::optional<Namespace>& ns,
                                                                        const DatabaseConfiguration& staticDatabaseConfiguration,
+                                                                       const boost::optional<std::size_t>& addressIndex,
                                                                        std::shared_ptr<Logger> logger)
 {
     auto staticAddresses(staticDatabaseConfiguration.getServerAddresses());
@@ -57,10 +58,10 @@ std::shared_ptr<AsyncDatabaseDiscovery> AsyncDatabaseDiscovery::create(std::shar
     else
     {
 #if HAVE_HIREDIS
-        if (staticDbType == DatabaseConfiguration::DbType::REDIS_SENTINEL)
+        if (staticDbType == DatabaseConfiguration::DbType::REDIS_SENTINEL ||
+            staticDbType == DatabaseConfiguration::DbType::SDL_CLUSTER)
         {
-            static_cast<void>(ns);
-            auto sentinelAddress(staticDatabaseConfiguration.getSentinelAddress());
+            auto sentinelAddress(staticDatabaseConfiguration.getSentinelAddress(addressIndex));
             if (sentinelAddress)
                 return std::make_shared<AsyncSentinelDatabaseDiscovery>(engine,
                                                                         logger,

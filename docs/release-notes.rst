@@ -29,6 +29,11 @@ This document provides the release notes of the sdl library.
 Version history
 ---------------
 
+[1.2.0] - 2021-05-26
+
+* Multiple DBAAS Redis Sentinel groups
+* New namespace (--ns) option in sdltool test-get-set -command
+
 [1.1.3] - 2020-05-16
 
 * Rename rpm and Debian makefile targets to rpm-pkg and deb-pkg.

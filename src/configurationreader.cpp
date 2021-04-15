@@ -213,6 +213,8 @@ ConfigurationReader::ConfigurationReader(const Directories& directories,
     sentinelPortEnvVariableValue({}),
     sentinelMasterNameEnvVariableName(SENTINEL_MASTER_NAME_ENV_VAR_NAME),
     sentinelMasterNameEnvVariableValue({}),
+    dbClusterAddrListEnvVariableName(DB_CLUSTER_ADDR_LIST_ENV_VAR_NAME),
+    dbClusterAddrListEnvVariableValue({}),
     jsonDatabaseConfiguration(boost::none),
     logger(logger)
 {
@@ -230,6 +232,9 @@ ConfigurationReader::ConfigurationReader(const Directories& directories,
         envStr = system.getenv(sentinelMasterNameEnvVariableName.c_str());
         if (envStr)
             sentinelMasterNameEnvVariableValue = envStr;
+        envStr = system.getenv(dbClusterAddrListEnvVariableName.c_str());
+        if (envStr)
+            dbClusterAddrListEnvVariableValue = envStr;
     }
 
     readConfigurationFromDirectories(directories);
@@ -311,7 +316,14 @@ void ConfigurationReader::readDatabaseConfiguration(DatabaseConfiguration& datab
             }
             else
             {
-                validateAndSetDbType("redis-sentinel", databaseConfiguration, sourceForDatabaseConfiguration);
+                if (dbClusterAddrListEnvVariableValue.empty())
+                    validateAndSetDbType("redis-sentinel", databaseConfiguration, sourceForDatabaseConfiguration);
+                else {
+                    validateAndSetDbType("sdl-cluster", databaseConfiguration, sourceForDatabaseConfiguration);
+                    parseDatabaseServersConfigurationFromString(databaseConfiguration,
+                                                                dbClusterAddrListEnvVariableValue,
+                                                                dbClusterAddrListEnvVariableName);
+                }
                 databaseConfiguration.checkAndApplySentinelAddress(dbHostEnvVariableValue + ":" + sentinelPortEnvVariableValue);
                 databaseConfiguration.checkAndApplySentinelMasterName(sentinelMasterNameEnvVariableValue);
             }

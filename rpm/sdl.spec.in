@@ -1,5 +1,5 @@
 Name:     sdl
-Version:  1.1.3
+Version:  1.2.0
 Release:  1%{?dist}
 Summary:  C++ API library for Shared Data Layer clients
 
@@ -50,6 +50,10 @@ rm -f %{buildroot}%{_libdir}/lib*.*a
 %{_includedir}/sdl
 
 %changelog
+* Wed May 26 2021 Petri Ovaska <petri.ovaska@nokia.com> - 1.2.0-1
+- Multiple DBAAS Redis Sentinel groups
+- New namespace (--ns) option in sdltool test-get-set -command
+
 * Sat May 16 2020 Timo Tietavainen <timo.tietavainen@nokia.com> - 1.1.3-1
 - Rename rpm and Debian makefile targets to rpm-pkg and deb-pkg.
 - Update CI Dockerfile to utilize rpm-pkg and deb-pkg makefile targets.

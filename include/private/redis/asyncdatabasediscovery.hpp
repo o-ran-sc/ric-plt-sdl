@@ -71,6 +71,7 @@ namespace shareddatalayer
             static std::shared_ptr<AsyncDatabaseDiscovery> create(std::shared_ptr<Engine> engine,
                                                                   const boost::optional<Namespace>& ns,
                                                                   const DatabaseConfiguration& staticDatabaseConfiguration,
+                                                                  const boost::optional<std::size_t>& addressIndex,
                                                                   std::shared_ptr<Logger> logger);
 
         protected:
