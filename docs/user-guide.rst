@@ -238,6 +238,7 @@ configure database backend:
 * DBAAS_SERVICE_PORT
 * DBAAS_SERVICE_SENTINEL_PORT
 * DBAAS_MASTER_NAME
+* DBAAS_CLUSTER_ADDR_LIST
 
 After DBaaS service is installed, environment variables are exposed to
 application containers. SDL library will automatically use these environment
@@ -419,9 +420,11 @@ storage:
 * Standalone (single DB node without redundancy)
 * Redundant (DB node pair working in master/slave redundancy model)
 
-SDL does not currently have any intelligent logic (e.g. dynamic scaling) on
-which storage node each namespace data is stored. This area might be developed
-further in the future.
+SDL supports also Redis sentinel based DB cluster where deployment has one or
+more DBAAS Redis sentinel group. Different DBAAS Redis sentinel groups
+can be used to distribute SDL DB operations to different SDL DB instances. When
+more than one DBAAS Redis sentinel group exits the selection of SDL DB instance
+is based on the namespace string hash calculation.
 
 SDL does not prevent backend data storage to be deployed in the same node with
 the SDL client. Such deployments are, however, typically used only in

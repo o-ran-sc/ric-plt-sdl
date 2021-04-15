@@ -21,6 +21,7 @@
 
 #include "private/databaseconfigurationimpl.hpp"
 #include <arpa/inet.h>
+#include <boost/crc.hpp>
 
 using namespace shareddatalayer;
 
@@ -53,6 +54,8 @@ void DatabaseConfigurationImpl::checkAndApplyDbType(const std::string& type)
         dbType = DatabaseConfiguration::DbType::REDIS_CLUSTER;
     else if (type == "redis-sentinel")
         dbType = DatabaseConfiguration::DbType::REDIS_SENTINEL;
+    else if (type == "sdl-cluster")
+        dbType = DatabaseConfiguration::DbType::SDL_CLUSTER;
     else
         throw DatabaseConfiguration::InvalidDbType(type);
 }
@@ -90,6 +93,14 @@ void DatabaseConfigurationImpl::checkAndApplySentinelAddress(const std::string& 
 boost::optional<HostAndPort> DatabaseConfigurationImpl::getSentinelAddress() const
 {
     return sentinelAddress;
+}
+
+boost::optional<HostAndPort> DatabaseConfigurationImpl::getSentinelAddress(const boost::optional<std::size_t>& addressIndex) const
+{
+    if (addressIndex)
+        return { HostAndPort(serverAddresses.at(*addressIndex).getHost(), sentinelAddress->getPort()) };
+
+    return getSentinelAddress();
 }
 
 void DatabaseConfigurationImpl::checkAndApplySentinelMasterName(const std::string& name)

@@ -30,7 +30,7 @@ namespace
     {
         std::ostringstream os;
         os << "invalid database type: '" << type << "'. ";
-        os << "Allowed types are: 'redis-standalone' or 'redis-cluster'";
+        os << "Allowed types are: 'redis-standalone', 'redis-cluster', 'redis-sentinel' or 'sdl-cluster'";
         return os.str();
     }
 }
