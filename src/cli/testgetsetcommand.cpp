@@ -93,7 +93,7 @@ namespace
     {
         auto keyCount(map["key-count"].as<int>());
         const auto timeout(map["timeout"].as<int>());
-        auto ns("sdltoolns");
+        auto ns(map["ns"].as<std::string>());
         setTimeout(timeout);
         auto sdl(createSyncStorage(out));
         if (sdl == nullptr)
@@ -141,4 +141,5 @@ AUTO_REGISTER_COMMAND(std::bind(TestGetSetCommand, std::placeholders::_1, std::p
                       "Check that basic SDL api commands (set/get) works normally and measure latency.",
                       CommandMap::Category::UTIL, 30010,
                       ("key-count", boost::program_options::value<int>()->default_value(10), "Number of write/read keys")
-                      ("timeout", boost::program_options::value<int>()->default_value(0), "Timeout (in seconds), Default is no timeout"));
+                      ("timeout", boost::program_options::value<int>()->default_value(0), "Timeout (in seconds), Default is no timeout")
+                      ("ns", boost::program_options::value<std::string>()->default_value("sdltoolns"), "namespace to use"));
