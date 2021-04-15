@@ -42,3 +42,9 @@ TEST(SyncStorageTest, IsAbstract)
 {
     EXPECT_TRUE(std::is_abstract<SyncStorage>::value);
 }
+
+TEST(SyncStorageTest, SyncStorageCreateInstanceHasCorrectType)
+{
+    auto syncStorageInstance(shareddatalayer::SyncStorage::create());
+    EXPECT_EQ(typeid(std::unique_ptr<SyncStorage>), typeid(syncStorageInstance));
+}

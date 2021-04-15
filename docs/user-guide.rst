@@ -238,6 +238,7 @@ configure database backend:
 * DBAAS_SERVICE_PORT
 * DBAAS_SERVICE_SENTINEL_PORT
 * DBAAS_MASTER_NAME
+* DBAAS_CLUSTER_ADDR_LIST
 
 After DBaaS service is installed, environment variables are exposed to
 application containers. SDL library will automatically use these environment
