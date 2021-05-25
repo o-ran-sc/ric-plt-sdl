@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f537ae1f_9eec82a7",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1001247
+      },
+      "writtenOn": "2021-05-25T05:41:52Z",
+      "side": 1,
+      "message": "True, I missed this one. I\u0027ll fix.",
+      "parentUuid": "922fe29c_d46b14eb",
+      "revId": "9998dd69592978bdd0a0efd652a5c4adbd8524f0",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "834b0177_4e76e4d4",
         "filename": "src/configurationreader.cpp",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2021-05-25T05:14:01Z",
       "side": 1,
       "message": "How about if we have set DBAAS_CLUSTER_ADDR_LIST but we do not have set DBAAS_SERVICE_SENTINEL_PORT? So, we have \"sdl cluster\" deployment with multiple standalone dbaas pods. Maybe support of that is missing from this commit or do you have another commit coming where you will implement it.",
+      "revId": "9998dd69592978bdd0a0efd652a5c4adbd8524f0",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dd4d44d_8ef8c441",
+        "filename": "src/configurationreader.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1001247
+      },
+      "writtenOn": "2021-05-25T05:41:52Z",
+      "side": 1,
+      "message": "Yes, I will check that later.",
+      "parentUuid": "834b0177_4e76e4d4",
       "revId": "9998dd69592978bdd0a0efd652a5c4adbd8524f0",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
