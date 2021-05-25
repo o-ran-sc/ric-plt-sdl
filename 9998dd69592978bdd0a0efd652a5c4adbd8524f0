@@ -69,6 +69,24 @@
       "parentUuid": "834b0177_4e76e4d4",
       "revId": "9998dd69592978bdd0a0efd652a5c4adbd8524f0",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ac04533_0cf2952b",
+        "filename": "src/configurationreader.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-05-25T05:51:56Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "9dd4d44d_8ef8c441",
+      "revId": "9998dd69592978bdd0a0efd652a5c4adbd8524f0",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
