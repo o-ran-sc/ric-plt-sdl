@@ -36,6 +36,24 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0949e969_7cbf7ce4",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-05-26T12:18:11Z",
+      "side": 1,
+      "message": "User-guide fix looks good to me.",
+      "parentUuid": "f537ae1f_9eec82a7",
+      "revId": "9998dd69592978bdd0a0efd652a5c4adbd8524f0",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "834b0177_4e76e4d4",
