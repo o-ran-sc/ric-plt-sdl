@@ -1,3 +1,9 @@
+sdl (1.2.1-1) UNRELEASED; urgency=low
+
+  * Multiple DBAAS Redis standalone groups
+
+ -- Petri Ovaska <petri.ovaska@nokia.com>  Mon, 31 May 2021 14:06:32 +0300
+
 sdl (1.2.0-1) UNRELEASED; urgency=low
 
   * Multiple DBAAS Redis Sentinel groups
