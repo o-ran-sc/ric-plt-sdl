@@ -1,5 +1,5 @@
 Name:     sdl
-Version:  1.2.0
+Version:  1.2.1
 Release:  1%{?dist}
 Summary:  C++ API library for Shared Data Layer clients
 
@@ -50,6 +50,9 @@ rm -f %{buildroot}%{_libdir}/lib*.*a
 %{_includedir}/sdl
 
 %changelog
+* Mon May 31 2021 Petri Ovaska <petri.ovaska@nokia.com> - 1.2.1-1
+- Multiple DBAAS Redis standalone groups
+
 * Wed May 26 2021 Petri Ovaska <petri.ovaska@nokia.com> - 1.2.0-1
 - Multiple DBAAS Redis Sentinel groups
 - New namespace (--ns) option in sdltool test-get-set -command

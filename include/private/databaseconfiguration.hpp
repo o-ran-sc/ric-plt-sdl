@@ -40,7 +40,8 @@ namespace shareddatalayer
             REDIS_STANDALONE,
             REDIS_CLUSTER,
             REDIS_SENTINEL,
-            SDL_CLUSTER
+            SDL_STANDALONE_CLUSTER,
+            SDL_SENTINEL_CLUSTER
         };
 
         virtual ~DatabaseConfiguration() = default;
@@ -50,6 +51,7 @@ namespace shareddatalayer
         virtual void checkAndApplySentinelMasterName(const std::string& name) = 0;
         virtual DatabaseConfiguration::DbType getDbType() const = 0;
         virtual DatabaseConfiguration::Addresses getServerAddresses() const = 0;
+        virtual DatabaseConfiguration::Addresses getServerAddresses(const boost::optional<std::size_t>& addressIndex) const = 0;
         virtual DatabaseConfiguration::Addresses getDefaultServerAddresses() const = 0;
         virtual boost::optional<HostAndPort> getSentinelAddress() const = 0; // Optional return value, because empty HostAndPort can't be created.
         virtual boost::optional<HostAndPort> getSentinelAddress(const boost::optional<std::size_t>& addressIndex) const = 0;

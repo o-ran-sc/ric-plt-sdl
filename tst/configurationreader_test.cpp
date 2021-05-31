@@ -62,6 +62,12 @@ namespace
             EXPECT_CALL(databaseConfigurationMock, checkAndApplyDbType(type));
         }
 
+        void expectGetDbTypeAndWillOnceReturn(DatabaseConfiguration::DbType type)
+        {
+            EXPECT_CALL(databaseConfigurationMock, getDbType())
+                    .WillOnce(Return(type));
+        }
+
         void expectDBServerAddressConfigurationCheckAndApply(const std::string& address)
         {
             EXPECT_CALL(databaseConfigurationMock, checkAndApplyServerAddress(address));
@@ -763,13 +769,15 @@ public:
     {
     }
 
-    void readEnvironmentConfigurationAndExpectConfigurationErrorException()
+    void readEnvironmentConfigurationAndExpectConfigurationErrorException(const std::string&  msg,
+                                                                          bool expectCall)
     {
         std::ostringstream os;
-        os << "Configuration error in " << someKnownInputSource << ": some error";
+        os << "Configuration error in " << someKnownInputSource << ": " << msg;
 
-        EXPECT_CALL(databaseConfigurationMock, checkAndApplyDbType(_))
-            .WillOnce(Throw(Exception("some error")));
+        if (expectCall)
+            EXPECT_CALL(databaseConfigurationMock, checkAndApplyDbType(_))
+                .WillOnce(Throw(Exception("some error")));
 
         EXPECT_THROW( {
             try
@@ -806,6 +814,7 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationCanOv
 
     expectDbTypeConfigurationCheckAndApply("redis-standalone");
     expectDBServerAddressConfigurationCheckAndApply("unknownAddress.local:12345");
+    expectGetDbTypeAndWillOnceReturn(DatabaseConfiguration::DbType::REDIS_STANDALONE);
     initializeReaderWithSDLconfigFileDirectory();
     configurationReader->readConfigurationFromInputStream(is);
     configurationReader->readDatabaseConfiguration(databaseConfigurationMock);
@@ -823,6 +832,7 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWitho
 
     expectDbTypeConfigurationCheckAndApply("redis-standalone");
     expectDBServerAddressConfigurationCheckAndApply("server.local");
+    expectGetDbTypeAndWillOnceReturn(DatabaseConfiguration::DbType::REDIS_STANDALONE);
     initializeReaderWithoutDirectories();
     configurationReader->readDatabaseConfiguration(databaseConfigurationMock);
 }
@@ -830,13 +840,14 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWitho
 TEST_F(ConfigurationReaderEnvironmentVariableTest, EmptyEnvironmentVariableThrows)
 {
     dbHostEnvVariableValue = "";
-    readEnvironmentConfigurationAndExpectConfigurationErrorException();
+    readEnvironmentConfigurationAndExpectConfigurationErrorException("Missing environment variable configuration!",
+                                                                      false);
 }
 
 TEST_F(ConfigurationReaderEnvironmentVariableTest, IllegalCharacterInEnvironmentVariableThrows)
 {
     dbHostEnvVariableValue = "@";
-    readEnvironmentConfigurationAndExpectConfigurationErrorException();
+    readEnvironmentConfigurationAndExpectConfigurationErrorException("some error", true);
 }
 
 TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationAcceptIPv6Address)
@@ -851,6 +862,7 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationAccep
 
     expectDbTypeConfigurationCheckAndApply("redis-standalone");
     expectDBServerAddressConfigurationCheckAndApply("[2001::123]:12345");
+    expectGetDbTypeAndWillOnceReturn(DatabaseConfiguration::DbType::REDIS_STANDALONE);
     initializeReaderWithoutDirectories();
     configurationReader->readDatabaseConfiguration(databaseConfigurationMock);
 }
@@ -869,6 +881,8 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWithS
     expectGetEnvironmentString(nullptr); //DB_CLUSTER_ENV_VAR_NAME
 
     expectDbTypeConfigurationCheckAndApply("redis-sentinel");
+    expectDBServerAddressConfigurationCheckAndApply("sentinelAddress.local:1111");
+    expectGetDbTypeAndWillOnceReturn(DatabaseConfiguration::DbType::REDIS_SENTINEL);
     expectSentinelAddressConfigurationCheckAndApply("sentinelAddress.local:2222");
     expectSentinelMasterNameConfigurationCheckAndApply(sentinelMasterNameEnvVariableValue);
     initializeReaderWithoutDirectories();
@@ -880,8 +894,7 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWithS
     InSequence dummy;
     dbHostEnvVariableValue = "address-0.local";
     expectGetEnvironmentString(dbHostEnvVariableValue.c_str());
-    dbPortEnvVariableValue = "1111";
-    expectGetEnvironmentString(dbPortEnvVariableValue.c_str());
+    expectGetEnvironmentString(nullptr); //DB_PORT_ENV_VAR_NAME
     sentinelPortEnvVariableValue = "2222";
     expectGetEnvironmentString(sentinelPortEnvVariableValue.c_str());
     sentinelMasterNameEnvVariableValue = "mymaster";
@@ -889,12 +902,54 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWithS
     dbClusterAddrListEnvVariableValue = "address-0.local,address-1.local,address-2.local";
     expectGetEnvironmentString(dbClusterAddrListEnvVariableValue.c_str());
 
-    expectDbTypeConfigurationCheckAndApply("sdl-cluster");
+    expectDbTypeConfigurationCheckAndApply("sdl-sentinel-cluster");
     expectDBServerAddressConfigurationCheckAndApply("address-0.local");
     expectDBServerAddressConfigurationCheckAndApply("address-1.local");
     expectDBServerAddressConfigurationCheckAndApply("address-2.local");
+    expectGetDbTypeAndWillOnceReturn(DatabaseConfiguration::DbType::SDL_SENTINEL_CLUSTER);
     expectSentinelAddressConfigurationCheckAndApply("address-0.local:2222");
     expectSentinelMasterNameConfigurationCheckAndApply(sentinelMasterNameEnvVariableValue);
+    initializeReaderWithoutDirectories();
+    configurationReader->readDatabaseConfiguration(databaseConfigurationMock);
+}
+
+TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWithoutSentinelAndWithClusterConfiguration)
+{
+    InSequence dummy;
+    dbHostEnvVariableValue = "address-0.local";
+    expectGetEnvironmentString(dbHostEnvVariableValue.c_str());
+    expectGetEnvironmentString(nullptr); //DB_PORT_ENV_VAR_NAME
+    expectGetEnvironmentString(nullptr); //SENTINEL_PORT_ENV_VAR_NAME
+    expectGetEnvironmentString(nullptr); //SENTINEL_MASTER_NAME_ENV_VAR_NAME
+    dbClusterAddrListEnvVariableValue = "address-0.local,address-1.local,address-2.local";
+    expectGetEnvironmentString(dbClusterAddrListEnvVariableValue.c_str());
+
+    expectDbTypeConfigurationCheckAndApply("sdl-standalone-cluster");
+    expectDBServerAddressConfigurationCheckAndApply("address-0.local");
+    expectDBServerAddressConfigurationCheckAndApply("address-1.local");
+    expectDBServerAddressConfigurationCheckAndApply("address-2.local");
+    expectGetDbTypeAndWillOnceReturn(DatabaseConfiguration::DbType::SDL_STANDALONE_CLUSTER);
+    initializeReaderWithoutDirectories();
+    configurationReader->readDatabaseConfiguration(databaseConfigurationMock);
+}
+
+TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWithoutSentinelAndWithClusterConfigurationAndDbPort)
+{
+    InSequence dummy;
+    dbHostEnvVariableValue = "address-0.local";
+    expectGetEnvironmentString(dbHostEnvVariableValue.c_str());
+    dbPortEnvVariableValue = "1111";
+    expectGetEnvironmentString(dbPortEnvVariableValue.c_str());
+    expectGetEnvironmentString(nullptr); //SENTINEL_PORT_ENV_VAR_NAME
+    expectGetEnvironmentString(nullptr); //SENTINEL_MASTER_NAME_ENV_VAR_NAME
+    dbClusterAddrListEnvVariableValue = "address-0.local,address-1.local,address-2.local";
+    expectGetEnvironmentString(dbClusterAddrListEnvVariableValue.c_str());
+
+    expectDbTypeConfigurationCheckAndApply("sdl-standalone-cluster");
+    expectDBServerAddressConfigurationCheckAndApply("address-0.local:1111");
+    expectDBServerAddressConfigurationCheckAndApply("address-1.local:1111");
+    expectDBServerAddressConfigurationCheckAndApply("address-2.local:1111");
+    expectGetDbTypeAndWillOnceReturn(DatabaseConfiguration::DbType::SDL_STANDALONE_CLUSTER);
     initializeReaderWithoutDirectories();
     configurationReader->readDatabaseConfiguration(databaseConfigurationMock);
 }

@@ -195,6 +195,19 @@ namespace
         for (const auto &namespaceConfigurationMapItem : namespaceConfigurationMap )
             parseNsConfiguration(namespaceConfigurations, namespaceConfigurationMapItem.first, namespaceConfigurationMapItem.second.first, namespaceConfigurationMapItem.second.second);
     }
+
+    void appendDBPortToAddrList(std::string& addresses, const std::string& port)
+    {
+        size_t base(0);
+        auto pos = addresses.find(',', base);
+        while (std::string::npos != pos)
+        {
+            addresses.insert(pos, ":" + port);
+            base = pos + 2 + port.size();
+            pos = addresses.find(',', base);
+        }
+        addresses.append(":" + port);
+    }
 }
 
 ConfigurationReader::ConfigurationReader(std::shared_ptr<Logger> logger):
@@ -306,24 +319,44 @@ void ConfigurationReader::readDatabaseConfiguration(DatabaseConfiguration& datab
         if (sourceForDatabaseConfiguration == dbHostEnvVariableName)
         {
             // NOTE: Redis cluster is not currently configurable via environment variables.
-            if (sentinelPortEnvVariableValue.empty())
+            std::string dbHostAddrs;
+            if (!dbHostEnvVariableValue.empty() && sentinelPortEnvVariableValue.empty() && dbClusterAddrListEnvVariableValue.empty())
             {
                 validateAndSetDbType("redis-standalone", databaseConfiguration, sourceForDatabaseConfiguration);
-                if (dbPortEnvVariableValue.empty())
-                    parseDatabaseServersConfigurationFromString(databaseConfiguration, dbHostEnvVariableValue, sourceForDatabaseConfiguration);
-                else
-                    parseDatabaseServersConfigurationFromString(databaseConfiguration, dbHostEnvVariableValue + ":" + dbPortEnvVariableValue, sourceForDatabaseConfiguration);
+                dbHostAddrs = dbHostEnvVariableValue;
+            }
+            else if (!dbHostEnvVariableValue.empty() && !sentinelPortEnvVariableValue.empty() && dbClusterAddrListEnvVariableValue.empty())
+            {
+                validateAndSetDbType("redis-sentinel", databaseConfiguration, sourceForDatabaseConfiguration);
+                dbHostAddrs = dbHostEnvVariableValue;
+            }
+            else if (sentinelPortEnvVariableValue.empty() && !dbClusterAddrListEnvVariableValue.empty())
+            {
+                validateAndSetDbType("sdl-standalone-cluster", databaseConfiguration, sourceForDatabaseConfiguration);
+                dbHostAddrs = dbClusterAddrListEnvVariableValue;
+            }
+            else if (!sentinelPortEnvVariableValue.empty() && !dbClusterAddrListEnvVariableValue.empty())
+            {
+                validateAndSetDbType("sdl-sentinel-cluster", databaseConfiguration, sourceForDatabaseConfiguration);
+                dbHostAddrs = dbClusterAddrListEnvVariableValue;
             }
             else
             {
-                if (dbClusterAddrListEnvVariableValue.empty())
-                    validateAndSetDbType("redis-sentinel", databaseConfiguration, sourceForDatabaseConfiguration);
-                else {
-                    validateAndSetDbType("sdl-cluster", databaseConfiguration, sourceForDatabaseConfiguration);
-                    parseDatabaseServersConfigurationFromString(databaseConfiguration,
-                                                                dbClusterAddrListEnvVariableValue,
-                                                                dbClusterAddrListEnvVariableName);
-                }
+                std::ostringstream os;
+                os << "Configuration error in " << sourceForDatabaseConfiguration << ": "
+                   << "Missing environment variable configuration!";
+                throw Exception(os.str());
+            }
+
+            if (!dbPortEnvVariableValue.empty())
+                appendDBPortToAddrList(dbHostAddrs, dbPortEnvVariableValue);
+            parseDatabaseServersConfigurationFromString(databaseConfiguration,
+                                                        dbHostAddrs,
+                                                        sourceForDatabaseConfiguration);
+            auto dbType = databaseConfiguration.getDbType();
+            if (DatabaseConfiguration::DbType::REDIS_SENTINEL == dbType ||
+                DatabaseConfiguration::DbType::SDL_SENTINEL_CLUSTER == dbType)
+            {
                 databaseConfiguration.checkAndApplySentinelAddress(dbHostEnvVariableValue + ":" + sentinelPortEnvVariableValue);
                 databaseConfiguration.checkAndApplySentinelMasterName(sentinelMasterNameEnvVariableValue);
             }

@@ -96,16 +96,17 @@ AsyncStorageImpl::AsyncStorageImpl(std::shared_ptr<Engine> engine,
 {
 }
 
-void AsyncStorageImpl::setAsyncRedisStorageHandlers(const std::string& ns)
+void AsyncStorageImpl::setAsyncRedisStorageHandlersForCluster(const std::string& ns)
 {
-    for (std::size_t i = 0; i < databaseConfiguration->getServerAddresses().size(); i++)
+    static auto serverCount = databaseConfiguration->getServerAddresses().size();
+    for (std::size_t addrIndex = 0; addrIndex < serverCount; addrIndex++)
     {
         auto redisHandler = std::make_shared<AsyncRedisStorage>(engine,
                                                                 asyncDatabaseDiscoveryCreator(
                                                                         engine,
                                                                         ns,
                                                                         std::ref(*databaseConfiguration),
-                                                                        i,
+                                                                        addrIndex,
                                                                         logger),
                                                                 publisherId,
                                                                 namespaceConfigurations,
@@ -114,10 +115,32 @@ void AsyncStorageImpl::setAsyncRedisStorageHandlers(const std::string& ns)
     }
 }
 
+void AsyncStorageImpl::setAsyncRedisStorageHandlers(const std::string& ns)
+{
+    if (DatabaseConfiguration::DbType::SDL_STANDALONE_CLUSTER == databaseConfiguration->getDbType() ||
+        DatabaseConfiguration::DbType::SDL_SENTINEL_CLUSTER == databaseConfiguration->getDbType())
+    {
+            setAsyncRedisStorageHandlersForCluster(ns);
+            return;
+    }
+    auto redisHandler = std::make_shared<AsyncRedisStorage>(engine,
+                                                            asyncDatabaseDiscoveryCreator(
+                                                                    engine,
+                                                                    ns,
+                                                                    std::ref(*databaseConfiguration),
+                                                                    boost::none,
+                                                                    logger),
+                                                            publisherId,
+                                                            namespaceConfigurations,
+                                                            logger);
+    asyncStorages.push_back(redisHandler);
+}
+
 AsyncStorage& AsyncStorageImpl::getAsyncRedisStorageHandler(const std::string& ns)
 {
     std::size_t handlerIndex{0};
-    if (DatabaseConfiguration::DbType::SDL_CLUSTER == databaseConfiguration->getDbType())
+    if (DatabaseConfiguration::DbType::SDL_STANDALONE_CLUSTER == databaseConfiguration->getDbType() ||
+        DatabaseConfiguration::DbType::SDL_SENTINEL_CLUSTER == databaseConfiguration->getDbType())
         handlerIndex = getClusterHashIndex(ns, databaseConfiguration->getServerAddresses().size());
     return *asyncStorages.at(handlerIndex);
 }
@@ -125,7 +148,6 @@ AsyncStorage& AsyncStorageImpl::getAsyncRedisStorageHandler(const std::string& n
 AsyncStorage& AsyncStorageImpl::getRedisHandler(const std::string& ns)
 {
 #if HAVE_REDIS
-    auto serverAddresses(databaseConfiguration->getServerAddresses());
     if (asyncStorages.empty())
             setAsyncRedisStorageHandlers(ns);
 

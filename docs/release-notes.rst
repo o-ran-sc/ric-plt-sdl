@@ -29,6 +29,10 @@ This document provides the release notes of the sdl library.
 Version history
 ---------------
 
+[1.2.1] - 2021-05-31
+
+* Multiple DBAAS Redis standalone groups
+
 [1.2.0] - 2021-05-26
 
 * Multiple DBAAS Redis Sentinel groups

@@ -83,11 +83,18 @@ TEST_F(DatabaseConfigurationImplTest, CanApplyRedisSentinelDbTypeStringAndReturn
     EXPECT_EQ(DatabaseConfiguration::DbType::REDIS_SENTINEL, retDbType);
 }
 
-TEST_F(DatabaseConfigurationImplTest, CanApplySdlClusterDbTypeStringAndReturnType)
+TEST_F(DatabaseConfigurationImplTest, CanApplySdlStandaloneClusterDbTypeStringAndReturnType)
 {
-    databaseConfigurationImpl->checkAndApplyDbType("sdl-cluster");
+    databaseConfigurationImpl->checkAndApplyDbType("sdl-standalone-cluster");
     const auto retDbType(databaseConfigurationImpl->getDbType());
-    EXPECT_EQ(DatabaseConfiguration::DbType::SDL_CLUSTER, retDbType);
+    EXPECT_EQ(DatabaseConfiguration::DbType::SDL_STANDALONE_CLUSTER, retDbType);
+}
+
+TEST_F(DatabaseConfigurationImplTest, CanApplySdlSentinelClusterDbTypeStringAndReturnType)
+{
+    databaseConfigurationImpl->checkAndApplyDbType("sdl-sentinel-cluster");
+    const auto retDbType(databaseConfigurationImpl->getDbType());
+    EXPECT_EQ(DatabaseConfiguration::DbType::SDL_SENTINEL_CLUSTER, retDbType);
 }
 
 TEST_F(DatabaseConfigurationImplTest, CanApplyNewAddressesOneByOneAndReturnAllAddresses)
@@ -100,6 +107,22 @@ TEST_F(DatabaseConfigurationImplTest, CanApplyNewAddressesOneByOneAndReturnAllAd
     EXPECT_EQ(6379U, ntohs(retAddresses.at(0).getPort()));
     EXPECT_EQ("10.20.30.40", retAddresses.at(1).getHost());
     EXPECT_EQ(65535U, ntohs(retAddresses.at(1).getPort()));
+}
+
+TEST_F(DatabaseConfigurationImplTest, CanGetAddressesOneByOneWithAddressIndex)
+{
+    databaseConfigurationImpl->checkAndApplyServerAddress("server0.local");
+    databaseConfigurationImpl->checkAndApplyServerAddress("10.20.30.40:65535");
+    const auto addresses(databaseConfigurationImpl->getServerAddresses(boost::none));
+    const auto addresses0(databaseConfigurationImpl->getServerAddresses(0));
+    const auto addresses1(databaseConfigurationImpl->getServerAddresses(1));
+    EXPECT_EQ(2U, addresses.size());
+    EXPECT_EQ(1U, addresses0.size());
+    EXPECT_EQ(1U, addresses1.size());
+    EXPECT_EQ("server0.local", addresses0.at(0).getHost());
+    EXPECT_EQ(6379U, ntohs(addresses0.at(0).getPort()));
+    EXPECT_EQ("10.20.30.40", addresses1.at(0).getHost());
+    EXPECT_EQ(65535U, ntohs(addresses1.at(0).getPort()));
 }
 
 TEST_F(DatabaseConfigurationImplTest, CanThrowIfIllegalDbTypeIsApplied)
@@ -148,9 +171,9 @@ TEST_F(DatabaseConfigurationImplTest, CanApplyAndReturnSentinelMasterName)
     EXPECT_EQ("mymaster", databaseConfigurationImpl->getSentinelMasterName());
 }
 
-TEST_F(DatabaseConfigurationImplTest, CanReturnSDLClusterAddress)
+TEST_F(DatabaseConfigurationImplTest, CanReturnSDLSentinelClusterAddress)
 {
-    databaseConfigurationImpl->checkAndApplyDbType("sdl-cluster");
+    databaseConfigurationImpl->checkAndApplyDbType("sdl-sentinel-cluster");
     databaseConfigurationImpl->checkAndApplyServerAddress("cluster-0.local");
     databaseConfigurationImpl->checkAndApplyServerAddress("cluster-1.local");
     databaseConfigurationImpl->checkAndApplyServerAddress("cluster-2.local");
