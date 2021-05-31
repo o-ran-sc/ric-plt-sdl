@@ -148,7 +148,7 @@ TEST_F(AsyncStorageImplTest, CorrectHandlerIsUsedBasedOnConfiguration)
 TEST_F(AsyncStorageImplTest, CorrectSdlClusterHandlerIsUsedBasedOnConfiguration)
 {
     expectNamespaceConfigurationIsDbBackendUseEnabled_returnTrue();
-    dummyDatabaseConfiguration->checkAndApplyDbType("sdl-cluster");
+    dummyDatabaseConfiguration->checkAndApplyDbType("sdl-sentinel-cluster");
     AsyncStorage& returnedHandler = asyncStorageImpl->getOperationHandler(ns);
     EXPECT_EQ(typeid(AsyncRedisStorage&), typeid(returnedHandler));
 }

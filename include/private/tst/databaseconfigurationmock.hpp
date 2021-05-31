@@ -37,6 +37,7 @@ namespace shareddatalayer
             MOCK_METHOD1(checkAndApplySentinelMasterName, void(const std::string& name));
             MOCK_CONST_METHOD0(getDbType, DatabaseConfiguration::DbType());
             MOCK_CONST_METHOD0(getServerAddresses, DatabaseConfiguration::Addresses());
+            MOCK_CONST_METHOD1(getServerAddresses, DatabaseConfiguration::Addresses(const boost::optional<std::size_t>& addressIndex));
             MOCK_CONST_METHOD0(getDefaultServerAddresses, DatabaseConfiguration::Addresses());
             MOCK_CONST_METHOD0(isEmpty, bool());
             MOCK_CONST_METHOD0(getSentinelAddress, boost::optional<HostAndPort>());

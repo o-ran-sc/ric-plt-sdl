@@ -103,6 +103,7 @@ namespace shareddatalayer
         AsyncStorage& getDummyHandler();
 
         void setAsyncRedisStorageHandlers(const std::string& ns);
+        void setAsyncRedisStorageHandlersForCluster(const std::string& ns);
         AsyncStorage& getAsyncRedisStorageHandler(const std::string& ns);
     };
 }

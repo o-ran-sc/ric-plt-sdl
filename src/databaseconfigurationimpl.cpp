@@ -54,8 +54,10 @@ void DatabaseConfigurationImpl::checkAndApplyDbType(const std::string& type)
         dbType = DatabaseConfiguration::DbType::REDIS_CLUSTER;
     else if (type == "redis-sentinel")
         dbType = DatabaseConfiguration::DbType::REDIS_SENTINEL;
-    else if (type == "sdl-cluster")
-        dbType = DatabaseConfiguration::DbType::SDL_CLUSTER;
+    else if (type == "sdl-standalone-cluster")
+        dbType = DatabaseConfiguration::DbType::SDL_STANDALONE_CLUSTER;
+    else if (type == "sdl-sentinel-cluster")
+        dbType = DatabaseConfiguration::DbType::SDL_SENTINEL_CLUSTER;
     else
         throw DatabaseConfiguration::InvalidDbType(type);
 }
@@ -77,6 +79,14 @@ bool DatabaseConfigurationImpl::isEmpty() const
 
 DatabaseConfiguration::Addresses DatabaseConfigurationImpl::getServerAddresses() const
 {
+    return serverAddresses;
+}
+
+DatabaseConfiguration::Addresses DatabaseConfigurationImpl::getServerAddresses(const boost::optional<std::size_t>& addressIndex) const
+{
+    if (addressIndex)
+        return { HostAndPort(serverAddresses.at(*addressIndex)) };
+
     return serverAddresses;
 }
 

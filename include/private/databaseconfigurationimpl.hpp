@@ -45,6 +45,8 @@ namespace shareddatalayer
 
         DatabaseConfigurationImpl::Addresses getServerAddresses() const override;
 
+        DatabaseConfigurationImpl::Addresses getServerAddresses(const boost::optional<std::size_t>& addressIndex) const override;
+
         DatabaseConfiguration::Addresses getDefaultServerAddresses() const override;
 
         boost::optional<HostAndPort> getSentinelAddress() const override;
