@@ -38,7 +38,7 @@ std::shared_ptr<AsyncDatabaseDiscovery> AsyncDatabaseDiscovery::create(std::shar
                                                                        const boost::optional<std::size_t>& addressIndex,
                                                                        std::shared_ptr<Logger> logger)
 {
-    auto staticAddresses(staticDatabaseConfiguration.getServerAddresses());
+    auto staticAddresses(staticDatabaseConfiguration.getServerAddresses(addressIndex));
 
     if (staticAddresses.empty())
         staticAddresses = staticDatabaseConfiguration.getDefaultServerAddresses();
@@ -59,7 +59,7 @@ std::shared_ptr<AsyncDatabaseDiscovery> AsyncDatabaseDiscovery::create(std::shar
     {
 #if HAVE_HIREDIS
         if (staticDbType == DatabaseConfiguration::DbType::REDIS_SENTINEL ||
-            staticDbType == DatabaseConfiguration::DbType::SDL_CLUSTER)
+            staticDbType == DatabaseConfiguration::DbType::SDL_SENTINEL_CLUSTER)
         {
             auto sentinelAddress(staticDatabaseConfiguration.getSentinelAddress(addressIndex));
             if (sentinelAddress)
