@@ -104,6 +104,24 @@
       "parentUuid": "828e0158_9b473f1e",
       "revId": "a2356fa39719406297c6816d23e9c9359ec6378f",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3448b720_46a66394",
+        "filename": "src/configurationreader.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-06-01T09:46:07Z",
+      "side": 1,
+      "message": "The fix in the patch set 3 looks ok to me.",
+      "parentUuid": "6effa258_aa943ac8",
+      "revId": "a2356fa39719406297c6816d23e9c9359ec6378f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
