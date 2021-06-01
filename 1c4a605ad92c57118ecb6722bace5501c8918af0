@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22052c70_a1a4156a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001247
+      },
+      "writtenOn": "2021-06-01T13:14:50Z",
+      "side": 1,
+      "message": "Patchset #4. Refactoring ConfigurationReader::readDatabaseConfiguration environment variable reading.",
+      "revId": "1c4a605ad92c57118ecb6722bace5501c8918af0",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
