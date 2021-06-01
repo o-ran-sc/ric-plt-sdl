@@ -16,6 +16,40 @@
       "message": "cluster support for standalone DB configuration.",
       "revId": "a2356fa39719406297c6816d23e9c9359ec6378f",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4c8b4ec_e4b36f93",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-06-01T05:35:53Z",
+      "side": 1,
+      "message": "Is this correct should we always update REVISION number? If there is no interface changes at all, in that case only REVISION number should be updated and Current or Age shouldn\u0027t be updated.",
+      "revId": "a2356fa39719406297c6816d23e9c9359ec6378f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "828e0158_9b473f1e",
+        "filename": "src/configurationreader.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-06-01T05:35:53Z",
+      "side": 1,
+      "message": "Just a question in case of standalone cluster, are we taken into account possible configured port (dbPortEnvVariableValue) like it is handled at lines 328-334 above.",
+      "revId": "a2356fa39719406297c6816d23e9c9359ec6378f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
