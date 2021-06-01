@@ -53,6 +53,24 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52d3298d_58fc8db8",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-06-01T08:44:31Z",
+      "side": 1,
+      "message": "Thanks, version looks good to me now.",
+      "parentUuid": "703aa49a_37ed46f0",
+      "revId": "a2356fa39719406297c6816d23e9c9359ec6378f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "828e0158_9b473f1e",
