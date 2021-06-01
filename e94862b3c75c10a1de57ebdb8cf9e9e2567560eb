@@ -16,6 +16,23 @@
       "message": "Minor fix to previous debian changelog. Wrong date syntax.",
       "revId": "e94862b3c75c10a1de57ebdb8cf9e9e2567560eb",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c10e304_3e6fb5c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-06-01T05:36:18Z",
+      "side": 1,
+      "message": "Looks good to me.",
+      "revId": "e94862b3c75c10a1de57ebdb8cf9e9e2567560eb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
