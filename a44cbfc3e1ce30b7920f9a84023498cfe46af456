@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b423d04f_054c5c99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001247
+      },
+      "writtenOn": "2021-06-01T07:10:43Z",
+      "side": 1,
+      "message": "New patchset should have now the correct ABI version.",
+      "revId": "a44cbfc3e1ce30b7920f9a84023498cfe46af456",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
