@@ -62,6 +62,8 @@ namespace shareddatalayer
 
             virtual void removeAll(const Namespace&) override { logAndAbort(__PRETTY_FUNCTION__); }
 
+            virtual void setOperationTimeout(const std::chrono::steady_clock::duration&) override { logAndAbort(__PRETTY_FUNCTION__); }
+
         private:
             static void logAndAbort(const char* function) noexcept __attribute__ ((__noreturn__))
             {

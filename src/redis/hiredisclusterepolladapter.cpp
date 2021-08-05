@@ -103,8 +103,8 @@ void HiredisClusterEpollAdapter::detach(const redisAsyncContext* ac)
 HiredisClusterEpollAdapter::Node::Node(Engine& engine,
                                        redisAsyncContext* ac,
                                        HiredisClusterSystem& hiredisClusterSystem):
-    engine(engine),
     hiredisClusterSystem(hiredisClusterSystem),
+    engine(engine),
     ac(ac),
     eventState(0),
     reading(false),

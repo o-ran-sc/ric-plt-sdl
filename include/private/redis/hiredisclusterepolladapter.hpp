@@ -92,8 +92,8 @@ namespace shareddatalayer
             Node& operator = (Node&&) = delete;
 
         private:
-            Engine& engine;
             HiredisClusterSystem& hiredisClusterSystem;
+            Engine& engine;
             redisAsyncContext* ac;
             unsigned int eventState;
             bool reading;

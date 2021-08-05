@@ -67,8 +67,8 @@ HiredisEpollAdapter::HiredisEpollAdapter(Engine& engine):
 }
 
 HiredisEpollAdapter::HiredisEpollAdapter(Engine& engine, HiredisSystem& hiredisSystem):
-    engine(engine),
     hiredisSystem(hiredisSystem),
+    engine(engine),
     ac(nullptr),
     eventState(0),
     reading(false),

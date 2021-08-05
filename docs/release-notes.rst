@@ -29,6 +29,11 @@ This document provides the release notes of the sdl library.
 Version history
 ---------------
 
+[1.3.0] - 2021-08-05
+
+* Definable timeout for DB backend readiness in synchronous SDL API
+* Fix SDL configuration file path Valgrind errors
+
 [1.2.1] - 2021-05-31
 
 * Multiple DBAAS Redis standalone groups

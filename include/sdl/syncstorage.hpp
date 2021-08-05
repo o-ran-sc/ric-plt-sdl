@@ -30,6 +30,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <chrono>
 #include <sdl/exception.hpp>
 #include <sdl/publisherid.hpp>
 
@@ -248,6 +249,21 @@ namespace shareddatalayer
          * @throw InvalidNamespace if given namespace does not meet the namespace format restrictions.
          */
         virtual void removeAll(const Namespace& ns) = 0;
+
+        /**
+         * Set a timeout value for the synchronous SDL read, write and remove operations.
+         * By default synchronous read, write and remove operations do not have any timeout
+         * for the backend data storage readiness, operations are pending interminable to
+         * finish until backend is ready. With this API function default behaviour can be
+         * changed and when a timeout happens, an error exception is risen for the SDL
+         * operation in question. To avoid unnecessary timeout failure due to a temporal
+         * connection issue, it is recommended not to set too short timeout value.
+         * Reasonable timeout value is 5 seconds or bigger value. On a side note, timeout
+         * value 0 means interminable pending time.
+         *
+         * @param timeout Timeout value to set.
+         */
+         virtual void setOperationTimeout(const std::chrono::steady_clock::duration& timeout) = 0;
 
         /**
          * Create a new instance of SyncStorage.
