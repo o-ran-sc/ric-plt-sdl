@@ -21,9 +21,7 @@
 
 #include "config.h"
 #include "private/configurationpaths.hpp"
-#include <algorithm>
-#include <boost/filesystem.hpp>
-#include <boost/range/iterator_range.hpp>
+#include <dirent.h>
 #include <boost/algorithm/string/predicate.hpp>
 
 using namespace shareddatalayer;
@@ -32,19 +30,17 @@ namespace
 {
     void findConfigurationFilesFromDirectory(const std::string& path, std::vector<std::string>& paths)
     {
-        try
+        DIR *dir; struct dirent *diread;
+        if ((dir = opendir(path.c_str())) != nullptr)
         {
-            for(const auto& i : boost::make_iterator_range(boost::filesystem::directory_iterator(path), { }))
+            while ((diread = readdir(dir)) != nullptr)
             {
-                const auto filename(i.path().filename().native());
-                if ((!boost::filesystem::is_directory(i.path())) &&
-                    (filename[0] != '.') &&
-                    (boost::algorithm::ends_with(filename, ".json")))
-                    paths.push_back(i.path().native());
+                if ((diread->d_type == DT_REG) &&
+                    (diread->d_name[0] != '.') &&
+                    (boost::algorithm::ends_with(diread->d_name, ".json")))
+                    paths.push_back(std::string(diread->d_name));
             }
-        }
-        catch (const boost::filesystem::filesystem_error &)
-        {
+            closedir (dir);
         }
     }
 }
