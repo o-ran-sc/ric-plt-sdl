@@ -61,8 +61,8 @@ namespace shareddatalayer
             virtual void cleanUp();
 
         private:
-            Engine& engine;
             HiredisSystem& hiredisSystem;
+            Engine& engine;
             redisAsyncContext* ac;
             unsigned int eventState;
             bool reading;

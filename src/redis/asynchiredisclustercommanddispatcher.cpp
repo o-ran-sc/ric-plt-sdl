@@ -53,13 +53,11 @@ namespace
 
     void disconnectCb(const redisClusterAsyncContext* acc, const redisAsyncContext* ac, int status)
     {
-        if (status)
-        {
-            std::ostringstream msg;
-            msg << "redis cluster instance disconnected, fd: " << ac->c.fd
-                << ", status: " << ac->err;
-            logDebugOnce(msg.str());
-        }
+        std::ostringstream msg;
+        msg << "redis cluster instance disconnected, status: " << ac->err
+            << ", " << ac->errstr << ", fd: " << ac->c.fd << std::endl;
+        logDebugOnce(msg.str());
+
         auto instance(static_cast<AsyncHiredisClusterCommandDispatcher*>(acc->data));
         instance->handleDisconnect(ac);
     }

@@ -16,11 +16,13 @@ using namespace shareddatalayer::cli;
 
 namespace
 {
-    std::shared_ptr<shareddatalayer::SyncStorage> createSyncStorage(std::ostream& out)
+    std::shared_ptr<shareddatalayer::SyncStorage> createSyncStorage(const std::string& nsStr, std::ostream& out)
     {
         try
         {
             auto sdl(shareddatalayer::SyncStorage::create());
+            sdl->waitReady(nsStr, std::chrono::minutes(1));
+            sdl->setOperationTimeout(std::chrono::seconds(5));
             return sdl;
         }
         catch (const shareddatalayer::Exception& error)
@@ -95,7 +97,7 @@ namespace
         const auto timeout(map["timeout"].as<int>());
         auto ns(map["ns"].as<std::string>());
         setTimeout(timeout);
-        auto sdl(createSyncStorage(out));
+        auto sdl(createSyncStorage(ns, out));
         if (sdl == nullptr)
             return EXIT_FAILURE;
 

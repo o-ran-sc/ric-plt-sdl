@@ -30,6 +30,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <chrono>
 #include <sdl/exception.hpp>
 #include <sdl/publisherid.hpp>
 
@@ -73,6 +74,43 @@ namespace shareddatalayer
         using Data = std::vector<uint8_t>;
 
         using DataMap = std::map<Key, Data>;
+
+        /**
+         * Wait for the service to become ready to serve. There is typically a waiting period
+         * when product cluster is brought up (deploying container orchestrated service,
+         * container restart etc.). The function can be called and used to synchronize the
+         * application startup with the readiness of the underlying data storage.
+         *
+         * This function can also be used if SDL returns an error indicating connection cut
+         * to backend data storage. In that situation client can use this function to get an
+         * indication when SDL is again ready to serve. SDL error code documentation indicates
+         * the error codes for which the usage of this function is applicable.
+         *
+         * Exceptions thrown (excluding standard exceptions such as std::bad_alloc) are all
+         * derived from shareddatalayer::Exception base class. Client can catch only that
+         * exception if separate handling for different shareddatalayer error situations is not
+         * needed.
+         *
+         * @param ns Namespace under which this operation is targeted. As it is possible to
+         *           use different DB backend instances for namespaces, it is necessary to
+         *           provide namespace for this call to test the DB backend readiness of that
+         *           particular namespace. it is recommended to call this always when starting
+         *           to use new namespace.
+         *
+         * @param timeout Timeout value after which readiness waiting is finished when
+         *                readiness check is not completed. It is recommended to use rather
+         *                long timeout value to have enough time for a system to recover for
+         *                example from restart scenarios. Suitable timeout value depends greatly
+         *                from the environment itself. As an example an application could use 10
+         *                seconds timeout value and have a loop what does a re-try if previous
+         *                waitReady call has failed. On a side note, timeout value 0 means that
+         *                readiness is waited interminable.
+         *
+         * @throw NotConnected if shareddatalayer is not connected to the backend data storage.
+         * @throw RejectedBySdl if SDL rejects the request.
+         * @throw BackendError if the backend data storage fails to process the request.
+         */
+        virtual void waitReady(const Namespace& ns, const std::chrono::steady_clock::duration& timeout) = 0;
 
         /**
          * Write data to shared data layer storage. Writing is done atomically, i.e. either
@@ -259,6 +297,21 @@ namespace shareddatalayer
          *
          */
         static std::unique_ptr<SyncStorage> create();
+
+        /**
+         * Set a timeout value for the synchronous SDL read, write and remove operations.
+         * By default synchronous read, write and remove operations do not have any timeout
+         * for the backend data storage readiness, operations are pending interminable to
+         * finish until backend is ready. With this API function default behaviour can be
+         * changed and when a timeout happens, an error exception is risen for the SDL
+         * operation in question. To avoid unnecessary timeout failure due to a temporal
+         * connection issue, it is recommended not to set too short timeout value.
+         * Reasonable timeout value is 5 seconds or bigger value. On a side note, timeout
+         * value 0 means interminable pending time.
+         *
+         * @param timeout Timeout value to set.
+         */
+         virtual void setOperationTimeout(const std::chrono::steady_clock::duration& timeout) = 0;
 
     protected:
         SyncStorage() = default;

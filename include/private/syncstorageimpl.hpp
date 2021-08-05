@@ -22,13 +22,13 @@
 #ifndef SHAREDDATALAYER_SYNCSTORAGEIMPL_HPP_
 #define SHAREDDATALAYER_SYNCSTORAGEIMPL_HPP_
 
+#include <sdl/asyncstorage.hpp>
 #include <sdl/syncstorage.hpp>
+#include <sys/poll.h>
 #include <system_error>
 
 namespace shareddatalayer
 {
-    class AsyncStorage;
-
     class System;
 
     class SyncStorageImpl: public SyncStorage
@@ -39,37 +39,53 @@ namespace shareddatalayer
         SyncStorageImpl(std::unique_ptr<AsyncStorage> asyncStorage,
                         System& system);
 
-        void set(const Namespace& ns, const DataMap& dataMap) override;
+        virtual void waitReady(const Namespace& ns, const std::chrono::steady_clock::duration& timeout) override;
 
-        bool setIf(const Namespace& ns, const Key& key, const Data& oldData, const Data& newData) override;
+        virtual void set(const Namespace& ns, const DataMap& dataMap) override;
 
-        bool setIfNotExists(const Namespace& ns, const Key& key, const Data& data) override;
+        virtual bool setIf(const Namespace& ns, const Key& key, const Data& oldData, const Data& newData) override;
 
-        DataMap get(const Namespace& ns, const Keys& keys) override;
+        virtual bool setIfNotExists(const Namespace& ns, const Key& key, const Data& data) override;
 
-        void remove(const Namespace& ns, const Keys& keys) override;
+        virtual DataMap get(const Namespace& ns, const Keys& keys) override;
 
-        bool removeIf(const Namespace& ns, const Key& key, const Data& data) override;
+        virtual void remove(const Namespace& ns, const Keys& keys) override;
 
-        Keys findKeys(const Namespace& ns, const std::string& keyPrefix) override;
+        virtual bool removeIf(const Namespace& ns, const Key& key, const Data& data) override;
 
-        void removeAll(const Namespace& ns) override;
+        virtual Keys findKeys(const Namespace& ns, const std::string& keyPrefix) override;
+
+        virtual void removeAll(const Namespace& ns) override;
+
+        virtual void setOperationTimeout(const std::chrono::steady_clock::duration& timeout) override;
+
+        static constexpr int NO_TIMEOUT = -1;
 
     private:
         std::unique_ptr<AsyncStorage> asyncStorage;
         System& system;
-        int pFd;
         DataMap localMap;
         Keys localKeys;
         bool localStatus;
         std::error_code localError;
         bool synced;
+        bool isReady;
+        struct pollfd events;
+        std::chrono::steady_clock::duration operationTimeout;
 
         void verifyBackendResponse();
 
-        void waitForCallback();
+        void pollAndHandleEvents(int timeout_ms);
+
+        void waitForReadinessCheckCallback(const std::chrono::steady_clock::duration& timeout);
+
+        void waitForOperationCallback();
 
         void waitSdlToBeReady(const Namespace& ns);
+
+        void waitSdlToBeReady(const Namespace& ns, const std::chrono::steady_clock::duration& timeout);
+
+        void waitReadyAck(const std::error_code& error);
 
         void modifyAck(const std::error_code& error);
 
@@ -78,6 +94,8 @@ namespace shareddatalayer
         void getAck(const std::error_code& error, const DataMap& dataMap);
 
         void findKeysAck(const std::error_code& error, const Keys& keys);
+
+        void handlePendingEvents();
     };
 }
 

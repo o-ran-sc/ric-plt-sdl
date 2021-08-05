@@ -10,8 +10,8 @@
 # Change the numbers just before release.
 
 m4_define([SDL_MAJOR], [1])
-m4_define([SDL_MINOR], [2])
-m4_define([SDL_MICRO], [1])
+m4_define([SDL_MINOR], [3])
+m4_define([SDL_MICRO], [0])
 
 # SDL ABI version with libtool
 #
@@ -27,8 +27,8 @@ m4_define([SDL_MICRO], [1])
 #
 # Change the numbers just before release.
 
-m4_define([SDL_CURRENT], [2])
-m4_define([SDL_REVISION], [9])
+m4_define([SDL_CURRENT], [3])
+m4_define([SDL_REVISION], [10])
 m4_define([SDL_AGE], [0])
 
 AC_INIT([shareddatalayer], [SDL_MAJOR.SDL_MINOR.SDL_MICRO], [], [], [https://gerrit.o-ran-sc.org/r/admin/repos/ric-plt/sdl])

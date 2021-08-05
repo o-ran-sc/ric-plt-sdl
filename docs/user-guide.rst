@@ -498,6 +498,11 @@ Using SDL APIs
   operations. See waitReadyAsync() function
   `doxygen documentation <#doxygen-generated-sdl-api-documentation>`_
   for corresponding asynchronous API for details.
+* Use waitReady() function before doing first operation via synchronous
+  APIs to ensure that SDL and backend data storage are ready to handle
+  operations. See waitReady() function
+  `doxygen documentation <#doxygen-generated-sdl-api-documentation>`_
+  for corresponding synchronous API for details.
 * Avoid using heavy search functions (for example: *AsyncStorage::findKeys()*).
   Rather define your keys so that you know which keys should be read.
 

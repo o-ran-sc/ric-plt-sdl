@@ -46,6 +46,8 @@ namespace shareddatalayer
         public:
             MockableSyncStorage() { }
 
+            virtual void waitReady(const Namespace&, const std::chrono::steady_clock::duration&) override { logAndAbort(__PRETTY_FUNCTION__); }
+
             virtual void set(const Namespace&, const DataMap&) override { logAndAbort(__PRETTY_FUNCTION__); }
 
             virtual bool setIf(const Namespace&, const Key&, const Data&, const Data&) override { logAndAbort(__PRETTY_FUNCTION__); }
@@ -61,6 +63,8 @@ namespace shareddatalayer
             virtual Keys findKeys(const Namespace&, const std::string&) override { logAndAbort(__PRETTY_FUNCTION__); }
 
             virtual void removeAll(const Namespace&) override { logAndAbort(__PRETTY_FUNCTION__); }
+
+            virtual void setOperationTimeout(const std::chrono::steady_clock::duration&) override { logAndAbort(__PRETTY_FUNCTION__); }
 
         private:
             static void logAndAbort(const char* function) noexcept __attribute__ ((__noreturn__))

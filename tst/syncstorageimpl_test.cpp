@@ -30,6 +30,7 @@
 #include <sdl/notconnected.hpp>
 #include <sdl/operationinterrupted.hpp>
 #include <sdl/rejectedbybackend.hpp>
+#include <sdl/rejectedbysdl.hpp>
 
 using namespace shareddatalayer;
 using namespace shareddatalayer::redis;
@@ -59,16 +60,29 @@ namespace
         SyncStorage::DataMap dataMap;
         SyncStorage::Keys keys;
         const SyncStorage::Namespace ns;
+        std::chrono::steady_clock::duration TEST_READY_WAIT_TIMEOUT;
+        std::chrono::steady_clock::duration TEST_OPERATION_WAIT_TIMEOUT;
+        int TEST_READY_POLL_WAIT_TIMEOUT;
+        int TEST_OPERATION_POLL_WAIT_TIMEOUT;
         SyncStorageImplTest():
             asyncStorageMockPassedToImplementation(new StrictMock<AsyncStorageMock>()),
             asyncStorageMockRawPtr(asyncStorageMockPassedToImplementation.get()),
             pFd(10),
             dataMap({{ "key1", { 0x0a, 0x0b, 0x0c } }, { "key2", { 0x0d, 0x0e, 0x0f, 0xff } }}),
             keys({ "key1", "key2" }),
-            ns("someKnownNamespace")
+            ns("someKnownNamespace"),
+            TEST_READY_WAIT_TIMEOUT(std::chrono::minutes(1)),
+            TEST_OPERATION_WAIT_TIMEOUT(std::chrono::seconds(1)),
+            TEST_READY_POLL_WAIT_TIMEOUT(std::chrono::duration_cast<std::chrono::milliseconds>(TEST_READY_WAIT_TIMEOUT).count() / 10),
+            TEST_OPERATION_POLL_WAIT_TIMEOUT(std::chrono::duration_cast<std::chrono::milliseconds>(TEST_OPERATION_WAIT_TIMEOUT).count() / 10)
         {
             expectConstructorCalls();
             syncStorage.reset(new SyncStorageImpl(std::move(asyncStorageMockPassedToImplementation), systemMock));
+        }
+
+        ~SyncStorageImplTest()
+        {
+            syncStorage->setOperationTimeout(std::chrono::steady_clock::duration::zero());
         }
 
         void expectConstructorCalls()
@@ -79,17 +93,28 @@ namespace
                 .WillOnce(Return(pFd));
         }
 
-        void expectSdlReadinessCheck()
+        void expectSdlReadinessCheck(int timeout)
         {
             InSequence dummy;
+            expectPollForPendingEvents_ReturnNoEvents();
             expectWaitReadyAsync();
-            expectPollWait();
-            expectHandleEvents();
+            expectPollWait(timeout);
+            expectHandleEvents_callWaitReadyAck();
         }
 
-        void expectPollWait()
+        void expectPollForPendingEvents_ReturnNoEvents()
         {
-            EXPECT_CALL(systemMock, poll( _, 1, -1))
+            EXPECT_CALL(systemMock, poll( _, 1, 0))
+                .Times(1)
+                .WillOnce(Invoke([](struct pollfd *, nfds_t, int)
+                                 {
+                                     return 0;
+                                 }));
+        }
+
+        void expectPollWait(int timeout)
+        {
+            EXPECT_CALL(systemMock, poll( _, 1, timeout))
                 .Times(1)
                 .WillOnce(Invoke([](struct pollfd *fds, nfds_t, int)
                                  {
@@ -123,10 +148,36 @@ namespace
         void expectHandleEvents()
         {
             EXPECT_CALL(*asyncStorageMockRawPtr, handleEvents())
+                .Times(1);
+        }
+
+        void expectHandleEvents_callWaitReadyAck()
+        {
+            EXPECT_CALL(*asyncStorageMockRawPtr, handleEvents())
                 .Times(1)
                 .WillOnce(Invoke([this]()
                                  {
                                     savedReadyAck(std::error_code());
+                                 }));
+        }
+
+        void expectHandleEvents_callWaitReadyAckWithError()
+        {
+            EXPECT_CALL(*asyncStorageMockRawPtr, handleEvents())
+                .Times(1)
+                .WillOnce(Invoke([this]()
+                                 {
+                                    savedReadyAck(AsyncRedisCommandDispatcherErrorCode::NOT_CONNECTED);
+                                 }));
+        }
+
+        void expectHandleEvents_callModifyAck()
+        {
+            EXPECT_CALL(*asyncStorageMockRawPtr, handleEvents())
+                .Times(1)
+                .WillOnce(Invoke([this]()
+                                 {
+                                    savedModifyAck(std::error_code());
                                  }));
         }
 
@@ -136,7 +187,6 @@ namespace
                 .Times(1)
                 .WillOnce(SaveArg<1>(&savedReadyAck));
         }
-
 
         void expectModifyAckWithError()
         {
@@ -272,41 +322,77 @@ TEST_F(SyncStorageImplTest, ImplementssyncStorage)
 TEST_F(SyncStorageImplTest, EventsAreNotHandledWhenPollReturnsError)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetAsync(dataMap);
     expectPollError();
-    expectPollWait();
-    expectHandleEvents();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
     syncStorage->set(ns, dataMap);
 }
 
 TEST_F(SyncStorageImplTest, EventsAreNotHandledWhenThereIsAnExceptionalConditionOnTheFd)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetAsync(dataMap);
     expectPollExceptionalCondition();
-    expectPollWait();
-    expectHandleEvents();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
     syncStorage->set(ns, dataMap);
+}
+
+TEST_F(SyncStorageImplTest, WaitReadySuccessfully)
+{
+    InSequence dummy;
+    expectWaitReadyAsync();
+    expectPollWait(TEST_READY_POLL_WAIT_TIMEOUT);
+    expectHandleEvents_callWaitReadyAck();
+    syncStorage->waitReady(ns, TEST_READY_WAIT_TIMEOUT);
+}
+
+TEST_F(SyncStorageImplTest, WaitReadyCanThrowRejectedBySdl)
+{
+    InSequence dummy;
+    expectWaitReadyAsync();
+    EXPECT_THROW(syncStorage->waitReady(ns, std::chrono::nanoseconds(1)), RejectedBySdl);
+}
+
+TEST_F(SyncStorageImplTest, WaitReadyCanThrowNotConnected)
+{
+    InSequence dummy;
+    expectWaitReadyAsync();
+    expectPollWait(TEST_READY_POLL_WAIT_TIMEOUT);
+    expectHandleEvents_callWaitReadyAckWithError();
+    EXPECT_THROW(syncStorage->waitReady(ns, TEST_READY_WAIT_TIMEOUT), NotConnected);
 }
 
 TEST_F(SyncStorageImplTest, SetSuccessfully)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetAsync(dataMap);
-    expectPollWait();
-    expectHandleEvents();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
+    syncStorage->set(ns, dataMap);
+}
+
+TEST_F(SyncStorageImplTest, SetWithReadinessTimeoutSuccessfully)
+{
+    InSequence dummy;
+    expectSdlReadinessCheck(TEST_OPERATION_POLL_WAIT_TIMEOUT);
+    expectSetAsync(dataMap);
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
+    syncStorage->setOperationTimeout(TEST_OPERATION_WAIT_TIMEOUT);
     syncStorage->set(ns, dataMap);
 }
 
 TEST_F(SyncStorageImplTest, SetCanThrowBackendError)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetAsync(dataMap);
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectModifyAckWithError();
     EXPECT_THROW(syncStorage->set(ns, dataMap), BackendError);
 }
@@ -314,29 +400,45 @@ TEST_F(SyncStorageImplTest, SetCanThrowBackendError)
 TEST_F(SyncStorageImplTest, SetIfSuccessfully)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetAsync(dataMap);
-    expectPollWait();
-    expectHandleEvents();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
     syncStorage->set(ns, dataMap);
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetIfAsync("key1", { 0x0a, 0x0b, 0x0c }, { 0x0d, 0x0e, 0x0f });
-    expectPollWait();
-    expectHandleEvents();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
+    syncStorage->setIf(ns, "key1", { 0x0a, 0x0b, 0x0c }, { 0x0d, 0x0e, 0x0f });
+}
+
+TEST_F(SyncStorageImplTest, SetIfWithReadinessTimeoutSuccessfully)
+{
+    InSequence dummy;
+    expectSdlReadinessCheck(TEST_OPERATION_POLL_WAIT_TIMEOUT);
+    expectSetAsync(dataMap);
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
+    syncStorage->setOperationTimeout(TEST_OPERATION_WAIT_TIMEOUT);
+    syncStorage->set(ns, dataMap);
+    expectSdlReadinessCheck(TEST_OPERATION_POLL_WAIT_TIMEOUT);
+    expectSetIfAsync("key1", { 0x0a, 0x0b, 0x0c }, { 0x0d, 0x0e, 0x0f });
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
     syncStorage->setIf(ns, "key1", { 0x0a, 0x0b, 0x0c }, { 0x0d, 0x0e, 0x0f });
 }
 
 TEST_F(SyncStorageImplTest, SetIfCanThrowBackendError)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetAsync(dataMap);
-    expectPollWait();
-    expectHandleEvents();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
     syncStorage->set(ns, dataMap);
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetIfAsync("key1", { 0x0a, 0x0b, 0x0c }, { 0x0d, 0x0e, 0x0f });
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectModifyIfAck(AsyncRedisCommandDispatcherErrorCode::OUT_OF_MEMORY, false);
     EXPECT_THROW(syncStorage->setIf(ns, "key1", { 0x0a, 0x0b, 0x0c }, { 0x0d, 0x0e, 0x0f }), BackendError);
 }
@@ -344,19 +446,30 @@ TEST_F(SyncStorageImplTest, SetIfCanThrowBackendError)
 TEST_F(SyncStorageImplTest, SetIfNotExistsSuccessfully)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetIfNotExistsAsync("key1", { 0x0a, 0x0b, 0x0c });
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectModifyIfAck(std::error_code(), true);
+    EXPECT_TRUE(syncStorage->setIfNotExists(ns, "key1", { 0x0a, 0x0b, 0x0c }));
+}
+
+TEST_F(SyncStorageImplTest, SetIfNotExistsIfWithReadinessTimeoutSuccessfully)
+{
+    InSequence dummy;
+    expectSdlReadinessCheck(TEST_OPERATION_POLL_WAIT_TIMEOUT);
+    expectSetIfNotExistsAsync("key1", { 0x0a, 0x0b, 0x0c });
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectModifyIfAck(std::error_code(), true);
+    syncStorage->setOperationTimeout(TEST_OPERATION_WAIT_TIMEOUT);
     EXPECT_TRUE(syncStorage->setIfNotExists(ns, "key1", { 0x0a, 0x0b, 0x0c }));
 }
 
 TEST_F(SyncStorageImplTest, SetIfNotExistsReturnsFalseIfKeyAlreadyExists)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetIfNotExistsAsync("key1", { 0x0a, 0x0b, 0x0c });
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectModifyIfAck(std::error_code(), false);
     EXPECT_FALSE(syncStorage->setIfNotExists(ns, "key1", { 0x0a, 0x0b, 0x0c }));
 }
@@ -364,9 +477,9 @@ TEST_F(SyncStorageImplTest, SetIfNotExistsReturnsFalseIfKeyAlreadyExists)
 TEST_F(SyncStorageImplTest, SetIfNotExistsCanThrowBackendError)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetIfNotExistsAsync("key1", { 0x0a, 0x0b, 0x0c });
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectModifyIfAck(AsyncRedisCommandDispatcherErrorCode::OUT_OF_MEMORY, false);
     EXPECT_THROW(syncStorage->setIfNotExists(ns, "key1", { 0x0a, 0x0b, 0x0c }), BackendError);
 }
@@ -374,10 +487,22 @@ TEST_F(SyncStorageImplTest, SetIfNotExistsCanThrowBackendError)
 TEST_F(SyncStorageImplTest, GetSuccessfully)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectGetAsync(keys);
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectGetAck();
+    auto map(syncStorage->get(ns, keys));
+    EXPECT_EQ(map, dataMap);
+}
+
+TEST_F(SyncStorageImplTest, GetWithReadinessTimeoutSuccessfully)
+{
+    InSequence dummy;
+    expectSdlReadinessCheck(TEST_OPERATION_POLL_WAIT_TIMEOUT);
+    expectGetAsync(keys);
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectGetAck();
+    syncStorage->setOperationTimeout(TEST_OPERATION_WAIT_TIMEOUT);
     auto map(syncStorage->get(ns, keys));
     EXPECT_EQ(map, dataMap);
 }
@@ -385,9 +510,9 @@ TEST_F(SyncStorageImplTest, GetSuccessfully)
 TEST_F(SyncStorageImplTest, GetCanThrowBackendError)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectGetAsync(keys);
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectGetAckWithError();
     EXPECT_THROW(syncStorage->get(ns, keys), BackendError);
 }
@@ -395,19 +520,30 @@ TEST_F(SyncStorageImplTest, GetCanThrowBackendError)
 TEST_F(SyncStorageImplTest, RemoveSuccessfully)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectRemoveAsync(keys);
-    expectPollWait();
-    expectHandleEvents();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
+    syncStorage->remove(ns, keys);
+}
+
+TEST_F(SyncStorageImplTest, RemoveWithReadinessTimeoutSuccessfully)
+{
+    InSequence dummy;
+    expectSdlReadinessCheck(TEST_OPERATION_POLL_WAIT_TIMEOUT);
+    expectRemoveAsync(keys);
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
+    syncStorage->setOperationTimeout(TEST_OPERATION_WAIT_TIMEOUT);
     syncStorage->remove(ns, keys);
 }
 
 TEST_F(SyncStorageImplTest, RemoveCanThrowBackendError)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectRemoveAsync(keys);
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectModifyAckWithError();
     EXPECT_THROW(syncStorage->remove(ns, keys), BackendError);
 }
@@ -415,19 +551,30 @@ TEST_F(SyncStorageImplTest, RemoveCanThrowBackendError)
 TEST_F(SyncStorageImplTest, RemoveIfSuccessfully)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectRemoveIfAsync("key1", { 0x0a, 0x0b, 0x0c });
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectModifyIfAck(std::error_code(), true);
+    EXPECT_TRUE(syncStorage->removeIf(ns, "key1", { 0x0a, 0x0b, 0x0c }));
+}
+
+TEST_F(SyncStorageImplTest, RemoveIfWithReadinessTimeoutSuccessfully)
+{
+    InSequence dummy;
+    expectSdlReadinessCheck(TEST_OPERATION_POLL_WAIT_TIMEOUT);
+    expectRemoveIfAsync("key1", { 0x0a, 0x0b, 0x0c });
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectModifyIfAck(std::error_code(), true);
+    syncStorage->setOperationTimeout(TEST_OPERATION_WAIT_TIMEOUT);
     EXPECT_TRUE(syncStorage->removeIf(ns, "key1", { 0x0a, 0x0b, 0x0c }));
 }
 
 TEST_F(SyncStorageImplTest, RemoveIfReturnsFalseIfKeyDoesnotMatch)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectRemoveIfAsync("key1", { 0x0a, 0x0b, 0x0c });
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectModifyIfAck(std::error_code(), false);
     EXPECT_FALSE(syncStorage->removeIf(ns, "key1", { 0x0a, 0x0b, 0x0c }));
 }
@@ -435,9 +582,9 @@ TEST_F(SyncStorageImplTest, RemoveIfReturnsFalseIfKeyDoesnotMatch)
 TEST_F(SyncStorageImplTest, RemoveIfCanThrowBackendError)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectRemoveIfAsync("key1", { 0x0a, 0x0b, 0x0c });
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectModifyIfAck(AsyncRedisCommandDispatcherErrorCode::OUT_OF_MEMORY, false);
     EXPECT_THROW(syncStorage->removeIf(ns, "key1", { 0x0a, 0x0b, 0x0c }), BackendError);
 }
@@ -445,10 +592,22 @@ TEST_F(SyncStorageImplTest, RemoveIfCanThrowBackendError)
 TEST_F(SyncStorageImplTest, FindKeysSuccessfully)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectFindKeysAsync();
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectFindKeysAck();
+    auto ids(syncStorage->findKeys(ns, "*"));
+    EXPECT_EQ(ids, keys);
+}
+
+TEST_F(SyncStorageImplTest, FindKeysWithReadinessTimeoutSuccessfully)
+{
+    InSequence dummy;
+    expectSdlReadinessCheck(TEST_OPERATION_POLL_WAIT_TIMEOUT);
+    expectFindKeysAsync();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectFindKeysAck();
+    syncStorage->setOperationTimeout(TEST_OPERATION_WAIT_TIMEOUT);
     auto ids(syncStorage->findKeys(ns, "*"));
     EXPECT_EQ(ids, keys);
 }
@@ -456,9 +615,9 @@ TEST_F(SyncStorageImplTest, FindKeysSuccessfully)
 TEST_F(SyncStorageImplTest, FindKeysAckCanThrowBackendError)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectFindKeysAsync();
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectFindKeysAckWithError();
     EXPECT_THROW(syncStorage->findKeys(ns, "*"), BackendError);
 }
@@ -466,19 +625,30 @@ TEST_F(SyncStorageImplTest, FindKeysAckCanThrowBackendError)
 TEST_F(SyncStorageImplTest, RemoveAllSuccessfully)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectRemoveAllAsync();
-    expectPollWait();
-    expectHandleEvents();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
+    syncStorage->removeAll(ns);
+}
+
+TEST_F(SyncStorageImplTest, RemoveAllWithReadinessTimeoutSuccessfully)
+{
+    InSequence dummy;
+    expectSdlReadinessCheck(TEST_OPERATION_POLL_WAIT_TIMEOUT);
+    expectRemoveAllAsync();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectHandleEvents_callModifyAck();
+    syncStorage->setOperationTimeout(TEST_OPERATION_WAIT_TIMEOUT);
     syncStorage->removeAll(ns);
 }
 
 TEST_F(SyncStorageImplTest, RemoveAllCanThrowBackendError)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectRemoveAllAsync();
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectModifyAckWithError();
     EXPECT_THROW(syncStorage->removeAll(ns), BackendError);
 }
@@ -492,9 +662,9 @@ TEST_F(SyncStorageImplTest, AllAsyncRedisStorageErrorCodesThrowCorrectException)
     {
         if (arsec != AsyncRedisStorage::ErrorCode::SUCCESS)
         {
-            expectSdlReadinessCheck();
+            expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
             expectSetIfNotExistsAsync("key1", { 0x0a, 0x0b, 0x0c });
-            expectPollWait();
+            expectPollWait(SyncStorageImpl::NO_TIMEOUT);
         }
 
         switch (arsec)
@@ -525,9 +695,9 @@ TEST_F(SyncStorageImplTest, AllDispatcherErrorCodesThrowCorrectException)
     {
         if (aec != AsyncRedisCommandDispatcherErrorCode::SUCCESS)
         {
-            expectSdlReadinessCheck();
+            expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
             expectSetIfNotExistsAsync("key1", { 0x0a, 0x0b, 0x0c });
-            expectPollWait();
+            expectPollWait(SyncStorageImpl::NO_TIMEOUT);
         }
 
         switch (aec)
@@ -576,9 +746,9 @@ TEST_F(SyncStorageImplTest, AllDispatcherErrorCodesThrowCorrectException)
 TEST_F(SyncStorageImplTest, CanThrowStdExceptionIfDispatcherErrorCodeCannotBeMappedToSdlException)
 {
     InSequence dummy;
-    expectSdlReadinessCheck();
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
     expectSetIfNotExistsAsync("key1", { 0x0a, 0x0b, 0x0c });
-    expectPollWait();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectModifyIfAck(std::error_code(1, std::system_category()), false);
     EXPECT_THROW(syncStorage->setIfNotExists(ns, "key1", { 0x0a, 0x0b, 0x0c }), std::range_error);
 }

@@ -302,6 +302,7 @@ testrunner_SOURCES = \
     include/private/tst/enginemock.hpp \
     include/private/tst/gettopsrcdir.hpp \
     include/private/tst/namespaceconfigurationsmock.hpp \
+    include/private/tst/syncstorageimplmock.hpp \
     include/private/tst/systemmock.hpp \
     include/private/tst/wellknownerrorcode.hpp \
     tst/abort_test.cpp \
