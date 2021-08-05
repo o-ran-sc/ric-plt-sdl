@@ -30,6 +30,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <chrono>
 #include <sdl/exception.hpp>
 #include <sdl/publisherid.hpp>
 
@@ -259,6 +260,18 @@ namespace shareddatalayer
          *
          */
         static std::unique_ptr<SyncStorage> create();
+
+        /**
+         * Set a timeout value for the synchronous SDL read, write and remove operations.
+         * By default synchronous read, write and remove operations do not have any timeout
+         * for the backend data storage readiness, operations are pending interminable to
+         * finish until backend is ready. With this API function default behaviour can be
+         * changed and when a timeout happens, an error exception is risen for the SDL
+         * operation in question.
+         *
+         * @param timeout Timeout value to set.
+         */
+         virtual void setOperationTimeout(std::chrono::steady_clock::duration timeout) = 0;
 
     protected:
         SyncStorage() = default;

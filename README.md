@@ -188,7 +188,7 @@ line options gtest supports, for example:
 Enable unit test gcov code coverage analysis by configuring gcov reporting
 directory:
 
-    configure --with-gcov-report-dir=DIR
+    ./configure --with-gcov-report-dir=DIR
 
 Directory can be an absolute path or a relative path to an SDL source root.
 Unit test build creates directory if it does not exist.
