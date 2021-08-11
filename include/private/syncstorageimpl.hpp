@@ -39,6 +39,8 @@ namespace shareddatalayer
         SyncStorageImpl(std::unique_ptr<AsyncStorage> asyncStorage,
                         System& system);
 
+        virtual void waitReady(const Namespace& ns, const std::chrono::steady_clock::duration& timeout) override;
+
         virtual void set(const Namespace& ns, const DataMap& dataMap) override;
 
         virtual bool setIf(const Namespace& ns, const Key& key, const Data& oldData, const Data& newData) override;
@@ -75,11 +77,13 @@ namespace shareddatalayer
 
         void pollAndHandleEvents(int timeout_ms);
 
-        void waitForReadinessCheckCallback();
+        void waitForReadinessCheckCallback(const std::chrono::steady_clock::duration& timeout);
 
         void waitForOperationCallback();
 
         void waitSdlToBeReady(const Namespace& ns);
+
+        void waitSdlToBeReady(const Namespace& ns, const std::chrono::steady_clock::duration& timeout);
 
         void waitReadyAck(const std::error_code& error);
 
