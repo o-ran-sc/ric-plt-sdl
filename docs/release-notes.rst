@@ -29,6 +29,10 @@ This document provides the release notes of the sdl library.
 Version history
 ---------------
 
+[1.4.0] - 2021-08-11
+
+* Add synchronous readiness check API
+
 [1.3.0] - 2021-08-05
 
 * Definable timeout for DB backend readiness in synchronous SDL API

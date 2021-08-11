@@ -30,6 +30,7 @@
 #include <sdl/notconnected.hpp>
 #include <sdl/operationinterrupted.hpp>
 #include <sdl/rejectedbybackend.hpp>
+#include <sdl/rejectedbysdl.hpp>
 
 using namespace shareddatalayer;
 using namespace shareddatalayer::redis;
@@ -59,7 +60,9 @@ namespace
         SyncStorage::DataMap dataMap;
         SyncStorage::Keys keys;
         const SyncStorage::Namespace ns;
+        std::chrono::steady_clock::duration TEST_READY_WAIT_TIMEOUT;
         std::chrono::steady_clock::duration TEST_OPERATION_WAIT_TIMEOUT;
+        int TEST_READY_POLL_WAIT_TIMEOUT;
         int TEST_OPERATION_POLL_WAIT_TIMEOUT;
         SyncStorageImplTest():
             asyncStorageMockPassedToImplementation(new StrictMock<AsyncStorageMock>()),
@@ -68,7 +71,9 @@ namespace
             dataMap({{ "key1", { 0x0a, 0x0b, 0x0c } }, { "key2", { 0x0d, 0x0e, 0x0f, 0xff } }}),
             keys({ "key1", "key2" }),
             ns("someKnownNamespace"),
+            TEST_READY_WAIT_TIMEOUT(std::chrono::minutes(1)),
             TEST_OPERATION_WAIT_TIMEOUT(std::chrono::seconds(1)),
+            TEST_READY_POLL_WAIT_TIMEOUT(std::chrono::duration_cast<std::chrono::milliseconds>(TEST_READY_WAIT_TIMEOUT).count() / 10),
             TEST_OPERATION_POLL_WAIT_TIMEOUT(std::chrono::duration_cast<std::chrono::milliseconds>(TEST_OPERATION_WAIT_TIMEOUT).count() / 10)
         {
             expectConstructorCalls();
@@ -156,6 +161,16 @@ namespace
                                  }));
         }
 
+        void expectHandleEvents_callWaitReadyAckWithError()
+        {
+            EXPECT_CALL(*asyncStorageMockRawPtr, handleEvents())
+                .Times(1)
+                .WillOnce(Invoke([this]()
+                                 {
+                                    savedReadyAck(AsyncRedisCommandDispatcherErrorCode::NOT_CONNECTED);
+                                 }));
+        }
+
         void expectHandleEvents_callModifyAck()
         {
             EXPECT_CALL(*asyncStorageMockRawPtr, handleEvents())
@@ -172,7 +187,6 @@ namespace
                 .Times(1)
                 .WillOnce(SaveArg<1>(&savedReadyAck));
         }
-
 
         void expectModifyAckWithError()
         {
@@ -325,6 +339,31 @@ TEST_F(SyncStorageImplTest, EventsAreNotHandledWhenThereIsAnExceptionalCondition
     expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectHandleEvents_callModifyAck();
     syncStorage->set(ns, dataMap);
+}
+
+TEST_F(SyncStorageImplTest, WaitReadySuccessfully)
+{
+    InSequence dummy;
+    expectWaitReadyAsync();
+    expectPollWait(TEST_READY_POLL_WAIT_TIMEOUT);
+    expectHandleEvents_callWaitReadyAck();
+    syncStorage->waitReady(ns, TEST_READY_WAIT_TIMEOUT);
+}
+
+TEST_F(SyncStorageImplTest, WaitReadyCanThrowRejectedBySdl)
+{
+    InSequence dummy;
+    expectWaitReadyAsync();
+    EXPECT_THROW(syncStorage->waitReady(ns, std::chrono::nanoseconds(1)), RejectedBySdl);
+}
+
+TEST_F(SyncStorageImplTest, WaitReadyCanThrowNotConnected)
+{
+    InSequence dummy;
+    expectWaitReadyAsync();
+    expectPollWait(TEST_READY_POLL_WAIT_TIMEOUT);
+    expectHandleEvents_callWaitReadyAckWithError();
+    EXPECT_THROW(syncStorage->waitReady(ns, TEST_READY_WAIT_TIMEOUT), NotConnected);
 }
 
 TEST_F(SyncStorageImplTest, SetSuccessfully)

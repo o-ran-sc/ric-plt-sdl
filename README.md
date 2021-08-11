@@ -203,8 +203,8 @@ a directory, what was defined by '--with-gcov-report-dir' configure option.
 In addition, graphical gcov front-ends such as lcov can be used for coverage
 analysis:
 
-	lcov --directory tst/ --directory src --capture --output-file coverage.info
-	genhtml coverage.info --output-directory out
+    lcov --directory tst/ --directory src --capture --output-file coverage.info
+    genhtml coverage.info --output-directory out
 
 Open the out/index.html using any web browser.
 

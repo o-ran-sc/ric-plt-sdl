@@ -1,5 +1,5 @@
 Name:     sdl
-Version:  1.3.0
+Version:  1.4.0
 Release:  1%{?dist}
 Summary:  C++ API library for Shared Data Layer clients
 
@@ -50,6 +50,9 @@ rm -f %{buildroot}%{_libdir}/lib*.*a
 %{_includedir}/sdl
 
 %changelog
+* Thu Aug 11 2021 Timo Tietavainen <timo.tietavainen@nokia.com> - 1.4.0-1
+- Add synchronous readiness check API
+
 * Thu Aug 05 2021 Timo Tietavainen <timo.tietavainen@nokia.com> - 1.3.0-1
 - Definable timeout for DB backend readiness in synchronous SDL API
 - Fix SDL configuration file path Valgrind errors
