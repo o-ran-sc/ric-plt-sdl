@@ -79,9 +79,10 @@ SyncStorageImpl::SyncStorageImpl(std::unique_ptr<AsyncStorage> pAsyncStorage,
 {
 }
 
-void SyncStorageImpl::waitReadyAck(const std::error_code&)
+void SyncStorageImpl::waitReadyAck(const std::error_code& error)
 {
     isReady = true;
+    localError = error;
 }
 
 void SyncStorageImpl::modifyAck(const std::error_code& error)
@@ -129,30 +130,44 @@ void SyncStorageImpl::pollAndHandleEvents(int timeout_ms)
         asyncStorage->handleEvents();
 }
 
-void SyncStorageImpl::waitForReadinessCheckCallback()
+void SyncStorageImpl::waitForReadinessCheckCallback(const std::chrono::steady_clock::duration& timeout)
 {
-    if (operationTimeout == std::chrono::steady_clock::duration::zero())
+    if (timeout == std::chrono::steady_clock::duration::zero())
     {
         while (!isReady)
             pollAndHandleEvents(NO_TIMEOUT);
     }
     else
     {
-        int pollTimeout_ms = std::chrono::duration_cast<std::chrono::milliseconds>(operationTimeout).count() / 10;
+        auto timeout_ms(std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count());
+        auto pollTimeout_ms(timeout_ms / 10);
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-        while(!isReady && (std::chrono::steady_clock::now() - start < operationTimeout))
+        while(!isReady && (std::chrono::steady_clock::now() - start < std::chrono::milliseconds(timeout_ms)))
             pollAndHandleEvents(pollTimeout_ms);
     }
 }
 
 void SyncStorageImpl::waitSdlToBeReady(const Namespace& ns)
 {
+    waitSdlToBeReady(ns, operationTimeout);
+}
+
+void SyncStorageImpl::waitSdlToBeReady(const Namespace& ns, const std::chrono::steady_clock::duration& timeout)
+{
     isReady = false;
     asyncStorage->waitReadyAsync(ns,
                                  std::bind(&shareddatalayer::SyncStorageImpl::waitReadyAck,
                                            this,
-                                           std::error_code()));
-    waitForReadinessCheckCallback();
+                                           std::placeholders::_1));
+    waitForReadinessCheckCallback(timeout);
+}
+
+void SyncStorageImpl::waitReady(const Namespace& ns, const std::chrono::steady_clock::duration& timeout)
+{
+    waitSdlToBeReady(ns, timeout);
+    if(!isReady)
+        throw RejectedBySdl("Timeout, SDL service not ready");
+    verifyBackendResponse();
 }
 
 void SyncStorageImpl::set(const Namespace& ns, const DataMap& dataMap)
