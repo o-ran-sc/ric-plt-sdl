@@ -1,11 +1,11 @@
 ---
 package_name: sdl
-log_dir: ric-plt-sdl-rpm-autotools-packagecloud-stage-master/2
-ref: 1c4a605ad92c57118ecb6722bace5501c8918af0
-version: 1.2.1
+log_dir: ric-plt-sdl-rpm-autotools-packagecloud-stage-master/3
+ref: d565df6613d97c08664a00f3fbc7cb5fdcf233f6
+version: 1.4.0
 distribution_type: packagecloud
 packages:
-   - name: sdl_1.2.1-1_amd64.deb
-   - name: sdl-dev_1.2.1-1_amd64.deb
-   - name: sdl-1.2.1-1.x86_64.rpm
-   - name: sdl-devel-1.2.1-1.x86_64.rpm
+   - name: sdl_1.4.0-1_amd64.deb
+   - name: sdl-dev_1.4.0-1_amd64.deb
+   - name: sdl-1.4.0-1.x86_64.rpm
+   - name: sdl-devel-1.4.0-1.x86_64.rpm
