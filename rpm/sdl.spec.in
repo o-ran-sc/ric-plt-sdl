@@ -1,5 +1,5 @@
 Name:     sdl
-Version:  1.5.0
+Version:  1.5.1
 Release:  1%{?dist}
 Summary:  C++ API library for Shared Data Layer clients
 
@@ -50,6 +50,9 @@ rm -f %{buildroot}%{_libdir}/lib*.*a
 %{_includedir}/sdl
 
 %changelog
+* Fri Sep 17 2021 Petri Ovaska <petri.ovaska@nokia.com> - 1.5.1-1
+- Add set, get and listKeys -sdltool CLI commands
+
 * Fri Sep 17 2021 Petri Ovaska <petri.ovaska@nokia.com> - 1.5.0-1
 - New listKeys API to support glob-style search pattern
 - Deprecated old findKeys and findKeysAsync API
