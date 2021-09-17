@@ -241,6 +241,13 @@ void AsyncStorageImpl::findKeysAsync(const Namespace& ns,
     getOperationHandler(ns).findKeysAsync(ns, keyPrefix, findKeysAck);
 }
 
+void AsyncStorageImpl::listKeys(const Namespace& ns,
+                                const std::string& pattern,
+                                const FindKeysAck& findKeysAck)
+{
+    getOperationHandler(ns).listKeys(ns, pattern, findKeysAck);
+}
+
 void AsyncStorageImpl::removeAllAsync(const Namespace& ns,
                                        const ModifyAck& modifyAck)
 {

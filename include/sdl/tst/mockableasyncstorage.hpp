@@ -66,6 +66,8 @@ namespace shareddatalayer
 
             virtual void findKeysAsync(const Namespace&, const std::string&, const FindKeysAck&) override { logAndAbort(__PRETTY_FUNCTION__); }
 
+            virtual void listKeys(const Namespace&, const std::string&, const FindKeysAck&) override { logAndAbort(__PRETTY_FUNCTION__); }
+
             virtual void removeAllAsync(const Namespace&, const ModifyAck&) override { logAndAbort(__PRETTY_FUNCTION__); }
 
         private:

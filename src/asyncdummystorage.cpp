@@ -85,6 +85,11 @@ void AsyncDummyStorage::findKeysAsync(const Namespace&, const std::string&, cons
     postCallback(std::bind(findKeysAck, std::error_code(), Keys()));
 }
 
+void AsyncDummyStorage::listKeys(const Namespace&, const std::string&, const FindKeysAck& findKeysAck)
+{
+    postCallback(std::bind(findKeysAck, std::error_code(), Keys()));
+}
+
 void AsyncDummyStorage::removeAllAsync(const Namespace&, const ModifyAck& modifyAck)
 {
     postCallback(std::bind(modifyAck, std::error_code()));

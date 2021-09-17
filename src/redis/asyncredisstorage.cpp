@@ -512,9 +512,9 @@ void AsyncRedisStorage::removeAsync(const Namespace& ns,
                                   contentsBuilder->build("DEL", ns, keys));
 }
 
-void AsyncRedisStorage::findKeysAsync(const Namespace& ns,
-                                      const std::string& keyPrefix,
-                                      const FindKeysAck& findKeysAck)
+void AsyncRedisStorage::findKeys(const Namespace& ns,
+                                 const std::string& keyPattern,
+                                 const FindKeysAck& findKeysAck)
 {
     //TODO: update to more optimal solution than current KEYS-based one.
     std::error_code ec;
@@ -533,7 +533,23 @@ void AsyncRedisStorage::findKeysAsync(const Namespace& ns,
                                       findKeysAck(std::error_code(), getKeys(*reply.getArray()));
                               },
                               ns,
-                              contentsBuilder->build("KEYS", buildKeyPrefixSearchPattern(ns, keyPrefix)));
+                              contentsBuilder->build("KEYS", keyPattern));
+}
+
+void AsyncRedisStorage::findKeysAsync(const Namespace& ns,
+                                      const std::string& keyPrefix,
+                                      const FindKeysAck& findKeysAck)
+{
+    auto keyPattern(buildKeyPrefixSearchPattern(ns, keyPrefix));
+    findKeys(ns, keyPattern, findKeysAck);
+}
+
+void AsyncRedisStorage::listKeys(const Namespace& ns,
+                                 const std::string& pattern,
+                                 const FindKeysAck& findKeysAck)
+{
+    auto keyPattern(buildNamespaceKeySearchPattern(ns, pattern));
+    findKeys(ns, keyPattern, findKeysAck);
 }
 
 void AsyncRedisStorage::removeAllAsync(const Namespace& ns,
@@ -572,5 +588,13 @@ std::string AsyncRedisStorage::buildKeyPrefixSearchPattern(const Namespace& ns, 
     escapeRedisSearchPatternCharacters(escapedKeyPrefix);
     std::ostringstream oss;
     oss << '{' << ns << '}' << SEPARATOR << escapedKeyPrefix << "*";
+    return oss.str();
+}
+
+std::string AsyncRedisStorage::buildNamespaceKeySearchPattern(const Namespace& ns,
+                                                              const std::string& pattern) const
+{
+    std::ostringstream oss;
+    oss << '{' << ns << '}' << SEPARATOR << pattern;
     return oss.str();
 }

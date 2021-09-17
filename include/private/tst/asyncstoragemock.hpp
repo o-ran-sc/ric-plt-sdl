@@ -46,6 +46,8 @@ namespace shareddatalayer
 
             MOCK_METHOD3(findKeysAsync, void(const Namespace& ns, const std::string& keyPrefix, const FindKeysAck& findKeysAck));
 
+            MOCK_METHOD3(listKeys, void(const Namespace& ns, const std::string& pattern, const FindKeysAck& findKeysAck));
+
             MOCK_METHOD2(removeAllAsync, void(const Namespace& ns, const ModifyAck& modifyAck));
 
             MOCK_METHOD2(waitReadyAsync, void(const Namespace& ns, const ReadyAck& readyAck));

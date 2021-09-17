@@ -5,6 +5,7 @@ BASE_CPPFLAGS = \
     -Werror \
     -Wextra \
     -Wno-missing-field-initializers \
+    -Wno-error=deprecated-declarations \
     -I$(top_srcdir)/include \
     -I$(builddir)/include \
     -DSDL_CONF_DIR='"@SDL_CONF_DIR@"' \

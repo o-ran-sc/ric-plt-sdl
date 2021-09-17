@@ -29,6 +29,11 @@ This document provides the release notes of the sdl library.
 Version history
 ---------------
 
+[1.5.0] - 2021-09-17
+
+* New listKeys API to support glob-style search pattern
+* Deprecated old findKeys and findKeysAsync API
+
 [1.4.0] - 2021-08-11
 
 * Add synchronous readiness check API
