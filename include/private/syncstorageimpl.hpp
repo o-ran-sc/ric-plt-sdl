@@ -55,6 +55,8 @@ namespace shareddatalayer
 
         virtual Keys findKeys(const Namespace& ns, const std::string& keyPrefix) override;
 
+        virtual Keys listKeys(const Namespace& ns, const std::string& pattern) override;
+
         virtual void removeAll(const Namespace& ns) override;
 
         virtual void setOperationTimeout(const std::chrono::steady_clock::duration& timeout) override;

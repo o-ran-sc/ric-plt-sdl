@@ -775,6 +775,29 @@ TEST_F(AsyncRedisStorageTest, FindKeysAsyncSuccessfullyAndErrorIsTranslated)
     savedCommandCb(getWellKnownErrorCode(), replyMock);
 }
 
+TEST_F(AsyncRedisStorageTest, ListKeysPatternSuccessfullyAndErrorIsTranslated)
+{
+    InSequence dummy;
+    expectContentsBuild("KEYS", "{tag1},key[12]");
+    expectDispatchAsync();
+    sdlStorage->listKeys(ns,
+                         "key[12]",
+                         std::bind(&AsyncRedisStorageTest::findKeysAck,
+                                   this,
+                                   std::placeholders::_1,
+                                   std::placeholders::_2));
+    expectGetArray();
+    auto expectedDataItem1(Reply::DataItem { key1, ReplyStringLength(key1.size()) });
+    auto expectedDataItem2(Reply::DataItem { key2, ReplyStringLength(key2.size()) });
+    expectGetDataString(expectedDataItem1);
+    expectGetType(Reply::Type::NIL);
+    expectGetDataString(expectedDataItem2);
+    expectFindKeysAck(std::error_code(), { key1, key2 });
+    savedCommandCb(std::error_code(), replyMock);
+    expectFindKeysAck(getWellKnownErrorCode(), { });
+    savedCommandCb(getWellKnownErrorCode(), replyMock);
+}
+
 TEST_F(AsyncRedisStorageTest, RemoveAllAsyncSuccessfully)
 {
     InSequence dummy;
@@ -939,6 +962,26 @@ TEST_F(AsyncRedisStorageTest, RedisSearchPatternCharactersAreCorrectlyEscapedInK
     expectedKeyPrefixSearchPattern = keyPrefixSearchPatternPrefix + R"(\?\*some\[\]Known\[\*\?\\\]Key\\\*Prefix\*\*\*\*)" + '*';
     builtKeyPrefixSearchPattern = sdlStorage->buildKeyPrefixSearchPattern(ns, "?*some[]Known[*?\\]Key\\*Prefix****");
     ASSERT_STREQ(expectedKeyPrefixSearchPattern.c_str(), builtKeyPrefixSearchPattern.c_str());
+}
+
+TEST_F(AsyncRedisStorageTest, BuildNamespaceKeySearchPatternIsCorrect)
+{
+    InSequence dummy;
+    const std::string nsPrefix = '{' + ns + '}' + AsyncStorage::SEPARATOR;
+    std::string buildPattern;
+    std::string expectedPattern;
+
+    expectedPattern = nsPrefix;
+    buildPattern = sdlStorage->buildNamespaceKeySearchPattern(ns, "");
+    ASSERT_STREQ(expectedPattern.c_str(), buildPattern.c_str());
+
+    expectedPattern = nsPrefix + '*';
+    buildPattern = sdlStorage->buildNamespaceKeySearchPattern(ns, "*");
+    ASSERT_STREQ(expectedPattern.c_str(), buildPattern.c_str());
+
+    expectedPattern = nsPrefix + "h?llo";
+    buildPattern = sdlStorage->buildNamespaceKeySearchPattern(ns, "h?llo");
+    ASSERT_STREQ(expectedPattern.c_str(), buildPattern.c_str());
 }
 
 TEST_F(AsyncRedisStorageTestDispatcherNotCreated, ReadyAckNotForwardedIfDispatcherNotYetCreated)

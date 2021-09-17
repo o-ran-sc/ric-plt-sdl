@@ -276,6 +276,13 @@ namespace
                 .WillOnce(SaveArg<2>(&savedFindKeysAck));
         }
 
+        void expectListKeys()
+        {
+            EXPECT_CALL(*asyncStorageMockRawPtr, listKeys(ns, _, _))
+                .Times(1)
+                .WillOnce(SaveArg<2>(&savedFindKeysAck));
+        }
+
         void expectRemoveAsync(const SyncStorage::Keys& keys)
         {
             EXPECT_CALL(*asyncStorageMockRawPtr, removeAsync(ns, keys, _))
@@ -597,6 +604,17 @@ TEST_F(SyncStorageImplTest, FindKeysSuccessfully)
     expectPollWait(SyncStorageImpl::NO_TIMEOUT);
     expectFindKeysAck();
     auto ids(syncStorage->findKeys(ns, "*"));
+    EXPECT_EQ(ids, keys);
+}
+
+TEST_F(SyncStorageImplTest, ListKeysSuccessfully)
+{
+    InSequence dummy;
+    expectSdlReadinessCheck(SyncStorageImpl::NO_TIMEOUT);
+    expectListKeys();
+    expectPollWait(SyncStorageImpl::NO_TIMEOUT);
+    expectFindKeysAck();
+    auto ids(syncStorage->listKeys(ns, "*"));
     EXPECT_EQ(ids, keys);
 }
 

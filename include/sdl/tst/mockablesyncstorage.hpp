@@ -62,6 +62,8 @@ namespace shareddatalayer
 
             virtual Keys findKeys(const Namespace&, const std::string&) override { logAndAbort(__PRETTY_FUNCTION__); }
 
+            virtual Keys listKeys(const Namespace&, const std::string&) override { logAndAbort(__PRETTY_FUNCTION__); }
+
             virtual void removeAll(const Namespace&) override { logAndAbort(__PRETTY_FUNCTION__); }
 
             virtual void setOperationTimeout(const std::chrono::steady_clock::duration&) override { logAndAbort(__PRETTY_FUNCTION__); }
