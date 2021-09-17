@@ -283,6 +283,22 @@ SyncStorageImpl::Keys SyncStorageImpl::findKeys(const Namespace& ns, const std::
     return localKeys;
 }
 
+SyncStorageImpl::Keys SyncStorageImpl::listKeys(const Namespace& ns, const std::string& pattern)
+{
+    handlePendingEvents();
+    waitSdlToBeReady(ns);
+    synced = false;
+    asyncStorage->listKeys(ns,
+                           pattern,
+                           std::bind(&shareddatalayer::SyncStorageImpl::findKeysAck,
+                                     this,
+                                     std::placeholders::_1,
+                                     std::placeholders::_2));
+    waitForOperationCallback();
+    verifyBackendResponse();
+    return localKeys;
+}
+
 void SyncStorageImpl::removeAll(const Namespace& ns)
 {
     handlePendingEvents();

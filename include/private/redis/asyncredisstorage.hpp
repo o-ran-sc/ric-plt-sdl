@@ -105,11 +105,15 @@ namespace shareddatalayer
 
         void findKeysAsync(const Namespace& ns, const std::string& keyPrefix, const FindKeysAck& findKeysAck) override;
 
+        void listKeys(const Namespace& ns, const std::string& pattern, const FindKeysAck& findKeysAck) override;
+
         void removeAllAsync(const Namespace& ns, const ModifyAck& modifyAck) override;
 
         redis::DatabaseInfo& getDatabaseInfo();
 
         std::string buildKeyPrefixSearchPattern(const Namespace& ns, const std::string& keyPrefix) const;
+
+        std::string buildNamespaceKeySearchPattern(const Namespace& ns, const std::string& pattern) const;
 
     private:
         std::shared_ptr<Engine> engine;
@@ -132,6 +136,8 @@ namespace shareddatalayer
         void modificationCommandCallback(const std::error_code& error, const redis::Reply&, const ModifyAck&);
 
         void conditionalCommandCallback(const std::error_code& error, const redis::Reply&, const ModifyIfAck&);
+
+        void findKeys(const std::string& ns, const std::string& keyPattern, const FindKeysAck& findKeysAck);
     };
 
     AsyncRedisStorage::ErrorCode& operator++ (AsyncRedisStorage::ErrorCode& ecEnum);

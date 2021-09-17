@@ -267,8 +267,32 @@ namespace shareddatalayer
          * @throw OperationInterrupted if shareddatalayer does not receive a reply from the backend data storage.
          * @throw InvalidNamespace if given namespace does not meet the namespace format restrictions.
          */
+        [[deprecated("Use listKeys() instead.")]]
         virtual Keys findKeys(const Namespace& ns,
                               const std::string& keyPrefix) = 0;
+
+        /**
+         * List all keys matching search glob-style pattern under the namespace.
+         *
+         * Supported glob-style patterns:
+         *   h?llo matches hello, hallo and hxllo
+         *   h*llo matches hllo and heeeello
+         *   h[ae]llo matches hello and hallo, but not hillo
+         *   h[^e]llo matches hallo, hbllo, ... but not hello
+         *   h[a-b]llo matches hallo and hbllo
+         *
+         * @param ns Namespace under which this operation is targeted.
+         * @param pattern Find keys matching a given glob-style pattern.
+         *
+         * @return Found keys.
+         *
+         * @throw BackendError if the backend data storage fails to process the request.
+         * @throw NotConnected if shareddatalayer is not connected to the backend data storage.
+         * @throw OperationInterrupted if shareddatalayer does not receive a reply from the backend data storage.
+         * @throw InvalidNamespace if given namespace does not meet the namespace format restrictions.
+         */
+        virtual Keys listKeys(const Namespace& ns,
+                              const std::string& pattern) = 0;
 
         /**
          * Remove all keys under the namespace. Found keys are removed atomically, i.e.

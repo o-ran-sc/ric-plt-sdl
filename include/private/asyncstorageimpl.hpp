@@ -85,6 +85,8 @@ namespace shareddatalayer
 
         void findKeysAsync(const Namespace& ns, const std::string& keyPrefix, const FindKeysAck& findKeysAck) override;
 
+        void listKeys(const Namespace& ns, const std::string& pattern, const FindKeysAck& findKeysAck) override;
+
         void removeAllAsync(const Namespace& ns, const ModifyAck& modifyAck) override;
 
         //public for UT

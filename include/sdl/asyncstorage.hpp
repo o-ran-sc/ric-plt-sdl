@@ -301,9 +301,29 @@ namespace shareddatalayer
          * @param findKeysAck The acknowledgement to be called once the request has been handled.
          *                    The given function is called in the context of handleEvents() function.
          */
+        [[deprecated("Use listKeys() instead.")]]
         virtual void findKeysAsync(const Namespace& ns,
                                    const std::string& keyPrefix,
                                    const FindKeysAck& findKeysAck) = 0;
+
+        /**
+         * List all keys matching search glob-style pattern under the namespace.
+         *
+         * Supported glob-style patterns:
+         *   h?llo matches hello, hallo and hxllo
+         *   h*llo matches hllo and heeeello
+         *   h[ae]llo matches hello and hallo, but not hillo
+         *   h[^e]llo matches hallo, hbllo, ... but not hello
+         *   h[a-b]llo matches hallo and hbllo
+         *
+         * @param ns Namespace under which this operation is targeted.
+         * @param pattern Find keys matching a given glob-style pattern.
+         * @param findKeysAck The acknowledgement to be called once the request has been handled.
+         *                    The given function is called in the context of handleEvents() function.
+         */
+        virtual void listKeys(const Namespace& ns,
+                              const std::string& pattern,
+                              const FindKeysAck& findKeysAck) = 0;
 
         /**
          * Remove all keys under the namespace. Found keys are removed atomically, i.e.
