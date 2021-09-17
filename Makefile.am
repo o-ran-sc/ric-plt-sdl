@@ -141,6 +141,9 @@ libshareddatalayercli_la_SOURCES = \
     src/cli/dumpconfigurationcommand.cpp \
     src/cli/testgetsetcommand.cpp \
     src/cli/testconnectivitycommand.cpp \
+    src/cli/listkeyscommand.cpp \
+    src/cli/setcommand.cpp \
+    src/cli/getcommand.cpp \
     src/exception.cpp \
     src/configurationpaths.cpp \
     include/private/configurationpaths.hpp \

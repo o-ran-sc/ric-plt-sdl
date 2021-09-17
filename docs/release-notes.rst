@@ -29,6 +29,10 @@ This document provides the release notes of the sdl library.
 Version history
 ---------------
 
+[1.5.1] - 2021-09-17
+
+* Add set, get and listKeys -sdltool CLI commands
+
 [1.5.0] - 2021-09-17
 
 * New listKeys API to support glob-style search pattern
