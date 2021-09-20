@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89dcb00b_f1acd35b",
+        "filename": "include/sdl/asyncstorage.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-09-20T04:13:45Z",
+      "side": 1,
+      "message": "Should we explain that if the key itself contains *?[]\\ characters, those should be escaped in listKeys pattern parameter, so that those characters are not treated as glob-style search characters? If we are not supporting characters escaping in listKeys pattern parameter, then I think we should document it here.\nSimilar note also to SyncStorage class.",
+      "revId": "f41f4991d5d7a846cbf217902f90fae9af1cd5d4",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
