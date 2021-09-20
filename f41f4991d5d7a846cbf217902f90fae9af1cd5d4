@@ -34,6 +34,24 @@
       "parentUuid": "89dcb00b_f1acd35b",
       "revId": "f41f4991d5d7a846cbf217902f90fae9af1cd5d4",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "299c1d32_7a26e8c3",
+        "filename": "include/sdl/asyncstorage.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-09-20T05:28:21Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "47029305_cb76a974",
+      "revId": "f41f4991d5d7a846cbf217902f90fae9af1cd5d4",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
