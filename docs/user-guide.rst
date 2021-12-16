@@ -238,7 +238,7 @@ configure database backend:
 * DBAAS_SERVICE_PORT
 * DBAAS_SERVICE_SENTINEL_PORT
 * DBAAS_MASTER_NAME
-* DBAAS_CLUSTER_ADDR_LIST
+* DBAAS_NODE_COUNT
 
 After DBaaS service is installed, environment variables are exposed to
 application containers. SDL library will automatically use these environment
@@ -253,17 +253,17 @@ port *6379*::
 
    export DBAAS_SERVICE_HOST=dbaas
    export DBAAS_SERVICE_PORT=6379
+   export DBAAS_NODE_COUNT=1
 
 Besides hostname, IPv4 and IPv6 addresses can be set to *DBAAS_SERVICE_HOST*.
 
 An example how environment variables can be set in bash shell, when Redis
-HA deployment is used. Please note that DBaaS does not support yet HA
-deployment option. Below environment variables are only in the form of an
-example to show how HA deployment would be configured::
+HA deployment is used::
 
-   export DBAAS_MASTER_NAME=my-master-sentinel
+   export DBAAS_MASTER_NAME=my-primary-sentinel
    export DBAAS_SERVICE_HOST=dbaas
    export DBAAS_SERVICE_SENTINEL_PORT=23550
+   export DBAAS_NODE_COUNT=3
 
 .. raw:: pdf
 
@@ -418,7 +418,7 @@ There are two different supported deployment modes for SDL backend data
 storage:
 
 * Standalone (single DB node without redundancy)
-* Redundant (DB node pair working in master/slave redundancy model)
+* Redundant (DB node pair working in primary/replica redundancy model)
 
 SDL supports also Redis sentinel based DB cluster where deployment has one or
 more DBAAS Redis sentinel group. Different DBAAS Redis sentinel groups
@@ -533,3 +533,21 @@ Data Management
 .. raw:: pdf
 
    PageBreak
+
+SDLCLI
+******
+
+There is a pre-installed *sdlcli* tool in DBaaS container. With this tool user
+can see statistics of database backend (Redis), check healthiness of DBaaS
+database backend, list database keys and get and set values into database.
+For example to see statistics give below command inside DBaaS container::
+
+    sdlcli statistics
+
+To check healthiness of database::
+
+    sdlcli healthcheck
+
+Use *sdlcli* help to get more information about available commands::
+
+    sdlcli --help
