@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2018-2019 Nokia.
+   Copyright (c) 2018-2022 Nokia.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@
 #include "private/namespaceconfigurations.hpp"
 #include "private/namespacevalidator.hpp"
 #include "private/system.hpp"
+#include <boost/algorithm/string.hpp>
 
 using namespace shareddatalayer;
 
@@ -196,17 +197,25 @@ namespace
             parseNsConfiguration(namespaceConfigurations, namespaceConfigurationMapItem.first, namespaceConfigurationMapItem.second.first, namespaceConfigurationMapItem.second.second);
     }
 
+    const std::string DEFAULT_REDIS_PORT("6379");
+
     void appendDBPortToAddrList(std::string& addresses, const std::string& port)
     {
         size_t base(0);
+        std::vector<std::string> portList;
+        boost::split(portList, port, boost::is_any_of(","));
+
+        std::size_t idx(0);
+        auto redisPort((portList.size() > 0 && idx < portList.size()) ? portList.at(idx) : DEFAULT_REDIS_PORT);
         auto pos = addresses.find(',', base);
         while (std::string::npos != pos)
         {
-            addresses.insert(pos, ":" + port);
-            base = pos + 2 + port.size();
+            addresses.insert(pos, ":" + redisPort);
+            base = pos + 2 + redisPort.size();
             pos = addresses.find(',', base);
+            idx++;
         }
-        addresses.append(":" + port);
+        addresses.append(":" + redisPort);
     }
 }
 
@@ -357,8 +366,8 @@ void ConfigurationReader::readDatabaseConfiguration(DatabaseConfiguration& datab
             if (DatabaseConfiguration::DbType::REDIS_SENTINEL == dbType ||
                 DatabaseConfiguration::DbType::SDL_SENTINEL_CLUSTER == dbType)
             {
-                databaseConfiguration.checkAndApplySentinelAddress(dbHostEnvVariableValue + ":" + sentinelPortEnvVariableValue);
-                databaseConfiguration.checkAndApplySentinelMasterName(sentinelMasterNameEnvVariableValue);
+                databaseConfiguration.checkAndApplySentinelPorts(sentinelPortEnvVariableValue);
+                databaseConfiguration.checkAndApplySentinelMasterNames(sentinelMasterNameEnvVariableValue);
             }
         }
         else

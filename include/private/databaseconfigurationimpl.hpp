@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2018-2019 Nokia.
+   Copyright (c) 2018-2022 Nokia.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -37,9 +37,9 @@ namespace shareddatalayer
 
         void checkAndApplyServerAddress(const std::string& address) override;
 
-        void checkAndApplySentinelAddress(const std::string& address) override;
+        void checkAndApplySentinelPorts(const std::string& sentinelPortsEnvStr) override;
 
-        void checkAndApplySentinelMasterName(const std::string& name) override;
+        void checkAndApplySentinelMasterNames(const std::string& sentinelMasterNamesEnvStr) override;
 
         DatabaseConfiguration::DbType getDbType() const override;
 
@@ -49,19 +49,17 @@ namespace shareddatalayer
 
         DatabaseConfiguration::Addresses getDefaultServerAddresses() const override;
 
-        boost::optional<HostAndPort> getSentinelAddress() const override;
-
         boost::optional<HostAndPort> getSentinelAddress(const boost::optional<std::size_t>& addressIndex) const override;
 
-        std::string getSentinelMasterName() const override;
+        std::string getSentinelMasterName(const boost::optional<std::size_t>& addressIndex) const override;
 
         bool isEmpty() const override;
 
     private:
         DbType dbType;
         Addresses serverAddresses;
-        boost::optional<HostAndPort> sentinelAddress;
-        std::string sentinelMasterName;
+        SentinelPorts sentinelPorts;
+        SentinelMasterNames sentinelMasterNames;
     };
 }
 

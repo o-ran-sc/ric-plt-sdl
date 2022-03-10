@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2018-2019 Nokia.
+   Copyright (c) 2018-2022 Nokia.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -73,14 +73,14 @@ namespace
             EXPECT_CALL(databaseConfigurationMock, checkAndApplyServerAddress(address));
         }
 
-        void expectSentinelAddressConfigurationCheckAndApply(const std::string& address)
+        void expectCheckAndApplySentinelPorts(const std::string& portsEnvStr)
         {
-            EXPECT_CALL(databaseConfigurationMock, checkAndApplySentinelAddress(address));
+            EXPECT_CALL(databaseConfigurationMock, checkAndApplySentinelPorts(portsEnvStr));
         }
 
         void expectSentinelMasterNameConfigurationCheckAndApply(const std::string& address)
         {
-            EXPECT_CALL(databaseConfigurationMock, checkAndApplySentinelMasterName(address));
+            EXPECT_CALL(databaseConfigurationMock, checkAndApplySentinelMasterNames(address));
         }
 
         void expectDatabaseConfigurationIsEmpty_returnFalse()
@@ -883,7 +883,7 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWithS
     expectDbTypeConfigurationCheckAndApply("redis-sentinel");
     expectDBServerAddressConfigurationCheckAndApply("sentinelAddress.local:1111");
     expectGetDbTypeAndWillOnceReturn(DatabaseConfiguration::DbType::REDIS_SENTINEL);
-    expectSentinelAddressConfigurationCheckAndApply("sentinelAddress.local:2222");
+    expectCheckAndApplySentinelPorts(sentinelPortEnvVariableValue);
     expectSentinelMasterNameConfigurationCheckAndApply(sentinelMasterNameEnvVariableValue);
     initializeReaderWithoutDirectories();
     configurationReader->readDatabaseConfiguration(databaseConfigurationMock);
@@ -895,9 +895,9 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWithS
     dbHostEnvVariableValue = "address-0.local";
     expectGetEnvironmentString(dbHostEnvVariableValue.c_str());
     expectGetEnvironmentString(nullptr); //DB_PORT_ENV_VAR_NAME
-    sentinelPortEnvVariableValue = "2222";
+    sentinelPortEnvVariableValue = "2222,2223,2224";
     expectGetEnvironmentString(sentinelPortEnvVariableValue.c_str());
-    sentinelMasterNameEnvVariableValue = "mymaster";
+    sentinelMasterNameEnvVariableValue = "mymaster-0,mymaster-1,mymaster-2";
     expectGetEnvironmentString(sentinelMasterNameEnvVariableValue.c_str());
     dbClusterAddrListEnvVariableValue = "address-0.local,address-1.local,address-2.local";
     expectGetEnvironmentString(dbClusterAddrListEnvVariableValue.c_str());
@@ -907,7 +907,7 @@ TEST_F(ConfigurationReaderEnvironmentVariableTest, EnvironmentConfigurationWithS
     expectDBServerAddressConfigurationCheckAndApply("address-1.local");
     expectDBServerAddressConfigurationCheckAndApply("address-2.local");
     expectGetDbTypeAndWillOnceReturn(DatabaseConfiguration::DbType::SDL_SENTINEL_CLUSTER);
-    expectSentinelAddressConfigurationCheckAndApply("address-0.local:2222");
+    expectCheckAndApplySentinelPorts(sentinelPortEnvVariableValue);
     expectSentinelMasterNameConfigurationCheckAndApply(sentinelMasterNameEnvVariableValue);
     initializeReaderWithoutDirectories();
     configurationReader->readDatabaseConfiguration(databaseConfigurationMock);

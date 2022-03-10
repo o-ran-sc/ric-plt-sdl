@@ -1,5 +1,5 @@
 Name:     sdl
-Version:  1.5.1
+Version:  1.6.0
 Release:  1%{?dist}
 Summary:  C++ API library for Shared Data Layer clients
 
@@ -50,6 +50,9 @@ rm -f %{buildroot}%{_libdir}/lib*.*a
 %{_includedir}/sdl
 
 %changelog
+* Thu Mar 10 2022 Petri Ovaska <petri.ovaska@nokia.com> - 1.6.0-1
+- Enable redis/sentinel port and sentinel master name configuration
+
 * Fri Sep 17 2021 Petri Ovaska <petri.ovaska@nokia.com> - 1.5.1-1
 - Add set, get and listKeys -sdltool CLI commands
 
