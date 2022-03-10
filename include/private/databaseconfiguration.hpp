@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2018-2019 Nokia.
+   Copyright (c) 2018-2022 Nokia.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ namespace shareddatalayer
     public:
         class InvalidDbType;
         using Addresses = std::vector<HostAndPort>;
+        using SentinelPorts = std::vector<uint16_t>;
+        using SentinelMasterNames = std::vector<std::string>;
         enum class DbType
         {
             UNKNOWN = 0,
@@ -47,15 +49,14 @@ namespace shareddatalayer
         virtual ~DatabaseConfiguration() = default;
         virtual void checkAndApplyDbType(const std::string& type) = 0;
         virtual void checkAndApplyServerAddress(const std::string& address) = 0;
-        virtual void checkAndApplySentinelAddress(const std::string& address) = 0;
-        virtual void checkAndApplySentinelMasterName(const std::string& name) = 0;
+        virtual void checkAndApplySentinelPorts(const std::string& sentinelPortsEnvStr) = 0;
+        virtual void checkAndApplySentinelMasterNames(const std::string& sentinelMasterNamesEnvStr) = 0;
         virtual DatabaseConfiguration::DbType getDbType() const = 0;
         virtual DatabaseConfiguration::Addresses getServerAddresses() const = 0;
         virtual DatabaseConfiguration::Addresses getServerAddresses(const boost::optional<std::size_t>& addressIndex) const = 0;
         virtual DatabaseConfiguration::Addresses getDefaultServerAddresses() const = 0;
-        virtual boost::optional<HostAndPort> getSentinelAddress() const = 0; // Optional return value, because empty HostAndPort can't be created.
         virtual boost::optional<HostAndPort> getSentinelAddress(const boost::optional<std::size_t>& addressIndex) const = 0;
-        virtual std::string getSentinelMasterName() const = 0;
+        virtual std::string getSentinelMasterName(const boost::optional<std::size_t>& addressIndex) const = 0;
         virtual bool isEmpty() const = 0;
 
         DatabaseConfiguration(DatabaseConfiguration&&) = delete;

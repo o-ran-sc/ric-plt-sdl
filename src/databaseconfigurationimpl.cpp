@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2018-2019 Nokia.
+   Copyright (c) 2018-2022 Nokia.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@
 #include "private/databaseconfigurationimpl.hpp"
 #include <arpa/inet.h>
 #include <boost/crc.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace shareddatalayer;
 
@@ -35,6 +37,7 @@ namespace
 
     const uint16_t DEFAULT_PORT(6379U);
     const uint16_t DEFAULT_SENTINEL_PORT(26379U);
+    const std::string DEFAULT_SENTINEL_MASTER_GROUP_NAME("dbaasmaster");
 }
 
 DatabaseConfigurationImpl::DatabaseConfigurationImpl():
@@ -95,30 +98,40 @@ DatabaseConfiguration::Addresses DatabaseConfigurationImpl::getDefaultServerAddr
     return { HostAndPort(getDefaultHost(), htons(DEFAULT_PORT)) };
 }
 
-void DatabaseConfigurationImpl::checkAndApplySentinelAddress(const std::string& address)
+void DatabaseConfigurationImpl::checkAndApplySentinelPorts(const std::string& portsEnvStr)
 {
-    sentinelAddress = HostAndPort(address, htons(DEFAULT_SENTINEL_PORT));
-}
+    std::vector<std::string> ports;
+    boost::split(ports, portsEnvStr, boost::is_any_of(","));
 
-boost::optional<HostAndPort> DatabaseConfigurationImpl::getSentinelAddress() const
-{
-    return sentinelAddress;
+    for (auto port : ports)
+    {
+        try {
+            sentinelPorts.push_back(htons(boost::lexical_cast<uint16_t>(port)));
+        }
+        catch (boost::bad_lexical_cast const &) {
+            continue;
+        }
+    }
 }
 
 boost::optional<HostAndPort> DatabaseConfigurationImpl::getSentinelAddress(const boost::optional<std::size_t>& addressIndex) const
 {
-    if (addressIndex)
-        return { HostAndPort(serverAddresses.at(*addressIndex).getHost(), sentinelAddress->getPort()) };
+    std::size_t index(addressIndex ? *addressIndex : 0);
+    uint16_t port((sentinelPorts.size() > 0 && index < sentinelPorts.size()) ? sentinelPorts.at(index) : htons(DEFAULT_SENTINEL_PORT));
 
-    return getSentinelAddress();
+    if (!(serverAddresses.size() > 0))
+        return {};
+
+    return { HostAndPort(serverAddresses.at(index).getHost(), port) };
 }
 
-void DatabaseConfigurationImpl::checkAndApplySentinelMasterName(const std::string& name)
+void DatabaseConfigurationImpl::checkAndApplySentinelMasterNames(const std::string& sentinelMasterNamesEnvStr)
 {
-    sentinelMasterName = name;
+    boost::split(sentinelMasterNames, sentinelMasterNamesEnvStr, boost::is_any_of(","));
 }
 
-std::string DatabaseConfigurationImpl::getSentinelMasterName() const
+std::string DatabaseConfigurationImpl::getSentinelMasterName(const boost::optional<std::size_t>& addressIndex) const
 {
-    return sentinelMasterName;
+    std::size_t index(addressIndex ? *addressIndex : 0);
+    return ((sentinelMasterNames.size() > 0 && index < sentinelMasterNames.size()) ? sentinelMasterNames.at(index) : DEFAULT_SENTINEL_MASTER_GROUP_NAME);
 }

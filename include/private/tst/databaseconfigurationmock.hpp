@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2018-2019 Nokia.
+   Copyright (c) 2018-2022 Nokia.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -33,16 +33,15 @@ namespace shareddatalayer
         public:
             MOCK_METHOD1(checkAndApplyDbType, void(const std::string& type));
             MOCK_METHOD1(checkAndApplyServerAddress, void(const std::string& address));
-            MOCK_METHOD1(checkAndApplySentinelAddress, void(const std::string& address));
-            MOCK_METHOD1(checkAndApplySentinelMasterName, void(const std::string& name));
+            MOCK_METHOD1(checkAndApplySentinelPorts, void(const std::string& sentinelPortsEnvStr));
+            MOCK_METHOD1(checkAndApplySentinelMasterNames, void(const std::string& sentinelMasterNamesEnvStr));
             MOCK_CONST_METHOD0(getDbType, DatabaseConfiguration::DbType());
             MOCK_CONST_METHOD0(getServerAddresses, DatabaseConfiguration::Addresses());
             MOCK_CONST_METHOD1(getServerAddresses, DatabaseConfiguration::Addresses(const boost::optional<std::size_t>& addressIndex));
             MOCK_CONST_METHOD0(getDefaultServerAddresses, DatabaseConfiguration::Addresses());
             MOCK_CONST_METHOD0(isEmpty, bool());
-            MOCK_CONST_METHOD0(getSentinelAddress, boost::optional<HostAndPort>());
             MOCK_CONST_METHOD1(getSentinelAddress, boost::optional<HostAndPort>(const boost::optional<std::size_t>& addressIndex));
-            MOCK_CONST_METHOD0(getSentinelMasterName, std::string());
+            MOCK_CONST_METHOD1(getSentinelMasterName, std::string(const boost::optional<std::size_t>& addressIndex));
         };
     }
 }

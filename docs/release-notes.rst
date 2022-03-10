@@ -1,5 +1,5 @@
 ..
-..  Copyright (c) 2019 Nokia.
+..  Copyright (c) 2019-2022 Nokia.
 ..
 ..  Licensed under the Creative Commons Attribution 4.0 International
 ..  Public License (the "License"); you may not use this file except
@@ -28,6 +28,10 @@ This document provides the release notes of the sdl library.
 
 Version history
 ---------------
+
+[1.6.0] - 2022-03-10
+
+* Enable redis/sentinel port and sentinel master name configuration
 
 [1.5.1] - 2021-09-17
 

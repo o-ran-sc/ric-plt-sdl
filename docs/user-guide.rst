@@ -1,6 +1,6 @@
 ..
 ..  Copyright (c) 2019 AT&T Intellectual Property.
-..  Copyright (c) 2019 Nokia.
+..  Copyright (c) 2019-2022 Nokia.
 ..
 ..  Licensed under the Creative Commons Attribution 4.0 International
 ..  Public License (the "License"); you may not use this file except
@@ -239,11 +239,24 @@ configure database backend:
 * DBAAS_SERVICE_SENTINEL_PORT
 * DBAAS_MASTER_NAME
 * DBAAS_NODE_COUNT
+* DBAAS_CLUSTER_ADDR_LIST
 
 After DBaaS service is installed, environment variables are exposed to
 application containers. SDL library will automatically use these environment
 variables. If DBaaS service is not used, above environment variables needs to
 be set manually so that SDL backend can connect to correct database.
+
+When multiple Database (DB) service is used Nokia SEP deployments can have
+comma separated list of DB ports, sentinel master group names and DB service
+addresses:
+
+ DBAAS_CLUSTER_ADDR_LIST=<comma separated list of DB services>
+ DBAAS_MASTER_NAME=<comma separated list of DB sentinel master names>
+ DBAAS_SERVICE_PORT=<comma separated list of DB service ports>
+ DBAAS_SERVICE_SENTINEL_PORT=<comma separated list of Redis Sentinel ports>
+
+In RIC platform deployments above list type of environment variables will have
+a single value, because only one Database (DB) service is supported in RIC.
 
 **Examples**
 
@@ -263,6 +276,16 @@ HA deployment is used::
    export DBAAS_MASTER_NAME=my-primary-sentinel
    export DBAAS_SERVICE_HOST=dbaas
    export DBAAS_SERVICE_SENTINEL_PORT=23550
+   export DBAAS_NODE_COUNT=3
+
+An example how environment variables can be set in bash shell, when Redis
+HA deployment with two DB service is used::
+
+   export DBAAS_CLUSTER_ADDR_LIST=dbaas-0,dbaas-1
+   export DBAAS_MASTER_NAME=my-dbaasmaster-0,my-dbaasmaster-1
+   export DBAAS_SERVICE_HOST=dbaas-0
+   export DBAAS_SERVICE_PORT=6379,6380
+   export DBAAS_SERVICE_SENTINEL_PORT=26379,26380
    export DBAAS_NODE_COUNT=3
 
 .. raw:: pdf

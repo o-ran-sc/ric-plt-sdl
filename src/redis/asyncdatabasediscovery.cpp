@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2018-2019 Nokia.
+   Copyright (c) 2018-2022 Nokia.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -62,11 +62,13 @@ std::shared_ptr<AsyncDatabaseDiscovery> AsyncDatabaseDiscovery::create(std::shar
             staticDbType == DatabaseConfiguration::DbType::SDL_SENTINEL_CLUSTER)
         {
             auto sentinelAddress(staticDatabaseConfiguration.getSentinelAddress(addressIndex));
+            auto sentinelMasterName(staticDatabaseConfiguration.getSentinelMasterName(addressIndex));
+
             if (sentinelAddress)
                 return std::make_shared<AsyncSentinelDatabaseDiscovery>(engine,
                                                                         logger,
                                                                         *sentinelAddress,
-                                                                        staticDatabaseConfiguration.getSentinelMasterName());
+                                                                        sentinelMasterName);
             else
                 SHAREDDATALAYER_ABORT("Sentinel address not configured.");
         }
